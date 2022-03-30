@@ -1,0 +1,14 @@
+Model\IoTBay\Person\Staff.class
+Model\IoTBay\Person\User.class
+Controller\RegisterController.class
+Model\IoTBay\Product.class
+Model\IoTBay\Invoice.class
+Model\IoTBay\Order.class
+Model\IoTBay\Person\User$EUserType.class
+Model\IoTBay\Person\Address.class
+Model\IoTBay\Core\IoTWebpageBase.class
+Model\IoTBay\Core\IIoTWebpage.class
+Model\IoTBay\Shipment.class
+Model\IoTBay\Person\PaymentInformation.class
+Controller\LoginController.class
+Model\IoTBay\Person\Customer.class

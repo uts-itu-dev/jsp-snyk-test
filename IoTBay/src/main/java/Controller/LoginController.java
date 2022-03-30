@@ -1,0 +1,25 @@
+package Controller;
+
+import Model.IoTBay.Core.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Login Controller for IoTBay. Controls whether a Login attempt was successful.
+ *
+ * @author Michael Wu
+ */
+@WebServlet(name = "Login", value = "/Login")
+public class LoginController extends IoTWebpageBase implements IIoTWebpage {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setContentType("text/type");
+
+		// Just write out the login details.
+		PrintWriter out = response.getWriter();
+		out.println("Login Controller: " + request.getParameter("Email") + " " + request.getParameter("Password"));
+	}
+}
