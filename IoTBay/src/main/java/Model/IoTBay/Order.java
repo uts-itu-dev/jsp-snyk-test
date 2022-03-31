@@ -3,6 +3,10 @@ package Model.IoTBay;
 import java.io.Serializable;
 
 import Model.IoTBay.Person.User;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * An Order made by a Customer : User in IoTBay.
@@ -10,38 +14,46 @@ import Model.IoTBay.Person.User;
  * @author Michael Wu
  */
 public class Order implements Serializable {
+	private static int numberOfOrders = 0;
 
+	public final int orderID;
 	private final User owner;
-	private final Product product;
-	private final int quantity;
-	private final float totalCost;
+	private ArrayList<OrderLineItem> products;
 	private String orderStatus;
+	private Date purchaseDate;
 
-	public Order(User o, Product p, int quant) {
+	public Order(User o, ArrayList<OrderLineItem> products, int quant) {
+		orderID = numberOfOrders++;
+		
 		owner = o;
-		product = p;
-		quantity = quant;
-		totalCost = p.getPrice() * quant;
+		this.products = products;
+		
+		purchaseDate = Calendar.getInstance().getTime();
 	}
 
 	public User getOwner() {
 		return owner;
 	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public int getQuantity() {
-		return quantity;
+	
+	public ArrayList<OrderLineItem> getProducts() {
+		return products;
 	}
 
 	public float getTotalCost() {
-		return totalCost;
+		float c = 0;
+		
+		for (OrderLineItem o : products)
+			c += o.getTotalCost();
+		
+		return c;
 	}
 
 	public String getOrderStatus() {
 		return orderStatus;
+	}
+	
+	public Date getPurchaseDate() {
+		return purchaseDate;
 	}
 
 	public void setOrderStatus(String v) {

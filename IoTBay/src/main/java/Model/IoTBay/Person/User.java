@@ -10,13 +10,17 @@ import java.io.Serializable;
  * @author Michael Wu
  */
 public class User implements Serializable {
-
+	private static int numberOfUsers = 0;
+	
+	public final int userID;
 	private String firstName;
 	private String lastName;
 	private String password;
 	private String email;
+	
 	private Address address;
 	private PaymentInformation payment;
+	
 
 	private EUserType type;
 
@@ -29,6 +33,8 @@ public class User implements Serializable {
 	 * @param em Email.
 	 */
 	public User(String fn, String ln, String pw, String em) {
+		userID = numberOfUsers++;
+		
 		firstName = fn;
 		lastName = ln;
 		password = pw;

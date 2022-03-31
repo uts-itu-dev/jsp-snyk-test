@@ -8,12 +8,16 @@ import java.io.Serializable;
  * @author Michael Wu
  */
 public class Product implements Serializable {
+	private static int numberOfProducts = 0;
 
+	public final int productID;
 	private String name;
 	private String description;
 	private float price;
 
 	public Product(String name, String desc, float price) {
+		productID = numberOfProducts++;
+		
 		this.name = name;
 		description = desc;
 		this.price = price;

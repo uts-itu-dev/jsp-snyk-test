@@ -10,12 +10,16 @@ import java.io.Serializable;
  * @author Michael Wu
  */
 public class Shipment implements Serializable {
+	private static int numberOfShipments = 0;
 
+	public final int shipmentID;
 	private Address destination;
 	private String status;
 	private String options;
 
 	public Shipment(Address destination, String status, String options) {
+		shipmentID = numberOfShipments++;
+		
 		this.destination = destination;
 		this.status = status;
 		this.options = options;
