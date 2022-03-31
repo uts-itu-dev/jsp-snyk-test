@@ -8,23 +8,21 @@ package Model.IoTBay.Person;
  */
 public class Address {
 
-	private int number;
+	private String number;
 	private String streetName;
 	private String suburb;
-	private int postcode;
-	private String state;
-	private String country;
+	private String postcode;
+	private String city;
 
-	public Address(int number, String streetName, String suburb, int postcode, String state, String country) {
+	public Address(String number, String streetName, String suburb, String postcode, String city) {
 		this.number = number;
 		this.streetName = streetName;
 		this.suburb = suburb;
 		this.postcode = postcode;
-		this.state = state;
-		this.country = country;
+		this.city = city;
 	}
 
-	public int getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
@@ -36,19 +34,15 @@ public class Address {
 		return suburb;
 	}
 
-	public int getPostcode() {
+	public String getPostcode() {
 		return postcode;
 	}
 
-	public String getState() {
-		return state;
+	public String getCity() {
+		return city;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setNumber(int number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 
@@ -60,16 +54,16 @@ public class Address {
 		this.suburb = suburb;
 	}
 
-	public void setPostcode(int postcode) {
+	public void setPostcode(String postcode) {
 		this.postcode = postcode;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setCity(String city) {
+		this.city = city;
 	}
-
-	public void setCountry(String country) {
-		this.country = country;
+	
+	@Override
+	public String toString() {
+		return getNumber() + " " + getStreetName() + ", " + getSuburb() + ", " + getPostcode() + ", " + getCity();
 	}
-
 }

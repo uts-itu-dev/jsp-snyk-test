@@ -15,11 +15,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<!-- Top menu bar thing. -->
 		<div class="IndexDivMain">
+			<!-- Top menu bar thing. -->
+			<nav>
+				<div>
+					<div class="navLinks left"><a href="index.jsp">Home</a></div>
+					<%
+						if (session.getAttribute("User") != null) {
+							out.println("<div class=\"navLinks right\"><a href=\"Logout\">Logout</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Profile.jsp\">Profile</a></div>");
+						} else {
+							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Register.jsp\">Register</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Login.jsp\">Login</a></div>");
+						}
+					%>
+				</div>
+			</nav>
+
 			<p class="IndexH1">IoTBay</p>
-			<h2 class="link"><a href="IoTCore/Login.jsp">Login</a></h2>
-			<h2 class="link"><a href="IoTCore/Register.jsp">Register</a></h2>
 		</div>
 
 	</body>

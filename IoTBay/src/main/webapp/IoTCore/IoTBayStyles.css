@@ -47,6 +47,58 @@ h1 {
 	text-align: center;
 }
 
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.centreScreen {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+nav {
+	background-color: rgba(1, 1, 1, 0);
+	text-align: center;
+}
+
+.navLinks{
+	display: inline-table;
+	padding: 15px;
+	margin-left: 20px;
+	margin-right: 20px;
+
+	font-weight: 400;
+	font-style: normal;
+}
+
+.navLinks:hover a{
+	color: #fa4299;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 25px;
+	padding-right: 25px;
+	background-color: whitesmoke;
+	border-right: 7px solid #fa4299;
+}
+
+.navLinks a{
+	color: white;
+	list-style: none;
+	text-decoration: none;
+	font-size: 25px;
+	text-align: left;
+	transition-timing-function: ease-in-out;
+	transition: .5s;
+}
+
 .link a {
 	color: #fa4299;
 	text-decoration: none;
@@ -75,11 +127,11 @@ html,body {
 }
 
 .wrapper {
-	overflow: hidden;
-	max-width: 390px;
+	width:390px;
+	max-width:390px;
 	background: #fff;
 	padding: 30px;
-	border-radius: 5px;
+	border-radius: 15px;
 	box-shadow: 15px 25px 20px rgba(0,0,0,.1);
 }
 

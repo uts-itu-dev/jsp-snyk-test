@@ -2,6 +2,7 @@ Model\IoTBay\Person\Staff.class
 Model\IoTBay\Person\User.class
 Controller\RegisterController.class
 Model\IoTBay\Product.class
+Controller\LogoutController.class
 Model\IoTBay\Invoice.class
 Model\IoTBay\Order.class
 Model\IoTBay\Person\User$EUserType.class

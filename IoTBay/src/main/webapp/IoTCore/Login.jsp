@@ -7,7 +7,6 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -16,32 +15,41 @@
 		<title>IoTBay | Login</title>
 	</head>
 	<body>
-		<div class="wrapper">
-			<div class="title-text">
-				<div class="title login">Login</div>
-			</div>
+		<div class="IndexDivMain">
+			<!-- Top menu bar thing. -->
+			<nav>
+				<div>
+					<div class="navLinks left"><a href="../index.jsp">Home</a></div>
+				</div>
+			</nav>
 
-			<div class="form-container">
-				<div class="form-inner">
-					<form action="../Login" class="login">
+			<div class="wrapper centreScreen">
+				<div class="title-text">
+					<div class="title login">Login</div>
+				</div>
 
-						<div class="field">
-							<input type="text" placeholder="E-Mail Address" name="Email" required>
-						</div>
+				<div class="form-container">
+					<div class="form-inner">
+						<form action="../Login" class="login" method="POST">
 
-						<div class="field">
-							<input type="password" placeholder="Password" name="Password" required>
-						</div>
+							<div class="field">
+								<input type="email" placeholder="E-Mail Address" name="Email" required>
+							</div>
 
-						<div class="field">
-							<input type="submit" value="Login">
-						</div>
+							<div class="field">
+								<input type="password" placeholder="Password" name="Password" required>
+							</div>
 
-						<div class="signup-link">
-							Not Registered? <a href="Register.jsp">Register Now!</a>
-						</div>
+							<div class="field">
+								<input type="submit" value="Login">
+							</div>
 
-					</form>
+							<div class="signup-link">
+								Not Registered? <a href="Register.jsp">Register Now!</a>
+							</div>
+
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
