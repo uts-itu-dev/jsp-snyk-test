@@ -17,6 +17,8 @@ public class Customer extends User implements Serializable {
 	private String phoneNumber;
 	private Date DOB;
 	private ArrayList<Order> purchaseHistory;
+	private PaymentInformation payment;
+	private boolean bIsRegistered;
 
 	public Customer(String fn, String ln, String pw, String em, Address add, String pn) {
 		super(fn, ln, pw, em, add);
@@ -44,9 +46,25 @@ public class Customer extends User implements Serializable {
 	public ArrayList<Order> getPurchaseHistory() {
 		return purchaseHistory;
 	}
+	
+	public PaymentInformation getPayment() {
+		return payment;
+	}
+	
+	public boolean getRegistration() {
+		return bIsRegistered;
+	}
 
 	public void setPhoneNumber(String v) {
 		phoneNumber = v;
+	}
+	
+	public void setPayment(PaymentInformation pi) {
+		payment = pi;
+	}
+	
+	public void setRegistered() {
+		bIsRegistered = true;
 	}
 	
 	public void addOrder(Order o) {

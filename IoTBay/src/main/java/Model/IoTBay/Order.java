@@ -2,7 +2,7 @@ package Model.IoTBay;
 
 import java.io.Serializable;
 
-import Model.IoTBay.Person.User;
+import Model.IoTBay.Person.Customer;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,12 +17,12 @@ public class Order implements Serializable {
 	private static int numberOfOrders = 0;
 
 	public final int orderID;
-	private final User owner;
+	private final Customer owner;
 	private ArrayList<OrderLineItem> products;
 	private String orderStatus;
 	private Date purchaseDate;
 
-	public Order(User o, ArrayList<OrderLineItem> products, int quant) {
+	public Order(Customer o, ArrayList<OrderLineItem> products, int quant) {
 		orderID = numberOfOrders++;
 		
 		owner = o;
@@ -31,7 +31,7 @@ public class Order implements Serializable {
 		purchaseDate = Calendar.getInstance().getTime();
 	}
 
-	public User getOwner() {
+	public Customer getOwner() {
 		return owner;
 	}
 	

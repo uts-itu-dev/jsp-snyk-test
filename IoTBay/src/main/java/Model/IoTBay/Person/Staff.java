@@ -1,6 +1,7 @@
 package Model.IoTBay.Person;
 
 import DB.MongoConnection;
+import Model.IoTBay.Product;
 import java.io.Serializable;
 import org.bson.Document;
 
@@ -40,5 +41,14 @@ public class Staff extends User implements Serializable {
 
 	public void setRole(String v) {
 		role = v;
+	}
+	
+	public Product addProduct(String name, String desc, float price) {
+		Product p = new Product(name, desc, price);
+		
+		// ...
+		
+		
+		return p;
 	}
 }

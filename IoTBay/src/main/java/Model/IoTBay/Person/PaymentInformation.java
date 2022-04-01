@@ -1,5 +1,7 @@
 package Model.IoTBay.Person;
 
+import java.util.Date;
+
 /**
  * Card details.
  *
@@ -8,13 +10,13 @@ package Model.IoTBay.Person;
 public class PaymentInformation {
 
 	private String cardNo;
-	private String security;
+	private String cvv;
 	private String cardHolder;
-	// Expiry Date.
+	private Date expiryDate;
 
-	public PaymentInformation(String cardNo, String security, String cardHolder) {
+	public PaymentInformation(String cardNo, String cvv, String cardHolder) {
 		this.cardNo = cardNo;
-		this.security = security;
+		this.cvv = cvv;
 		this.cardHolder = cardHolder;
 	}
 
@@ -22,23 +24,31 @@ public class PaymentInformation {
 		return cardNo;
 	}
 
-	public String getSecurity() {
-		return security;
+	public String getCVV() {
+		return cvv;
 	}
 
 	public String getCardHolder() {
 		return cardHolder;
 	}
 
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
 	public void setCardNo(String cardNo) {
 		this.cardNo = cardNo;
 	}
 
-	public void setSecurity(String security) {
-		this.security = security;
+	public void setCVV(String cvv) {
+		this.cvv = cvv;
 	}
 
 	public void setCardHolder(String cardHolder) {
 		this.cardHolder = cardHolder;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 }

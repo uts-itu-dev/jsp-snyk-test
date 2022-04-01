@@ -1,6 +1,6 @@
 package Model.IoTBay;
 
-import Model.IoTBay.Person.User;
+import Model.IoTBay.Person.Customer;
 import java.io.Serializable;
 
 /**
@@ -11,25 +11,25 @@ import java.io.Serializable;
  * @author Michael Wu
  */
 public class OrderLineItem implements Serializable {
-	private Product product;
-	private User user;
+	private final Product product;
+	private final Customer owner;
 	private int quantity;
-	private float totalCost;
+	private final float totalCost;
 
-	public OrderLineItem(Product product, User user, int quantity) {
+	public OrderLineItem(Product product, Customer owner, int quantity) {
 		this.product = product;
-		this.user = user;
+		this.owner = owner;
 		this.quantity = quantity;
 		
 		totalCost = product.getPrice() * quantity;
 	}
 
-	public Product getProductID() {
+	public Product getProduct() {
 		return product;
 	}
 
-	public User getUserID() {
-		return user;
+	public Customer getOwner() {
+		return owner;
 	}
 
 	public int getQuantity() {

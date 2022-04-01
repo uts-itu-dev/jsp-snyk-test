@@ -7,8 +7,6 @@ import org.bson.Document;
 /**
  * The base class for a person involved in IoTBay.
  *
- * This is also an Unregistered Customer of IoTBay.
- *
  * @author Michael Wu
  */
 public class User implements Serializable {
@@ -21,7 +19,6 @@ public class User implements Serializable {
 	private String email;
 	
 	private Address address;
-	private PaymentInformation payment;
 	
 
 	private EUserType type;
@@ -49,17 +46,10 @@ public class User implements Serializable {
 		address = add;
 	}
 
-	public User(String fn, String ln, String pw, String em, PaymentInformation pi) {
-		this(fn, ln, pw, em);
-
-		payment = pi;
-	}
-
 	public User(String fn, String ln, String pw, String em, Address add, PaymentInformation pi) {
 		this(fn, ln, pw, em);
 
 		address = add;
-		payment = pi;
 	}
 	
 	public void addToDatabase() {
@@ -94,10 +84,6 @@ public class User implements Serializable {
 		return address;
 	}
 
-	public PaymentInformation getPayment() {
-		return payment;
-	}
-
 	public EUserType getType() {
 		return type;
 	}
@@ -120,10 +106,6 @@ public class User implements Serializable {
 
 	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public void setPayment(PaymentInformation payment) {
-		this.payment = payment;
 	}
 
 	public void setType(EUserType ut) {
