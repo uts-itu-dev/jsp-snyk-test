@@ -48,17 +48,17 @@
 					IoTBay was developed in accordance to the requirements outlined by the University of
 					Technology Sydney | 41025 - Intro. to Software Development.
 					<br><br>
+					<span class="pink">SAOBAN SALWA HABIB</span> | <span class="darkerPink">14104638</span>
+					<br>
 					<span class="pink">SEUNGWON OCK</span> | <span class="darkerPink">14109641</span>
+					<br>
+					<span class="pink">YESEUL SHIN</span> | <span class="darkerPink">13978248</span>
+					<br>
+					<span class="pink">CHRISTIAN WU</span> | <span class="darkerPink">14147817</span>
 					<br>
 					<span class="pink">MICHAEL WU</span> | <span class="darkerPink">13938903</span>
 					<br>
 					<span class="pink">JERRY YAU</span> | <span class="darkerPink">14150371</span>
-					<br>
-					<span class="pink">CHRISTIAN WU</span> | <span class="darkerPink">14147817</span>
-					<br>
-					<span class="pink">YESEUL SHIN</span> | <span class="darkerPink">13978248</span>
-					<br>
-					<span class="pink">SAOBAN SALWA HABIB</span> | <span class="darkerPink">14104638</span>
 				</p>
 			</div>
 		</div>
