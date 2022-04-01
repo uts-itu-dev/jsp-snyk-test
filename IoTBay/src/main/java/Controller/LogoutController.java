@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Logout", value = "/Logout")
 public class LogoutController extends IoTWebpageBase implements IIoTWebpage {
+	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		super.doGet(request, response);
 		

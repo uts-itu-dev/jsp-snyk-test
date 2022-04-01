@@ -20,8 +20,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "Register", value = "/Register")
 public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
+		super.doPost(request, response);
 
 		String firstName = request.getParameter("First");
 		String lastName = request.getParameter("Last");
