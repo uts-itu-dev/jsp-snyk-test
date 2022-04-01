@@ -22,6 +22,7 @@
 			<nav>
 				<div>
 					<div class="navLinks left"><a href="../index.jsp">Home</a></div>
+					<div class="navLinks right"><a href="../Logout">Logout</a></div>
 				</div>
 			</nav>
 
@@ -30,9 +31,11 @@
 				<%
 					User active = (User) session.getAttribute("User");
 					if (active != null) {
-						out.println(active.getFirstName() + " " + active.getLastName());
+						out.println("<br>Name: " + active.getFirstName() + " " + active.getLastName());
 						out.println("<br>");
-						out.println(active.getEmail());
+						out.println("Email Address: " + active.getEmail());
+						out.println("<br>");
+						out.println("Address: " + active.getAddress());
 					}
 				%>
 			</div>

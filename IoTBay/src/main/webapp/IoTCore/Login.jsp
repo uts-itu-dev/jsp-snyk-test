@@ -47,7 +47,6 @@
 							<div class="signup-link">
 								Not Registered? <a href="Register.jsp">Register Now!</a>
 							</div>
-
 						</form>
 					</div>
 				</div>

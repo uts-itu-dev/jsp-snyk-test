@@ -1,9 +1,11 @@
 package Model.IoTBay.Person;
 
+import DB.MongoConnection;
 import Model.IoTBay.Order;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import org.bson.Document;
 
 /**
  * A Registered Customer of IoTBay.
@@ -20,6 +22,19 @@ public class Customer extends User implements Serializable {
 		super(fn, ln, pw, em, add);
 
 		phoneNumber = pn;
+	}
+	
+	@Override
+	public void addToDatabase() {
+		MongoConnection connection = MongoConnection.makeConnection();
+		
+		Document customer = new Document("_id", userID)
+			.append("FirstName", getFirstName())
+			.append("LastName", getLastName())
+			.append("EmailAddress", getEmail())
+			.append("Address", getAddress());
+
+		connection.getCollection().insertOne(customer);
 	}
 
 	public String getPhoneNumber() {

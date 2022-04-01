@@ -16,10 +16,12 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 
 	public final String CSS_LINK = "<link rel=\"stylesheet\"href=\"IoTCore/IoTBayStyles.css\">";
 	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
 	}
 	
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 	}

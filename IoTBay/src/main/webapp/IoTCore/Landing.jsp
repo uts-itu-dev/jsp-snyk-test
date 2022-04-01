@@ -7,6 +7,7 @@
 --%>
 
 <%@page import="Model.IoTBay.Person.User" %>
+<%@page import="Model.IoTBay.Person.Address" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -28,22 +29,35 @@
 
 			<div>
 				<div class="centreScreen">
-					<h1>Hello,
-						<%
-							User active = (User) session.getAttribute("User");
-							if (active != null) {
-								out.println(active.getFirstName() + " " + active.getLastName() + "!");
-								out.println("<br>");
-								out.println("Your E-Mail Address is: " + active.getEmail());
-								out.println("<br>");
-								out.println("Your Password is: " + active.getPassword());
-								out.println("<br>");
-								out.println("Your Address is: " + active.getAddress());
+
+					<%
+						User active = (User) session.getAttribute("User");
+						if (active != null) {
+							String firstName = active.getFirstName();
+							String lastName = active.getLastName();
+							Address address = active.getAddress();
+
+							if (firstName != null && lastName != null) {
+								out.println("<h1>Hello, " + firstName + " " + lastName + "!</h1>");
 							} else {
-								throw new NullPointerException("User is null");
+								out.println("<h1>Hello!</h1>");
 							}
-						%>
-					</h1>
+							
+							out.println("<br><p class=\"text\">");
+							out.println("Your E-Mail Address is: " + active.getEmail());
+							out.println("<br>");
+							out.println("Your Password is: " + active.getPassword());
+							
+							if (address != null) {
+								out.println("<br>");
+								out.println("Your Address is: " + address);
+							}
+							
+							out.println("</p>");
+						} else {
+							throw new NullPointerException("Landing.jsp::User is null");
+						}
+					%>
 				</div
 			</div>
 		</div>

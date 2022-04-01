@@ -42,7 +42,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 
 			// Mark this user as in-session.
 			HttpSession session = request.getSession();
-			session.setAttribute("User", new User(firstName, lastName, pass1, email, new Address(addressNum, addressStreetName, addressSuburb, addressPostcode, addressCity)));
+			User newUser = new User(firstName, lastName, pass1, email, new Address(addressNum, addressStreetName, addressSuburb, addressPostcode, addressCity));
+			session.setAttribute("User", newUser);
 			
 			response.sendRedirect("IoTCore/Landing.jsp");
 		} else {

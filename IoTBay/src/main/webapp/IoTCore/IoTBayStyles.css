@@ -10,9 +10,11 @@
 }
 
 h1 {
-	color:blue;
+	color:#FA4299;
 	font-family: 'Roboto', sans-serif;
-	font-weight: 400;
+	text-transform: uppercase;
+	font-weight: 900;
+	text-align:center;
 }
 
 .S {
@@ -55,6 +57,17 @@ h1 {
 	float: right;
 }
 
+.text {
+	font-family : 'Roboto', sans-serif;
+	font-weight: 700;
+}
+
+.textArea {
+	text-align: center;
+	padding-left:  25%;
+	padding-right: 25%;
+}
+
 .centreScreen {
 	margin: 0;
 	position: absolute;
@@ -62,6 +75,14 @@ h1 {
 	left: 50%;
 	-ms-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
+}
+
+.pink {
+	color: #FA4299;
+}
+
+.darkerPink {
+	color: #D82077;
 }
 
 nav {
@@ -80,13 +101,13 @@ nav {
 }
 
 .navLinks:hover a{
-	color: #fa4299;
+	color: #FA4299;
 	padding-top: 15px;
 	padding-bottom: 15px;
 	padding-left: 25px;
 	padding-right: 25px;
 	background-color: whitesmoke;
-	border-right: 7px solid #fa4299;
+	border-right: 7px solid #FA4299;
 }
 
 .navLinks a{
@@ -100,7 +121,7 @@ nav {
 }
 
 .link a {
-	color: #fa4299;
+	color: #FA4299;
 	text-decoration: none;
 	font-weight:100;
 }
@@ -122,7 +143,7 @@ html,body {
 }
 
 ::selection {
-	background: #fa4299;
+	background: #FA4299;
 	color: #fff;
 }
 
@@ -273,7 +294,7 @@ form .field input:focus::placeholder {
 
 .form-inner form .pass-link a,
 .form-inner form .signup-link a {
-	color: #fa4299;
+	color: #FA4299;
 	text-decoration: none;
 }
 
@@ -295,7 +316,7 @@ form .btn .btn-layer {
 	width: 300%;
 	position: absolute;
 	left: -100%;
-	background: -webkit-linear-gradient(right, #a445b2, #fa4299, #a445b2, #fa4299);
+	background: -webkit-linear-gradient(right, #a445b2, #FA4299, #a445b2, #FA4299);
 	border-radius: 5px;
 	transition: all 0.4s ease;
 	;

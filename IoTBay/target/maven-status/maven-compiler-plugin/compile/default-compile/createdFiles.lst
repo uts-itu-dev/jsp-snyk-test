@@ -1,4 +1,5 @@
 Model\IoTBay\Person\Staff.class
+DB\MongoConnection.class
 Model\IoTBay\Person\User.class
 Controller\RegisterController.class
 Model\IoTBay\Product.class
@@ -10,6 +11,7 @@ Model\IoTBay\Person\Address.class
 Model\IoTBay\Core\IoTWebpageBase.class
 Model\IoTBay\Core\IIoTWebpage.class
 Model\IoTBay\Shipment.class
+Model\IoTBay\OrderLineItem.class
 Model\IoTBay\Person\PaymentInformation.class
 Controller\LoginController.class
 Model\IoTBay\Person\Customer.class

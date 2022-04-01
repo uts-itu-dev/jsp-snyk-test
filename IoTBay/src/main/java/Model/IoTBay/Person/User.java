@@ -1,6 +1,8 @@
 package Model.IoTBay.Person;
 
 import java.io.Serializable;
+import DB.MongoConnection;
+import org.bson.Document;
 
 /**
  * The base class for a person involved in IoTBay.
@@ -58,6 +60,18 @@ public class User implements Serializable {
 
 		address = add;
 		payment = pi;
+	}
+	
+	public void addToDatabase() {
+		MongoConnection connection = MongoConnection.makeConnection();
+		
+		Document baseUser = new Document("_id", userID)
+			.append("FirstName", getFirstName())
+			.append("LastName", getLastName())
+			.append("EmailAddress", getEmail())
+			.append("Address", getAddress());
+
+		connection.getCollection().insertOne(baseUser);
 	}
 
 	public String getFirstName() {

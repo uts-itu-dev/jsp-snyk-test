@@ -1,8 +1,8 @@
 package Controller;
 
 import Model.IoTBay.Core.*;
+import Model.IoTBay.Person.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,20 +17,16 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "Login", value = "/Login")
 public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 
+	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/type");
-
-		// Just write out the login details.
-		PrintWriter out = response.getWriter();
-		out.println("Login Controller: " + request.getParameter("Email") + " " + request.getParameter("Password"));
+		super.doPost(request, response);
 		
-		/* Not implemented yet.
+		String email = request.getParameter("Email");
+		String password = request.getParameter("Password");
 		
 		HttpSession session = request.getSession();
-		session.setAttribute("User", new User());
+		session.setAttribute("User", new User(null, null, password, email));
 		
 		response.sendRedirect("IoTCore/Landing.jsp");
-		
-		*/
 	}
 }
