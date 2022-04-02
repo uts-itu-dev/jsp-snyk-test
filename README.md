@@ -39,4 +39,5 @@ If a browser window doesn't automatically open, open your browser to: http://loc
 IoTBay was tested using:  
 
 	Google Chrome 100.0.4896.60 (Official Build)
+	Java Platform: jdk1.8.0_321
 
