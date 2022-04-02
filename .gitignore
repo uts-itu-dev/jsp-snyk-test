@@ -46,3 +46,4 @@ nb-configuration.xml
 *.ear
 IoTBay/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
 IoTBay/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+/IoTBay/target/
