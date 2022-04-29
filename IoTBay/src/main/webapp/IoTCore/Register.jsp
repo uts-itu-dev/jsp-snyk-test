@@ -59,7 +59,7 @@
 
 							<div class="field">
 								<input type="text" placeholder="Phone Number" name="PhoneNumber" <%String pn = request.getParameter("PhoneNumber");
-								out.println(e == null ? "" : "value=" + pn);%> required>
+								out.println(pn == null ? "" : "value=" + pn);%> required>
 							</div>
 
 							<div class="field">
