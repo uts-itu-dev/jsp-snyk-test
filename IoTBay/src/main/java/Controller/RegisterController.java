@@ -1,11 +1,8 @@
 package Controller;
 
-import DAO.*;
 import Model.IoTBay.Core.*;
 import Model.IoTBay.Person.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +57,7 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 			}
 		} catch (SQLException s) {
 		}
-
+		
 		if (!pass1.equals(pass2)) {
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(

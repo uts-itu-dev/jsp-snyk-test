@@ -14,11 +14,15 @@ public class PaymentInformation implements Serializable {
 	private String cvv;
 	private String cardHolder;
 	private Date expiryDate;
-
+	
 	public PaymentInformation(String cardNo, String cvv, String cardHolder) {
 		this.cardNo = cardNo;
 		this.cvv = cvv;
 		this.cardHolder = cardHolder;
+	}
+
+	public PaymentInformation(){
+		this("", "", "");
 	}
 
 	public String getCardNo() {

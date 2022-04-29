@@ -23,7 +23,7 @@ public class DBUsers {
 		// Read Customers and Staff from a previous execution.
 		int cc = injectCustomers().size();
 		int cs = injectStaff().size();
-		
+
 		System.out.println("Injected " + cc + " Customers and " + cs + " Staff into IoTBay.");
 	}
 
@@ -39,7 +39,6 @@ public class DBUsers {
 
 		return null;
 	}
-	
 
 	public Customer findCustomer(String email, String password) throws SQLException {
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
@@ -55,33 +54,32 @@ public class DBUsers {
 	}
 
 	public void add(Customer c) throws SQLException {
-		final boolean bDebugging = false;
+		Address a = c.getAddress();
 
-		if (bDebugging) {
-			System.out.println("Debugging...");
+		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, PHONENUMBER) ";
 
-			// Test SQL command.
-			statement.executeUpdate("INSERT INTO IOTBAY.CUSTOMERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, PHONENUMBER, CARDNUMBER, CVV, CARDHOLDER) VALUES('Debugging: FirstName', 'Debugging: LastName', 'Debugging: Password', 'Debugging: E-Mail Address', 'stn', 'stname', 'sub', 'pc', 'city', '0470639692', 'cardno', '123', 'cardholder')");
+		String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + concatValues(c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail(),
+			a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(), c.getPhoneNumber());
 
-			System.out.println("End Exec.\nNew Debugging Record Added");
-		} else {
-			Address a = c.getAddress();
-			final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, PHONENUMBER) ";
+		statement.executeUpdate(instruction);
 
-			String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + concatValues(c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail(),
-				a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(),
-				c.getPhoneNumber());
-
-			statement.executeUpdate(instruction);
-
-			System.out.println("End Exec.\nAdded new Customer " + c.getFirstName() + " " + c.getEmail());
-		}
+		System.out.println("End Exec.\nAdded new Customer " + c.getFirstName() + " " + c.getEmail());
 	}
 
 	public void add(Staff s) throws SQLException {
 		String instruction = "INSERT INTO IOTBAY.STAFF " + concatValues(s.getFirstName(), s.getLastName(), s.getPassword(), s.getEmail());
 
 		statement.executeUpdate(instruction);
+	}
+
+	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException {
+		String instruction = "UPDATE IOTBAY.CUSTOMERS SET FIRSTNAME='" + fn + "', LASTNAME='" + ln + "', PASSWORD='" + pw + "', EMAIL='"+email+"', PHONENUMBER='"+phone+"',STREETNUMBER='"+addNum+"',STREETNAME='"+addStreetName+"', SUBURB='"+addSuburb+"', POSTCODE='"+addPostcode+"',CITY='"+addCity+"', CARDNUMBER='"+cardNo+"', CVV='"+cvv+"', CARDHOLDER='"+cardHolder+"' WHERE EMAIL='"+c.getEmail()+"'";
+		
+		statement.executeUpdate(instruction);
+	}
+	
+	public void update(Staff s) throws SQLException {
+		
 	}
 
 	private String concatValues(String... s) {
@@ -96,6 +94,7 @@ public class DBUsers {
 				ret += concat;
 			}
 		}
+		
 		System.out.println(ret);
 
 		return ret + "')";

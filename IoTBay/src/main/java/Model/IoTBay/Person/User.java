@@ -28,24 +28,26 @@ public class User implements Serializable {
 	 * @param ln Last Name.
 	 * @param pw Password.
 	 * @param em Email.
+	 * @param t Type.
 	 */
-	public User(String fn, String ln, String pw, String em) {
+	public User(String fn, String ln, String pw, String em, EUserType t) {
 		ID = numberOfUsers++;
 		
 		firstName = fn;
 		lastName = ln;
 		password = pw;
 		email = em;
+		type = t;
 	}
 
-	public User(String fn, String ln, String pw, String em, Address add) {
-		this(fn, ln, pw, em);
+	public User(String fn, String ln, String pw, String em, Address add, EUserType t) {
+		this(fn, ln, pw, em, t);
 
 		address = add;
 	}
 
-	public User(String fn, String ln, String pw, String em, Address add, PaymentInformation pi) {
-		this(fn, ln, pw, em);
+	public User(String fn, String ln, String pw, String em, Address add, PaymentInformation pi, EUserType t) {
+		this(fn, ln, pw, em, t);
 
 		address = add;
 	}

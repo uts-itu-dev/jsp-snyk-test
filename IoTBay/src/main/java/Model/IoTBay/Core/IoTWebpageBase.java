@@ -3,7 +3,6 @@ package Model.IoTBay.Core;
 import DAO.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServlet;
-import java.lang.IllegalArgumentException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +18,8 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 
 	public final String CSS_LINK = "<link rel=\"stylesheet\"href=\"IoTCore/IoTBayStyles.css\">";
 
-	public DBConnector connector;
-	public DBUsers uDB;
+	public static DBConnector connector;
+	public static DBUsers uDB;
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,6 +37,8 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 				connector = new DBConnector();
 				uDB = new DBUsers(connector.openConnection());
 				session.setAttribute("UDatabase", uDB);
+				
+				System.out.println("Database Set");
 			} catch (ClassNotFoundException c) {
 				throw new NullPointerException("Unable to make a new DBConnector. Class Not Found Exception.");
 			} catch (SQLException s) {

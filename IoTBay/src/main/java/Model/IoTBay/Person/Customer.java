@@ -19,13 +19,16 @@ public class Customer extends User implements Serializable {
 	private boolean bIsRegistered;
 	
 	public Customer(String fn, String ln, String pw, String em){
-		super(fn, ln, pw, em);
+		super(fn, ln, pw, em, EUserType.REGISTERED);
+		
+		payment = new PaymentInformation();
 	}
 
 	public Customer(String fn, String ln, String pw, String em, Address add, String pn) {
-		super(fn, ln, pw, em, add);
+		super(fn, ln, pw, em, add, EUserType.REGISTERED);
 
 		phoneNumber = pn;
+		payment = new PaymentInformation();
 	}
 
 	public Customer(String fn, String ln, String pw, String em, Address add, String pn, PaymentInformation pi) {
