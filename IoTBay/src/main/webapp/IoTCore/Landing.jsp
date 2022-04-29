@@ -7,6 +7,7 @@
 --%>
 
 <%@page import="Model.IoTBay.Person.User" %>
+<%@page import="Model.IoTBay.Person.Customer" %>
 <%@page import="Model.IoTBay.Person.Address" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -31,7 +32,7 @@
 				<div class="centreScreen">
 
 					<%
-						User active = (User) session.getAttribute("User");
+						Customer active = (Customer) session.getAttribute("User");
 						if (active != null) {
 							String firstName = active.getFirstName();
 							String lastName = active.getLastName();

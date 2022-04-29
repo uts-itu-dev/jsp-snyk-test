@@ -1,11 +1,9 @@
 package Model.IoTBay.Person;
 
-import DB.MongoConnection;
-import Model.IoTBay.Order;
+import Model.IoTBay.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import org.bson.Document;
 
 /**
  * A Registered Customer of IoTBay.
@@ -19,28 +17,34 @@ public class Customer extends User implements Serializable {
 	private ArrayList<Order> purchaseHistory;
 	private PaymentInformation payment;
 	private boolean bIsRegistered;
+	
+	public Customer(String fn, String ln, String pw, String em){
+		super(fn, ln, pw, em);
+	}
 
 	public Customer(String fn, String ln, String pw, String em, Address add, String pn) {
 		super(fn, ln, pw, em, add);
 
 		phoneNumber = pn;
 	}
+
+	public Customer(String fn, String ln, String pw, String em, Address add, String pn, PaymentInformation pi) {
+		this(fn, ln, pw, em, add, pn);
+		
+		payment = pi;
+	}
 	
 	@Override
 	public void addToDatabase() {
-		MongoConnection connection = MongoConnection.makeConnection();
 		
-		Document customer = new Document("_id", userID)
-			.append("FirstName", getFirstName())
-			.append("LastName", getLastName())
-			.append("EmailAddress", getEmail())
-			.append("Address", getAddress());
-
-		connection.getCollection().insertOne(customer);
 	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;
+	}
+	
+	public Date getDOB() {
+		return DOB;
 	}
 	
 	public ArrayList<Order> getPurchaseHistory() {
@@ -61,6 +65,10 @@ public class Customer extends User implements Serializable {
 	
 	public void setPayment(PaymentInformation pi) {
 		payment = pi;
+	}
+	
+	public void setPayment(String cn, String cvv, String ch) {
+		setPayment(new PaymentInformation(cn, cvv, ch));
 	}
 	
 	public void setRegistered() {

@@ -28,12 +28,23 @@
 					<div class="title login">Login</div>
 				</div>
 
+				<!-- If the user of email and password does not exist, show the message. -->
+				<p style="text-align:center; color:red">
+					<%
+						String err = request.getParameter("err");
+						if (err != null) {
+							out.println("<br>" + err);
+						}
+					%>
+				</p>
+
 				<div class="form-container">
 					<div class="form-inner">
 						<form action="../Login" class="login" method="POST">
 
 							<div class="field">
-								<input type="email" placeholder="E-Mail Address" name="Email" required>
+								<input type="email" placeholder="E-Mail Address" name="Email" <%String e = request.getParameter("Email");
+								out.println(e == null ? "" : "value=" + e);%>required>
 							</div>
 
 							<div class="field">

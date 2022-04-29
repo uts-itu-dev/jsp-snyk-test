@@ -1,8 +1,9 @@
 package Controller;
 
 import Model.IoTBay.Core.*;
-import Model.IoTBay.Person.User;
+import Model.IoTBay.Person.Customer;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +21,25 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		super.doPost(request, response);
-		
+
 		String email = request.getParameter("Email");
 		String password = request.getParameter("Password");
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("User", new User(null, null, password, email));
-		
-		response.sendRedirect("IoTCore/Landing.jsp");
+
+		try {
+			Customer tryLoginCredentials = uDB.findCustomer(email, password);
+			if (tryLoginCredentials != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("User", tryLoginCredentials);
+				
+				response.sendRedirect("IoTCore/Landing.jsp");
+			} else {
+				response.sendRedirect("IoTCore/Login.jsp?"
+					+ redirectParams("err", "Incorrect E-Mail or Password!", "Email", email)
+				);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Unable to find Email: " + email + "\n" + e);
+		}
 	}
 }

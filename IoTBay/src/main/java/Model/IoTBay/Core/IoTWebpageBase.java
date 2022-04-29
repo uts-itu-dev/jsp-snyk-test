@@ -1,11 +1,14 @@
 package Model.IoTBay.Core;
 
+import DAO.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import java.lang.IllegalArgumentException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 
 /**
  * The base class for any Java-controlled webpage in IoTBay.
@@ -15,15 +18,32 @@ import javax.servlet.http.HttpServletResponse;
 public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 
 	public final String CSS_LINK = "<link rel=\"stylesheet\"href=\"IoTCore/IoTBayStyles.css\">";
-	
+
+	public DBConnector connector;
+	public DBUsers uDB;
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
 	}
-	
+
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+
+		HttpSession session = request.getSession();
+		
+		if (session.getAttribute("UDatabase") == null) {
+			try {
+				connector = new DBConnector();
+				uDB = new DBUsers(connector.openConnection());
+				session.setAttribute("UDatabase", uDB);
+			} catch (ClassNotFoundException c) {
+				throw new NullPointerException("Unable to make a new DBConnector. Class Not Found Exception.");
+			} catch (SQLException s) {
+				throw new NullPointerException("Unable to make a new DBConnector. SQL Exception.");
+			}
+		}
 	}
 
 	public final String redirectParams(String... params) throws IllegalArgumentException {
@@ -35,7 +55,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 
 		for (int i = 0; i < params.length - 1; i += 2) {
 			result += params[i] + "=" + params[i + 1];
-			
+
 			if (i != params.length - 2) {
 				result += "&";
 			}
@@ -43,10 +63,10 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 
 		return result;
 	}
-	
+
 	final String convertStringToHTMLRequest(String s) {
 		String result = "";
-		
+
 		for (char r : s.toCharArray()) {
 			if (r == ' ') {
 				result += "%20";
@@ -54,7 +74,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 				result += r;
 			}
 		}
-		
+
 		return result;
 	}
 }

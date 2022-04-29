@@ -58,6 +58,11 @@
 							</div>
 
 							<div class="field">
+								<input type="text" placeholder="Phone Number" name="PhoneNumber" <%String pn = request.getParameter("PhoneNumber");
+								out.println(e == null ? "" : "value=" + pn);%> required>
+							</div>
+
+							<div class="field">
 								<input type="password" placeholder="Password" name="Pass1" required>
 							</div>
 

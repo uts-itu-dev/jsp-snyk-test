@@ -1,5 +1,6 @@
 package Model.IoTBay.Person;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  *
  * @author Michael Wu
  */
-public class PaymentInformation {
+public class PaymentInformation implements Serializable {
 
 	private String cardNo;
 	private String cvv;
