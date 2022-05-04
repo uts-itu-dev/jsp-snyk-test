@@ -37,6 +37,11 @@
 						if (err != null) {
 							out.println("<br>" + err);
 						}
+						
+						String upd = request.getParameter("upd");
+						if (upd != null) {
+							out.println("<br>" + upd);
+						}
 					%>
 				</p>
 				<%
@@ -47,7 +52,25 @@
 						Customer active = (Customer) base;
 
 						if (active != null) {
+							PaymentInformation pi = active.getPayment();
+							String cn = "";
+							String cvv = "";
+							String ch = "";
+							
+							if (pi != null){
+								cn = pi.getCardNo();
+								if (cn == null)
+									cn = "";
+								cvv = pi.getCVV();
+								if (cvv == null)
+									cvv = "";
+								ch = pi.getCardHolder();
+								if (ch == null)
+									ch = "";
+							}
+						
 							out.println(
+								// First and Last Names.
 								  "<form action=\"../Update\" method=\"POST\"><table>"
 								+ "<tr><td>First Name:</td><td><input type=\"text\" placeholder=\"First Name\" name=\"First\" value=\"" + active.getFirstName() + "\"></td></tr>"
 								+ "<tr><td>Last Name:</td><td><input type=\"text\" placeholder=\"Last Name\" name=\"Last\" value=\"" + active.getLastName() + "\"></td></tr>"
@@ -56,6 +79,7 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form>"
 								
+								// Passwords.
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
 								+ "<tr><td>Current Password:</td><td><input type=\"password\" placeholder=\"Current Password\" name=\"Password\"></td></tr>"
 								+ "<tr><td>New Password:</td><td><input type=\"password\" placeholder=\"New Password\" name=\"Pass1\"></td></tr>"
@@ -65,6 +89,7 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form>"
 								
+								// Email Address.
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
 								+ "<tr><td>Email Address:</td><td><input type=\"email\" placeholder=\"E-Mail Address\" name=\"Email\" value=\"" + active.getEmail() + "\"></td></tr>"
 								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
@@ -72,6 +97,7 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form>"
 								
+								// Phone Number.
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
 								+ "<tr><td>Phone Number:</td><td><input type=\"text\" placeholder=\"Phone Number\" name=\"PhoneNumber\" value=\"" + active.getPhoneNumber() + "\"></td></tr>"
 								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
@@ -79,6 +105,7 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form>"
 								
+								// Address Details.
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
 								+ "<tr><td>Street Number:</td><td><input type=\"text\" placeholder=\"Street Number\" name=\"addNum\" value=\"" + active.getAddress().getNumber() + "\"></td></tr>"
 								+ "<tr><td>Street:</td><td><input type=\"text\" placeholder=\"Street\" name=\"addStreetName\" value=\"" + active.getAddress().getStreetName() + "\"></td></tr>"
@@ -90,21 +117,16 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form>"
 								
+								// Payment Information Details.
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
-								+ "<tr><td>Card Number:</td><td><input type=\"text\" placeholder=\"Card Number\" name=\"CardNo\" value=\"" + (active.getPayment().getCardNo().length() == 0 ? "" : active.getPayment().getCardNo()) + "\"></td></tr>"
-								+ "<tr><td>CVV:</td><td><input type=\"text\" placeholder=\"CVV\" name=\"CVV\" value=\"" + (active.getPayment().getCVV().length() == 0 ? "" : active.getPayment().getCVV()) + "\"></td></tr>"
-								+ "<tr><td>Card Holder's Name:</td><td><input type=\"text\" placeholder=\"Card Holder\" name=\"CardHolder\" value=\"" + (active.getPayment().getCardHolder().length() == 0 ? "" : active.getPayment().getCardHolder()) + "\"></td></tr>"
+								+ "<tr><td>Card Number:</td><td><input type=\"text\" placeholder=\"Card Number\" name=\"CardNo\" value=\"" + cn + "\"></td></tr>"
+								+ "<tr><td>CVV:</td><td><input type=\"text\" placeholder=\"CVV\" name=\"CVV\" value=\"" + cvv + "\"></td></tr>"
+								+ "<tr><td>Card Holder's Name:</td><td><input type=\"text\" placeholder=\"Card Holder\" name=\"CardHolder\" value=\"" + ch + "\"></td></tr>"
 								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
 								+ "<input type=\"hidden\" name=\"Attribute\" value=\"PaymentInformation\">"
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form>"
 							);
-
-							out.println("<br>Name: " + active.getFirstName() + " " + active.getLastName());
-							out.println("<br>");
-							out.println("Email Address: " + active.getEmail());
-							out.println("<br>");
-							out.println("Address: " + active.getAddress());
 						}
 					} else if (base.getType() == EUserType.STAFF) {
 						Staff active = (Staff) base;

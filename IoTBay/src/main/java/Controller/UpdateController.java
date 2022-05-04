@@ -57,7 +57,7 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 						case "Names":
 							updateCustomerNames(current, firstName, lastName);
 							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Landing.jsp");
+							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Name Updated!"));
 
 							break;
 						case "Password":
@@ -68,7 +68,7 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							} else {
 								updateCustomerPassword(current, pass1);
 								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-								response.sendRedirect("IoTCore/Landing.jsp");
+								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
 							}
 
 							break;
@@ -78,33 +78,33 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							} else {
 								updateCustomerEmail(current, email);
 								session.setAttribute("User", uDB.findCustomer(email));
-								response.sendRedirect("IoTCore/Landing.jsp");
+								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
 							}
 
 							break;
 						case "PhoneNumber":
 							updateCustomerPhoneNumber(current, phoneNumber);
 							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Landing.jsp");
+							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Phone Number Updated!"));
 
 							break;
 						case "Address":
 							updateCustomerAddress(current, addressNum, addressStreetName, addressSuburb, addressPostcode, addressCity);
 							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Landing.jsp");
+							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
 
 							break;
 						case "PaymentInformation":
 							updateCustomerPaymentInformation(current, cardNo, CVV, cardHolder);
 							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Landing.jsp");
+							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Payment Information Updated!"));
 
 							break;
 					}
 				}
 
 			} catch (SQLException s) {
-				System.out.println(s);
+				System.out.println("UpdateController::doPost " + s);
 			}
 		}
 	}
