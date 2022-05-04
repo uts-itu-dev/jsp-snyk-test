@@ -42,7 +42,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 			} catch (ClassNotFoundException c) {
 				throw new NullPointerException("Unable to make a new DBConnector. Class Not Found Exception.");
 			} catch (SQLException s) {
-				throw new NullPointerException("Unable to make a new DBConnector. SQL Exception.");
+				throw new NullPointerException("Unable to make a new DBConnector. SQL Exception. " + s);
 			}
 		}
 	}

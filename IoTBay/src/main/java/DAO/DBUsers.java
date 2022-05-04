@@ -67,7 +67,8 @@ public class DBUsers {
 	}
 
 	public void add(Staff s) throws SQLException {
-		String instruction = "INSERT INTO IOTBAY.STAFF " + concatValues(s.getFirstName(), s.getLastName(), s.getPassword(), s.getEmail());
+		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL) ";
+		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + concatValues(s.getFirstName(), s.getLastName(), s.getPassword(), s.getEmail());
 
 		statement.executeUpdate(instruction);
 	}
