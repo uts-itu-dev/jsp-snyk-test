@@ -17,6 +17,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" href="IoTBayStyles.css">
 		<title>IoTBay | Home</title>
+		<meta http-equiv="refresh" content="1; URL=../index.jsp" />
 	</head>
 	<body>
 		<div class="IndexDivMain">
@@ -25,6 +26,7 @@
 				<div>
 					<div class="navLinks left"><a href="../index.jsp">Home</a></div>
 					<div class="navLinks right"><a href="../Logout">Logout</a></div>
+					<div class="navLinks right"><a href="../Profile.jsp">Profile</a></div>
 				</div>
 			</nav>
 

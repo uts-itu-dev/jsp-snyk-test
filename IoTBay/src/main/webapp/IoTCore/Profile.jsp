@@ -47,7 +47,7 @@
 				<%
 					User base = (User) session.getAttribute("User");
 					
-					if (base.getType() == EUserType.REGISTERED) {
+					if (base.getType() == EUserType.CUSTOMER) {
 						// If logged attribute "User" is a Registered Customer.
 						Customer active = (Customer) base;
 

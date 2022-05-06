@@ -4,7 +4,6 @@
  */
 package Controller;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -42,4 +41,12 @@ public class Validator {
 		Pattern rx = Pattern.compile(regularExpression);
 		return rx.matcher(string).matches();
 	}
+	
+	public static boolean containsApostrophe(String s) {
+		for (char c : s.toCharArray())
+			if (c == '\'')
+				return true;
+		return false;
+	}
+		
 }

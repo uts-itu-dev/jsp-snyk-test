@@ -2,6 +2,7 @@ package DAO;
 
 import Model.IoTBay.Person.*;
 import Model.IoTBay.Person.Customer;
+import Model.IoTBay.Product;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,18 +17,28 @@ import java.util.ArrayList;
 public class DBUsers {
 
 	private Statement statement;
+	
+	public ArrayList<Customer> customers;
+	public ArrayList<Staff> staff;
+	public ArrayList<Product> products;
 
 	public DBUsers(Connection c) throws SQLException {
 		statement = c.createStatement();
 
-		// Read Customers and Staff from a previous execution.
-		int cc = injectCustomers().size();
-		int cs = injectStaff().size();
+		// Read DB Information from a previous execution.
+		customers = injectCustomers();
+		staff = injectStaff();
+		products = injectProducts();
+		
+		int cc = customers.size();
+		int sc = staff.size();
+		int pc = products.size();
 
-		System.out.println("Injected " + cc + " Customers and " + cs + " Staff into IoTBay.");
+		System.out.println("Injected " + cc + " Customers | " + sc + " Staff | " + pc + " Products into IoTBay.");
 	}
 
 	public Customer findCustomer(String email) throws SQLException {
+		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL='" + email + "'";
 		ResultSet r = statement.executeQuery(instruction);
 
@@ -41,6 +52,7 @@ public class DBUsers {
 	}
 
 	public Customer findCustomer(String email, String password) throws SQLException {
+		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
 		ResultSet r = statement.executeQuery(instruction);
 
@@ -58,7 +70,7 @@ public class DBUsers {
 
 		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, PHONENUMBER) ";
 
-		String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + concatValues(c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail(),
+		String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + concatValues(c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail().toLowerCase(),
 			a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(), c.getPhoneNumber());
 
 		statement.executeUpdate(instruction);
@@ -68,9 +80,16 @@ public class DBUsers {
 
 	public void add(Staff s) throws SQLException {
 		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL) ";
-		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + concatValues(s.getFirstName(), s.getLastName(), s.getPassword(), s.getEmail());
+		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + concatValues(s.getFirstName(), s.getLastName(), s.getPassword(), s.getEmail().toLowerCase());
 
 		statement.executeUpdate(instruction);
+	}
+	
+	public void add(Product p) throws SQLException {
+		final String attributes = " (PRODUCTNAME, DESCRPTION, PRICE) ";
+		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "";
+		
+		statement.executeQuery(instruction);
 	}
 
 	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException {
@@ -80,6 +99,10 @@ public class DBUsers {
 	}
 	
 	public void update(Staff s) throws SQLException {
+		
+	}
+	
+	public void update(Product p) throws SQLException {
 		
 	}
 
@@ -127,6 +150,19 @@ public class DBUsers {
 
 		return dbInjected;
 	}
+	
+	public final ArrayList<Product> injectProducts() throws SQLException {
+		String instruction = "SELECT * FROM IOTBAY.PRODUCTS";
+		ResultSet r = statement.executeQuery(instruction);
+		ArrayList<Product> dbInjected = new ArrayList();
+		
+		while (r.next()){
+			// Inject.
+			dbInjected.add(resultSetToProduct(r));
+		}
+		
+		return dbInjected;
+	}
 
 	private Customer resultSetToCustomer(ResultSet r) throws SQLException {
 
@@ -167,5 +203,15 @@ public class DBUsers {
 		String pw = r.getString(4);
 
 		return new Staff(fn, ln, pw, em);
+	}
+	
+	private Product resultSetToProduct(ResultSet r) throws SQLException {
+		
+		// Product Information.
+		String pname = r.getString(2);
+		String descr = r.getString(3);
+		float fPrice = r.getFloat(4);
+		
+		return new Product(pname, descr, fPrice);
 	}
 }

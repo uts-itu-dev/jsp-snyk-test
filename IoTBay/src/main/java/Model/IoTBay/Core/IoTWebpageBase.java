@@ -31,18 +31,19 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		response.setContentType("text/html");
 
 		HttpSession session = request.getSession();
-		
+
 		if (session.getAttribute("UDatabase") == null) {
 			try {
-				connector = new DBConnector();
-				uDB = new DBUsers(connector.openConnection());
-				session.setAttribute("UDatabase", uDB);
+				connectToDB();
 				
+				session.setAttribute("UDatabase", uDB);
+				session.setAttribute("Customers", uDB.customers);
+				session.setAttribute("Staff", uDB.staff);
+				session.setAttribute("Products", uDB.products);
+
 				System.out.println("Database Set");
-			} catch (ClassNotFoundException c) {
-				throw new NullPointerException("Unable to make a new DBConnector. Class Not Found Exception.");
 			} catch (SQLException s) {
-				throw new NullPointerException("Unable to make a new DBConnector. SQL Exception. " + s);
+				throw new NullPointerException("IoTWebpageBase::doPost. SQL Exception. " + s);
 			}
 		}
 	}
@@ -77,5 +78,20 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		}
 
 		return result;
+	}
+
+	public static final void connectToDB() throws SQLException {
+		try {
+			System.out.println("Connecting to DB...");
+			
+			connector = new DBConnector();
+			uDB = new DBUsers(connector.openConnection());
+			
+			System.out.println("DB Connected.");
+		} catch (ClassNotFoundException c) {
+			throw new NullPointerException("IoTWebpageBase::connectToDB. Class Not Found Exception.");
+		} catch (SQLException s) {
+			throw new NullPointerException("IoTWebpageBase::connectToDB. SQL Exception. " + s);
+		}
 	}
 }

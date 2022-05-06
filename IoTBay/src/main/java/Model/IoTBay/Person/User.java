@@ -105,10 +105,7 @@ public class User implements Serializable {
 	}
 
 	public enum EUserType {
-		UNREGISTERED,
-		REGISTERED,
-		STAFF,
-		PRODUCT_MANAGER,
-		SYSTEM_MANAGER;
+		CUSTOMER,
+		STAFF
 	}
 }

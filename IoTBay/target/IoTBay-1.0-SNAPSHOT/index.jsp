@@ -6,6 +6,11 @@
 	Purpose    : The landing page of IoTBay.
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.IoTBay.Product"%>
+<%@page import="Model.IoTBay.Core.IoTWebpageBase"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,6 +20,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
+		<%
+			IoTWebpageBase.connectToDB();
+
+			session.setAttribute("UDatabase", IoTWebpageBase.uDB);
+			session.setAttribute("Customers", IoTWebpageBase.uDB.customers);
+			session.setAttribute("Staff", IoTWebpageBase.uDB.staff);
+			session.setAttribute("Products", IoTWebpageBase.uDB.products);
+		%>
+
 		<div class="IndexDivMain">
 			<!-- Top menu bar thing. -->
 			<nav>
@@ -37,7 +51,7 @@
 			<!-- Content area. -->
 			<div>
 				<p class="text textArea">
-					IoT Bay | Introduction to Software Development (41025) - Assignment 1: R0
+					IoT Bay | Introduction to Software Development (41025) - Assignment 2: R1
 					<br><br>
 					The Internet of Things Store (IoTBay) is a small company based in Sydney, Australia.
 					IoTBay wants to develop an online IoT devices ordering application to allow their
@@ -61,6 +75,37 @@
 					<span class="pink">JERRY YAU</span> | <span class="darkerPink">14150371</span>
 				</p>
 			</div>
+		</div>
+		<br><br>
+		<h1>Our Products</h1>
+
+		<div class="tileGrid">
+			<% int productID = 1; %>
+			<c:if test="${Products != null}">
+				<c:forEach var="p" items="${Products}">
+					<div class="tileSpace revealParent">
+						<div class="tileTitle">
+							<c:out value="${p.name}"/></div>
+						<div style="text-align:center; bottom:100%;">
+							<fmt:formatNumber value="${p.price}" type="currency"/></div>
+						<br><br>
+						<div class="hoverRevealer">
+							<div class="productmisc revealContent">
+								<c:out value="${p.description}"/>
+								<br><br>
+								<%
+									String link = "IoTCore/Login.jsp?productID=" + productID;
+									out.println(
+										"<a href=\"" + link + "\">"
+										+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
+										+ "</a>");
+									productID++;
+								%>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
+			</c:if>
 		</div>
 
 	</body>
