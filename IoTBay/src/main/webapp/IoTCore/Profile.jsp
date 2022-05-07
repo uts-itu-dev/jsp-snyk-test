@@ -15,7 +15,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" href="IoTBayStyles.css">
-		<title>JSP Page</title>
+		<title>Your Profile</title>
 	</head>
 	<body>
 		<div class="IndexDivMain">
@@ -31,16 +31,16 @@
 				<h1>Your Profile</h1><br><br>
 
 				<!-- If the user's current password didn't match, show the message. -->
-				<p style="text-align:center; color:red">
+				<p style="text-align:center;">
 					<%
 						String err = request.getParameter("err");
 						if (err != null) {
-							out.println("<br>" + err);
+							out.println("<span style=\"color:red\"><br>" + err + "</span>");
 						}
 						
 						String upd = request.getParameter("upd");
 						if (upd != null) {
-							out.println("<br>" + upd);
+							out.println("<span style=\"color:green\"><br>" + upd + "</span>");
 						}
 					%>
 				</p>
@@ -131,7 +131,33 @@
 					} else if (base.getType() == EUserType.STAFF) {
 						Staff active = (Staff) base;
 						if (active != null) {
-
+							out.println(
+								// First and Last Names.
+								  "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<tr><td>First Name:</td><td><input type=\"text\" placeholder=\"First Name\" name=\"First\" value=\"" + active.getFirstName() + "\"></td></tr>"
+								+ "<tr><td>Last Name:</td><td><input type=\"text\" placeholder=\"Last Name\" name=\"Last\" value=\"" + active.getLastName() + "\"></td></tr>"
+								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
+								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Names\">"
+								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
+								+ "</td></tr></table></form>"
+								
+								// Passwords.
+								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<tr><td>Current Password:</td><td><input type=\"password\" placeholder=\"Current Password\" name=\"Password\"></td></tr>"
+								+ "<tr><td>New Password:</td><td><input type=\"password\" placeholder=\"New Password\" name=\"Pass1\"></td></tr>"
+								+ "<tr><td>Confirm Password:</td><td><input type=\"password\" placeholder=\"Confirm Password\" name=\"Pass2\"></td></tr>"
+								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
+								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Password\">"
+								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
+								+ "</td></tr></table></form>"
+								
+								// Email Address.
+								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<tr><td>Email Address:</td><td><input type=\"email\" placeholder=\"E-Mail Address\" name=\"Email\" value=\"" + active.getEmail() + "\"></td></tr>"
+								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
+								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Email\">"
+								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
+								+ "</td></tr></table></form>");
 						}
 					}
 				%>

@@ -47,7 +47,20 @@ public class DBUsers {
 				return resultSetToCustomer(r);
 			}
 		}
-
+		
+		return null;
+	}
+	
+	public Staff findStaff(String email) throws SQLException {
+		email = email.toLowerCase();
+		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL='" + email + "'";
+		ResultSet r = statement.executeQuery(instruction);
+		
+		while (r.next()) {
+			if (r.getString(1).equals(email))
+				return resultSetToStaff(r);
+		}
+		
 		return null;
 	}
 
@@ -62,6 +75,19 @@ public class DBUsers {
 			}
 		}
 
+		return null;
+	}
+	
+	public Staff findStaff(String email, String password) throws SQLException {
+		email = email.toLowerCase();
+		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
+		ResultSet r = statement.executeQuery(instruction);
+		
+		while (r.next()) {
+			if (r.getString(1).equals(email) && r.getString(4).equals(password))
+				return resultSetToStaff(r);
+		}
+		
 		return null;
 	}
 
@@ -98,8 +124,10 @@ public class DBUsers {
 		statement.executeUpdate(instruction);
 	}
 	
-	public void update(Staff s) throws SQLException {
+	public void update(Staff s, String fn, String ln, String pw, String email) throws SQLException {
+		String instruction = "UPDATE IOTBAY.STAFF SET FIRSTNAME='" + fn + "', LASTNAME='" + ln + "', PASSWORD='" + pw + "', EMAIL='"+email+"' WHERE EMAIL='" + s.getEmail() + "'";;
 		
+		statement.executeUpdate(instruction);
 	}
 	
 	public void update(Product p) throws SQLException {

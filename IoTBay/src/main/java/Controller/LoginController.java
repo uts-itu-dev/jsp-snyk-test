@@ -2,6 +2,7 @@ package Controller;
 
 import Model.IoTBay.Core.*;
 import Model.IoTBay.Person.Customer;
+import Model.IoTBay.Person.Staff;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
@@ -27,15 +28,26 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 
 		try {
 			Customer tryLoginCredentials = uDB.findCustomer(email, password);
-			if (tryLoginCredentials != null) {
+			if (tryLoginCredentials != null) { // Found Customer.
 				HttpSession session = request.getSession();
 				session.setAttribute("User", tryLoginCredentials);
 				
 				response.sendRedirect("IoTCore/Landing.jsp");
-			} else {
-				response.sendRedirect("IoTCore/Login.jsp?"
-					+ redirectParams("err", "Incorrect E-Mail or Password!", "Email", email)
-				);
+			} else { // If no Customer was found, try Staff.
+
+				Staff tryStaffCredentials = uDB.findStaff(email, password);
+
+				if (tryStaffCredentials != null) { // Found Staff.
+					HttpSession session = request.getSession();
+					session.setAttribute("User", tryStaffCredentials);
+
+					response.sendRedirect("IoTCore/Landing.jsp");
+				} else { // Neither Customer or Staff exists with this Email.
+
+					response.sendRedirect("IoTCore/Login.jsp?"
+						+ redirectParams("err", "Incorrect E-Mail or Password!", "Email", email)
+					);
+				}
 			}
 
 		} catch (SQLException e) {

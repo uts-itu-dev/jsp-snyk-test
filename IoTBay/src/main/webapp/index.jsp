@@ -6,6 +6,8 @@
 	Purpose    : The landing page of IoTBay.
 --%>
 
+<%@page import="Model.IoTBay.Person.User.EUserType"%>
+<%@page import="Model.IoTBay.Person.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Model.IoTBay.Product"%>
 <%@page import="Model.IoTBay.Core.IoTWebpageBase"%>
@@ -80,9 +82,9 @@
 		<h1>Our Products</h1>
 
 		<div class="tileGrid">
-			<% int productID = 1; %>
-			<c:if test="${Products != null}">
-				<c:forEach var="p" items="${Products}">
+			<% int productID = 1; %> <!-- Keep track of Product index when looping. -->
+			<c:if test="${Products != null}"> <!-- If session.getAttribute("Products") exists (if there are products). -->
+				<c:forEach var="p" items="${Products}"> <!-- Loop over Products. -->
 					<div class="tileSpace revealParent">
 						<div class="tileTitle">
 							<c:out value="${p.name}"/></div>
@@ -93,14 +95,42 @@
 							<div class="productmisc revealContent">
 								<c:out value="${p.description}"/>
 								<br><br>
-								<%
-									String link = "IoTCore/Login.jsp?productID=" + productID;
-									out.println(
-										"<a href=\"" + link + "\">"
-										+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
-										+ "</a>");
-									productID++;
-								%>
+								<c:choose>
+									<c:when test="${User != null}">
+										<%
+											User U = (User) session.getAttribute("User");
+
+											// If the User is a Customer, they can add it to their cart.
+											if (U.getType() == EUserType.CUSTOMER) {
+												String link = "AddToCart?bAnonymous=false&productID=" + productID;
+												out.println(
+													"<a href=\"" + link + "\">"
+													+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
+													+ "</a>");
+												productID++;
+											} // If the User is Staff, they can edit the Product.
+											else if (U.getType() == EUserType.STAFF) {
+												String link = "IoTCore/ProductEditor.jsp?bAnonymous=false&productID=" + productID;
+												out.println(
+													"<a href=\"" + link + "\">"
+													+ "<input class=\"button\" type=\"submit\" value=\"Edit Product\">"
+													+ "</a>");
+												productID++;
+											}
+										%>
+									</c:when>
+									<c:when test="${User == null}">
+										<!-- The 'User' is Anonymous. -->
+										<%
+											String link = "AddToCart?bAnonymous=true&productID=" + productID;
+											out.println(
+												"<a href=\"" + link + "\">"
+												+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
+												+ "</a>");
+											productID++;
+										%>
+									</c:when>
+								</c:choose>
 							</div>
 						</div>
 					</div>
