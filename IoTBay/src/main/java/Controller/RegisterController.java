@@ -57,7 +57,7 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 			}
 		} catch (SQLException s) {
 		}
-		
+
 		if (!pass1.equals(pass2)) {
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
@@ -202,7 +202,11 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 
 			session.setAttribute("User", newCustomer);
 
-			response.sendRedirect("IoTCore/Landing.jsp");
+			response.sendRedirect("IoTCore/Redirector.jsp?"
+				+ redirectParams(
+					"HeadingMessage", "Welcome, " + firstName + "!",
+					"Message", "Thank you for registering with IoTBay!\n\nPlease wait while we redirect you...")
+			);
 		}
 	}
 }

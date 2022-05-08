@@ -31,8 +31,13 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 			if (tryLoginCredentials != null) { // Found Customer.
 				HttpSession session = request.getSession();
 				session.setAttribute("User", tryLoginCredentials);
-				
-				response.sendRedirect("IoTCore/Landing.jsp");
+
+				response.sendRedirect("IoTCore/Redirector.jsp?"
+					+ redirectParams(
+						"HeadingMessage", "Welcome, " + tryLoginCredentials.getFirstName() + "!",
+						"Message", "Please wait while we redirect you...")
+				);
+
 			} else { // If no Customer was found, try Staff.
 
 				Staff tryStaffCredentials = uDB.findStaff(email, password);
@@ -41,7 +46,12 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 					HttpSession session = request.getSession();
 					session.setAttribute("User", tryStaffCredentials);
 
-					response.sendRedirect("IoTCore/Landing.jsp");
+					response.sendRedirect("IoTCore/Redirector.jsp?"
+						+ redirectParams(
+							"HeadingMessage", "Welcome, " + tryStaffCredentials.getFirstName() + "!",
+							"Message", "Please wait while we redirect you...")
+					);
+					
 				} else { // Neither Customer or Staff exists with this Email.
 
 					response.sendRedirect("IoTCore/Login.jsp?"

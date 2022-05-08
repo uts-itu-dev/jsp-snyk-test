@@ -67,6 +67,7 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 							+ "<label for=\"ProductPrice\">Product Price:</label><br>"
 							+ "<div class=\"field\"><input name=\"ProductPrice\" type=\"number\" min =\".01\" max=\"9999\" step=\"0.01\" value=\"" + price + "\"></div><br>"
 							+ "<div class=\"field\"><input type=\"submit\" value=\"Update\"></div>"
+							+ "<input type=\"hidden\" name=\"pid\" value=\"" + id + "\">"
 							+ "<input type=\"hidden\" name=\"Attribute\" value=\"Product\">"
 							+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 							+ "</form>"
@@ -85,12 +86,5 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 		// End HTML.
 		out.println("</body>");
 		out.println("</html>");
-	}
-
-	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		super.doPost(request, response);
-
-		// Add to Cart Logic here...
 	}
 }

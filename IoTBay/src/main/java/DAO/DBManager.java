@@ -143,8 +143,10 @@ public class DBManager {
 		statement.executeUpdate(instruction);
 	}
 	
-	public void update(Product p) throws SQLException {
+	public void updateProduct(int id, String name, String desc, String price) throws SQLException {
+		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME='" + name + "', DESCRIPTION='" + desc + "', PRICE=" + Double.parseDouble(price) + " WHERE PRODUCTID=" + id;
 		
+		statement.executeUpdate(instruction);
 	}
 
 	private String concatValues(String... s) {

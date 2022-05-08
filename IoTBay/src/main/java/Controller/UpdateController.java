@@ -139,6 +139,23 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
 							}
 							break;
+						case "Product":
+							String pName = request.getParameter("ProductName");
+							String pDesc = request.getParameter("ProductDesc");
+							String pPrice = request.getParameter("ProductPrice");
+							
+							String pid = request.getParameter("pid");
+							int id = Integer.parseInt(pid);
+							
+							uDB.updateProduct(id, pName, pDesc, pPrice);
+							
+							response.sendRedirect("IoTCore/Redirector.jsp?" +
+								redirectParams(
+									"HeadingMessage", pName + " Updated!",
+									"Message", "Please wait while we redirect you...")
+							);
+							
+							break;
 					}
 				}
 			} catch (SQLException s) {
