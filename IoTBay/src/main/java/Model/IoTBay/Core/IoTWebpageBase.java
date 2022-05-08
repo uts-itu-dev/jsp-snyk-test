@@ -19,11 +19,28 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 	public final String CSS_LINK = "<link rel=\"stylesheet\"href=\"IoTCore/IoTBayStyles.css\">";
 
 	public static DBConnector connector;
-	public static DBUsers uDB;
+	public static DBManager uDB;
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("UDatabase") == null) {
+			try {
+				connectToDB();
+				
+				session.setAttribute("UDatabase", uDB);
+				session.setAttribute("Customers", uDB.customers);
+				session.setAttribute("Staff", uDB.staff);
+				session.setAttribute("Products", uDB.products);
+
+				System.out.println("Database Set");
+			} catch (SQLException s) {
+				throw new NullPointerException("IoTWebpageBase::doPost. SQL Exception. " + s);
+			}
+		}
 	}
 
 	@Override
@@ -85,7 +102,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 			System.out.println("Connecting to DB...");
 			
 			connector = new DBConnector();
-			uDB = new DBUsers(connector.openConnection());
+			uDB = new DBManager(connector.openConnection());
 			
 			System.out.println("DB Connected.");
 		} catch (ClassNotFoundException c) {

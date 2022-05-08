@@ -23,7 +23,7 @@
 				</div>
 			</nav>
 
-			<div class="wrapper centreScreen">
+			<div class="wrapper ForceCentreScreen">
 				<div class="title-text">
 					<div class="title login">Register</div>
 				</div>

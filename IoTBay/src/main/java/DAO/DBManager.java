@@ -10,19 +10,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * Database Manager for any person involved in IOTBay.
+ * Database Manager for any data involved in IoTBay.
  *
  * @author Michael Wu
  */
-public class DBUsers {
+public class DBManager {
 
-	private Statement statement;
+	private final Statement statement;
 	
 	public ArrayList<Customer> customers;
 	public ArrayList<Staff> staff;
 	public ArrayList<Product> products;
 
-	public DBUsers(Connection c) throws SQLException {
+	public DBManager(Connection c) throws SQLException {
 		statement = c.createStatement();
 
 		// Read DB Information from a previous execution.
@@ -59,6 +59,19 @@ public class DBUsers {
 		while (r.next()) {
 			if (r.getString(1).equals(email))
 				return resultSetToStaff(r);
+		}
+		
+		return null;
+	}
+	
+	public Product findProduct(int id) throws SQLException {
+		String instruction = "SELECT * FROM IOTBAY.PRODUCTS WHERE PRODUCTID=" + id;
+		ResultSet r = statement.executeQuery(instruction);
+		
+		while (r.next()) {
+			System.out.println(r.getInt(1));
+			if (r.getInt(1) == id)
+				return resultSetToProduct(r);
 		}
 		
 		return null;

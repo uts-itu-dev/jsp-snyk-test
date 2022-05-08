@@ -14,7 +14,7 @@ h1 {
 	font-family: 'Roboto', sans-serif;
 	text-transform: uppercase;
 	font-weight: 900;
-	
+
 }
 
 .S {
@@ -68,13 +68,22 @@ h1 {
 	padding-right: 25%;
 }
 
-.centreScreen {
+.ForceCentreScreen {
 	margin: 0;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	-ms-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
+}
+
+.centreScreen {
+	margin: 0;
+	position: absolute;
+	top: 10%;
+	bottom:10%;
+	left: 5%;
+	right:5%;
 }
 
 .pink {
@@ -474,4 +483,15 @@ form .btn input[type="submit"] {
 	font-weight: 500;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+textarea {
+	padding: 12px 20px;
+	outline: none;
+	padding-left: 15px;
+	border-radius: 5px;
+	border: 1px solid lightgrey;
+	border-bottom-width: 2px;
+	font-size: 17px;
+	transition: all 0.5s ease;
 }

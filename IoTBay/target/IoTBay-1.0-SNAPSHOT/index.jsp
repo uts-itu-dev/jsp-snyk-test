@@ -96,7 +96,7 @@
 								<c:out value="${p.description}"/>
 								<br><br>
 								<c:choose>
-									<c:when test="${User != null}">
+									<c:when test="${User != null}"> <!-- if (session.getAttribute("User") != null) -->
 										<%
 											User U = (User) session.getAttribute("User");
 
@@ -110,7 +110,7 @@
 												productID++;
 											} // If the User is Staff, they can edit the Product.
 											else if (U.getType() == EUserType.STAFF) {
-												String link = "IoTCore/ProductEditor.jsp?bAnonymous=false&productID=" + productID;
+												String link = "ProductEditor?bAnonymous=false&productID=" + productID;
 												out.println(
 													"<a href=\"" + link + "\">"
 													+ "<input class=\"button\" type=\"submit\" value=\"Edit Product\">"
@@ -119,9 +119,10 @@
 											}
 										%>
 									</c:when>
-									<c:when test="${User == null}">
+									<c:when test="${User == null}"> <!-- if (session.getAttribute("User") == null) -->
 										<!-- The 'User' is Anonymous. -->
 										<%
+											// Same link as a Registered Customer, but mark bAnonymous.
 											String link = "AddToCart?bAnonymous=true&productID=" + productID;
 											out.println(
 												"<a href=\"" + link + "\">"
