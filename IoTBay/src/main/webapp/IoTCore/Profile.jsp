@@ -181,31 +181,43 @@
 						if (active != null) {
 							out.println(
 								// First and Last Names.
-								  "<form action=\"../Update\" method=\"POST\"><table>"
-								+ "<tr><td>First Name:</td><td><input type=\"text\" placeholder=\"First Name\" name=\"First\" value=\"" + active.getFirstName() + "\"></td></tr>"
-								+ "<tr><td>Last Name:</td><td><input type=\"text\" placeholder=\"Last Name\" name=\"Last\" value=\"" + active.getLastName() + "\"></td></tr>"
-								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
+								"<div style=\"width: 100%; display: table;\">"
+								+ "<div style=\"display: table-row\">"
+								
+								+ "<div style=\"width: 600px; display:table-cell;\">"
+								+ "<div class=\"form-container\"><div class=\"form-inner\">"
+								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<tr><td><label for=\"First\">First Name:</label><div class=\"field\"><input type=\"text\" placeholder=\"First Name\" name=\"First\" value=\"" + active.getFirstName() + "\"></div></td></tr>"
+								+ "<tr><td><label for=\"Last\">Last Name:</label><div class=\"field\"><input type=\"text\" placeholder=\"Last Name\" name=\"Last\" value=\"" + active.getLastName() + "\"></div></td></tr>"
+								+ "<tr><td><div class=\"field\"><input type=\"submit\" value=\"Update\"></div></td><td>"
 								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Names\">"
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
-								+ "</td></tr></table></form>"
+								+ "</td></tr></table></form></div></div>"
+								+ "</div>"
 								
 								// Passwords.
+								+ "<div style=\"width: 600px; display:table-cell;\">"
+								+ "<div class=\"form-container\"><div class=\"form-inner\">"
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
-								+ "<tr><td>Current Password:</td><td><input type=\"password\" placeholder=\"Current Password\" name=\"Password\"></td></tr>"
-								+ "<tr><td>New Password:</td><td><input type=\"password\" placeholder=\"New Password\" name=\"Pass1\"></td></tr>"
-								+ "<tr><td>Confirm Password:</td><td><input type=\"password\" placeholder=\"Confirm Password\" name=\"Pass2\"></td></tr>"
-								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
+								+ "<tr><td><label for=\"Password\">Current Password:</label><div class=\"field\"><input type=\"password\" placeholder=\"Current Password\" name=\"Password\"></div></td></tr>"
+								+ "<tr><td><label for=\"Pass1\">New Password:</label><div class=\"field\"><input type=\"password\" placeholder=\"New Password\" name=\"Pass1\"></div></td></tr>"
+								+ "<tr><td><label for=\"Pass2\">Confirm Password:</label><div class=\"field\"><input type=\"password\" placeholder=\"Confirm Password\" name=\"Pass2\"></div></td></tr>"
+								+ "<tr><td><div class=\"field\"><input type=\"submit\" value=\"Update\"></div></td><td>"
 								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Password\">"
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
-								+ "</td></tr></table></form>"
+								+ "</td></tr></table></form></div></div>"
+								+ "</div>"
 								
 								// Email Address.
+								+ "<div style=\"width: 600px; display:table-cell;\">"
+								+ "<div class=\"form-container\"><div class=\"form-inner\">"
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
-								+ "<tr><td>Email Address:</td><td><input type=\"email\" placeholder=\"E-Mail Address\" name=\"Email\" value=\"" + active.getEmail() + "\"></td></tr>"
-								+ "<tr><td></td><td><input type=\"submit\" value=\"Update\">"
+								+ "<tr><td><label for=\"Email\">Email Address:</label><div class=\"field\"><input type=\"email\" placeholder=\"E-Mail Address\" name=\"Email\" value=\"" + active.getEmail() + "\"></div></td></tr>"
+								+ "<tr><td><div class=\"field\"><input type=\"submit\" value=\"Update\"></div></td><td>"
 								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Email\">"
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
-								+ "</td></tr></table></form>");
+								+ "</td></tr></table></form></div></div>"
+								+ "</div>");
 						}
 					}
 				%>
