@@ -31,8 +31,8 @@ public class Product implements Serializable {
 		return description;
 	}
 
-	public double getPrice() {
-		return (double)price;
+	public float getPrice() {
+		return price;
 	}
 
 	public void setName(String v) {

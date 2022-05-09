@@ -4,6 +4,7 @@ import Model.IoTBay.Person.*;
 import Model.IoTBay.Person.Customer;
 import Model.IoTBay.Product;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,19 +18,21 @@ import java.util.ArrayList;
 public class DBManager {
 
 	private final Statement statement;
-	
+	private final Connection connection;
+
 	public ArrayList<Customer> customers;
 	public ArrayList<Staff> staff;
 	public ArrayList<Product> products;
 
 	public DBManager(Connection c) throws SQLException {
+		connection = c;
 		statement = c.createStatement();
 
 		// Read DB Information from a previous execution.
 		customers = injectCustomers();
 		staff = injectStaff();
 		products = injectProducts();
-		
+
 		int cc = customers.size();
 		int sc = staff.size();
 		int pc = products.size();
@@ -47,33 +50,35 @@ public class DBManager {
 				return resultSetToCustomer(r);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public Staff findStaff(String email) throws SQLException {
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL='" + email + "'";
 		ResultSet r = statement.executeQuery(instruction);
-		
+
 		while (r.next()) {
-			if (r.getString(1).equals(email))
+			if (r.getString(1).equals(email)) {
 				return resultSetToStaff(r);
+			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public Product findProduct(int id) throws SQLException {
 		String instruction = "SELECT * FROM IOTBAY.PRODUCTS WHERE PRODUCTID=" + id;
 		ResultSet r = statement.executeQuery(instruction);
-		
+
 		while (r.next()) {
 			System.out.println(r.getInt(1));
-			if (r.getInt(1) == id)
+			if (r.getInt(1) == id) {
 				return resultSetToProduct(r);
+			}
 		}
-		
+
 		return null;
 	}
 
@@ -90,17 +95,18 @@ public class DBManager {
 
 		return null;
 	}
-	
+
 	public Staff findStaff(String email, String password) throws SQLException {
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
 		ResultSet r = statement.executeQuery(instruction);
-		
+
 		while (r.next()) {
-			if (r.getString(1).equals(email) && r.getString(4).equals(password))
+			if (r.getString(1).equals(email) && r.getString(4).equals(password)) {
 				return resultSetToStaff(r);
+			}
 		}
-		
+
 		return null;
 	}
 
@@ -109,63 +115,117 @@ public class DBManager {
 
 		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, PHONENUMBER) ";
 
-		String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + concatValues(c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail().toLowerCase(),
-			a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(), c.getPhoneNumber());
+		String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		statement.executeUpdate(instruction);
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, c.getFirstName());
+		ps.setString(2, c.getLastName());
+		ps.setString(3, c.getPassword());
+		ps.setString(4, c.getEmail().toLowerCase());
+		ps.setString(5, a.getNumber());
+		ps.setString(6, a.getStreetName());
+		ps.setString(7, a.getSuburb());
+		ps.setString(8, a.getPostcode());
+		ps.setString(9, a.getCity());
+		ps.setString(10, c.getPhoneNumber());
+
+		ps.execute();
 
 		System.out.println("End Exec.\nAdded new Customer " + c.getFirstName() + " " + c.getEmail());
 	}
 
 	public void add(Staff s) throws SQLException {
 		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL) ";
-		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + concatValues(s.getFirstName(), s.getLastName(), s.getPassword(), s.getEmail().toLowerCase());
+		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + "VALUES (?, ?, ?, ?)";
 
-		statement.executeUpdate(instruction);
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, s.getFirstName());
+		ps.setString(2, s.getLastName());
+		ps.setString(3, s.getPassword());
+		ps.setString(4, s.getEmail().toLowerCase());
+
+		ps.execute();
 	}
-	
+
 	public void add(Product p) throws SQLException {
 		final String attributes = " (PRODUCTNAME, DESCRIPTION, PRICE) ";
-		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "VALUES ('" + p.getName() + "', '" + p.getDescription() + "', " + p.getPrice() + ")";
-		
-		statement.executeUpdate(instruction);
+		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "VALUES (?, ?, ?)";
+
+		// Something fancy with the SQL command which allows apostrophes ' to be added
+		// to the Description.
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, p.getName());
+		ps.setString(2, p.getDescription());
+		ps.setFloat(3, p.getPrice());
+
+		ps.execute();
 	}
 
 	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException {
-		String instruction = "UPDATE IOTBAY.CUSTOMERS SET FIRSTNAME='" + fn + "', LASTNAME='" + ln + "', PASSWORD='" + pw + "', EMAIL='"+email+"', PHONENUMBER='"+phone+"',STREETNUMBER='"+addNum+"',STREETNAME='"+addStreetName+"', SUBURB='"+addSuburb+"', POSTCODE='"+addPostcode+"',CITY='"+addCity+"', CARDNUMBER='"+cardNo+"', CVV='"+cvv+"', CARDHOLDER='"+cardHolder+"' WHERE EMAIL='"+c.getEmail()+"'";
+		String instruction = "UPDATE IOTBAY.CUSTOMERS SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=?, PHONENUMBER=?, STREETNUMBER=?, STREETNAME=?, SUBURB=?, POSTCODE=?, CITY=?, CARDNUMBER=?, CVV=?, CARDHOLDER=? WHERE EMAIL=?";
 		
-		statement.executeUpdate(instruction);
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, fn);
+		ps.setString(2, ln);
+		ps.setString(3, pw);
+		ps.setString(4, email);
+		ps.setString(5, phone);
+		ps.setString(6, addNum);
+		ps.setString(7, addStreetName);
+		ps.setString(8, addSuburb);
+		ps.setString(9, addPostcode);
+		ps.setString(10, addCity);
+		ps.setString(11, cardNo);
+		ps.setString(12, cvv);
+		ps.setString(13, cardHolder);
+		ps.setString(14, c.getEmail());
+
+		ps.executeUpdate();
 	}
-	
+
 	public void update(Staff s, String fn, String ln, String pw, String email) throws SQLException {
-		String instruction = "UPDATE IOTBAY.STAFF SET FIRSTNAME='" + fn + "', LASTNAME='" + ln + "', PASSWORD='" + pw + "', EMAIL='"+email+"' WHERE EMAIL='" + s.getEmail() + "'";;
+		String instruction = "UPDATE IOTBAY.STAFF SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=? WHERE EMAIL=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, fn);
+		ps.setString(2, ln);
+		ps.setString(3, pw);
+		ps.setString(4, email);
+		ps.setString(5, s.getEmail());
 		
-		statement.executeUpdate(instruction);
+		ps.executeUpdate();
 	}
-	
+
 	public void updateProduct(int id, String name, String desc, String price) throws SQLException {
-		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME='" + name + "', DESCRIPTION='" + desc + "', PRICE=" + Double.parseDouble(price) + " WHERE PRODUCTID=" + id;
+		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME=?, DESCRIPTION=?, PRICE=? WHERE PRODUCTID=?";
 		
-		statement.executeUpdate(instruction);
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, name);
+		ps.setString(2, desc);
+		ps.setFloat(3, Float.parseFloat(price));
+		ps.setInt(4, id);		
+
+		ps.executeUpdate();
 	}
 
-	private String concatValues(String... s) {
-		final String concat = "', '";
-		String ret = "VALUES ('";
+	// Obsolete.
+	//private String concatValues(String... s) {
+		//final String concat = "', '";
+		//String ret = "VALUES ('";
 
-		for (int i = 0; i < s.length; ++i) {
-			System.out.println(s[i]);
-			ret += s[i];
+		//for (int i = 0; i < s.length; ++i) {
+			//System.out.println(s[i]);
+			//ret += s[i];
 
-			if (i != s.length - 1) {
-				ret += concat;
-			}
-		}
-		
-		System.out.println(ret);
+			//if (i != s.length - 1) {
+				//ret += concat;
+			//}
+		//}
 
-		return ret + "')";
-	}
+		//System.out.println(ret);
+
+		//return ret + "')";
+	//}
 
 	public final ArrayList<Customer> injectCustomers() throws SQLException {
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS";
@@ -193,17 +253,17 @@ public class DBManager {
 
 		return dbInjected;
 	}
-	
+
 	public final ArrayList<Product> injectProducts() throws SQLException {
 		String instruction = "SELECT * FROM IOTBAY.PRODUCTS";
 		ResultSet r = statement.executeQuery(instruction);
 		ArrayList<Product> dbInjected = new ArrayList();
-		
-		while (r.next()){
+
+		while (r.next()) {
 			// Inject.
 			dbInjected.add(resultSetToProduct(r));
 		}
-		
+
 		return dbInjected;
 	}
 
@@ -247,14 +307,14 @@ public class DBManager {
 
 		return new Staff(fn, ln, pw, em);
 	}
-	
+
 	private Product resultSetToProduct(ResultSet r) throws SQLException {
-		
+
 		// Product Information.
 		String pname = r.getString(2);
 		String descr = r.getString(3);
 		float fPrice = r.getFloat(4);
-		
+
 		return new Product(pname, descr, fPrice);
 	}
 }
