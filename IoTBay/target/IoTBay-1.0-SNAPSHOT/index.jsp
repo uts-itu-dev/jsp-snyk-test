@@ -37,10 +37,15 @@
 				<div>
 					<div class="navLinks left"><a href="index.jsp">Home</a></div>
 					<%
-						if (session.getAttribute("User") != null) {
+						User U = (User) session.getAttribute("User");
+						if (U != null) {
 							out.println("<div class=\"navLinks right\"><a href=\"Logout\">Logout</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Profile.jsp\">Profile</a></div>");
-						} else {
+							if (U.getType() == EUserType.STAFF) {
+								out.println("<div class=\"navLinks right\"><a href=\"IoTCore/StaffControlPanel.jsp\">Staff Control Panel</a></div>");
+							}
+						}
+						else {
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Register.jsp\">Register</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Login.jsp\">Login</a></div>");
 						}
@@ -90,7 +95,7 @@
 							<c:out value="${p.name}"/></div>
 						<div style="text-align:center; bottom:100%;">
 							<fmt:formatNumber value="${p.price}" type="currency"/></div>
-						<br><br>
+							<br><br><br>
 						<div class="hoverRevealer">
 							<div class="productmisc revealContent">
 								<c:out value="${p.description}"/>
@@ -98,8 +103,6 @@
 								<c:choose>
 									<c:when test="${User != null}"> <!-- if (session.getAttribute("User") != null) -->
 										<%
-											User U = (User) session.getAttribute("User");
-
 											// If the User is a Customer, they can add it to their cart.
 											if (U.getType() == EUserType.CUSTOMER) {
 												String link = "AddToCart?bAnonymous=false&productID=" + productID;
@@ -138,7 +141,7 @@
 				</c:forEach>
 			</c:if>
 		</div>
-
+			<br><br><br>
 	</body>
 </html>
 

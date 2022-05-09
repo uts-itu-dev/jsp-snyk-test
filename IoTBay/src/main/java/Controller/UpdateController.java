@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controller;
 
 import Model.IoTBay.Core.IIoTWebpage;
@@ -19,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Functions involving the updating of the Database as it relates to the people
+ * within IoTBay.
  *
  * @author Michael Wu
  */
@@ -65,9 +63,11 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 						case "Password":
 							if (!currentPass.equals(current.getPassword())) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "The Current Password was incorrect!"));
-							} else if (!pass1.equals(pass2)) {
+							}
+							else if (!pass1.equals(pass2)) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "Passwords did not match!"));
-							} else {
+							}
+							else {
 								updateCustomerPassword(current, pass1);
 								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
@@ -77,7 +77,8 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 						case "Email":
 							if (uDB.findCustomer(email) != null) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "An account with that E-Mail already exists!"));
-							} else {
+							}
+							else {
 								updateCustomerEmail(current, email);
 								session.setAttribute("User", uDB.findCustomer(email));
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
@@ -108,7 +109,8 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 			} catch (SQLException s) {
 				System.out.println("UpdateController::doPost::Logged in as a Customer " + s);
 			}
-		} else { // The User is Staff.
+		}
+		else { // The User is Staff.
 			try {
 				Staff current = uDB.findStaff(((Staff) session.getAttribute("User")).getEmail());
 
@@ -122,9 +124,11 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 						case "Password":
 							if (!currentPass.equals(current.getPassword())) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "The Current Password was incorrect!"));
-							} else if (!pass1.equals(pass2)) {
+							}
+							else if (!pass1.equals(pass2)) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "Passwords did not match!"));
-							} else {
+							}
+							else {
 								updateStaffPassword(current, pass1);
 								session.setAttribute("User", uDB.findStaff(current.getEmail()));
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
@@ -133,7 +137,8 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 						case "Email":
 							if (uDB.findCustomer(email) != null) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "An account with that E-Mail already exists!"));
-							} else {
+							}
+							else {
 								updateStaffEmail(current, email);
 								session.setAttribute("User", uDB.findStaff(email));
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
@@ -143,18 +148,18 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							String pName = request.getParameter("ProductName");
 							String pDesc = request.getParameter("ProductDesc");
 							String pPrice = request.getParameter("ProductPrice");
-							
+
 							String pid = request.getParameter("pid");
 							int id = Integer.parseInt(pid);
-							
+
 							uDB.updateProduct(id, pName, pDesc, pPrice);
-							
-							response.sendRedirect("IoTCore/Redirector.jsp?" +
-								redirectParams(
+
+							response.sendRedirect("IoTCore/Redirector.jsp?"
+								+ redirectParams(
 									"HeadingMessage", pName + " Updated!",
 									"Message", "Please wait while we redirect you...")
 							);
-							
+
 							break;
 					}
 				}

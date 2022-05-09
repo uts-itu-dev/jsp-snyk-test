@@ -125,10 +125,10 @@ public class DBManager {
 	}
 	
 	public void add(Product p) throws SQLException {
-		final String attributes = " (PRODUCTNAME, DESCRPTION, PRICE) ";
-		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "";
+		final String attributes = " (PRODUCTNAME, DESCRIPTION, PRICE) ";
+		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "VALUES ('" + p.getName() + "', '" + p.getDescription() + "', " + p.getPrice() + ")";
 		
-		statement.executeQuery(instruction);
+		statement.executeUpdate(instruction);
 	}
 
 	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException {

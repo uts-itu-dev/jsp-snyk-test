@@ -4,7 +4,6 @@
  */
 package Controller;
 
-import DAO.DBManager;
 import Model.IoTBay.Core.IIoTWebpage;
 import Model.IoTBay.Core.IoTWebpageBase;
 import Model.IoTBay.Product;
@@ -14,25 +13,24 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
+ * Provides the view for editing a product.
  *
  * @author Michael Wu
  */
 @WebServlet(name = "ProductEditor", value = "/ProductEditor")
 public class ProductEditorController extends IoTWebpageBase implements IIoTWebpage {
 
+	// For some reason, the Product Editor couldn't be made into a .jsp file, so here it is.
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		super.doGet(request, response);
 
 		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession();
 
 		// Begin HTML.
 		out.println("<!DOCTYPE html>");
@@ -57,22 +55,36 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 						String price = df.format(p.getPrice());
 						out.println("<div class=\"form-container\"><div class=\"form-inner\">"
 							+ "<form action=\"Update\" class=\"login\" method=\"POST\">"
+							//							
 							+ "<label for=\"ProductName\">Product Name:</label><br>"
-							+ "<div class=\"field\"><input name=\"ProductName\" type=\"text\" placeholder\"Product Name\" value=\"" + p.getName() + "\"></div><br>"
+							//							
+							+ "<div class=\"field\">"
+							+ "<input name=\"ProductName\" type=\"text\" placeholder=\"Product Name\" value=\"" + p.getName() + "\">"
+							+ "</div><br>"
+							//								
 							+ "<label for=\"ProductDesc\">Product Description:</label><br>"
+							//								
 							+ "<textarea name=\"ProductDesc\" rows=\"5\" cols=\"50\">"
 							+ p.getDescription()
 							+ "</textarea>"
 							+ "<br>"
+							//								
 							+ "<label for=\"ProductPrice\">Product Price:</label><br>"
-							+ "<div class=\"field\"><input name=\"ProductPrice\" type=\"number\" min =\".01\" max=\"9999\" step=\"0.01\" value=\"" + price + "\"></div><br>"
-							+ "<div class=\"field\"><input type=\"submit\" value=\"Update\"></div>"
+							+ "<div class=\"field\">"
+							+ "<input name=\"ProductPrice\" type=\"number\" min =\".01\" max=\"9999\" step=\"0.01\" value=\"" + price + "\">"
+							+ "</div><br>"
+							//								
+							+ "<div class=\"field\">"
+							+ "<input type=\"submit\" value=\"Update\">"
+							+ "</div>"
+							//								
 							+ "<input type=\"hidden\" name=\"pid\" value=\"" + id + "\">"
 							+ "<input type=\"hidden\" name=\"Attribute\" value=\"Product\">"
 							+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 							+ "</form>"
 							+ "</div></div>");
-					} else {
+					}
+					else {
 						out.println("<h1>No product selected!</h1>");
 					}
 

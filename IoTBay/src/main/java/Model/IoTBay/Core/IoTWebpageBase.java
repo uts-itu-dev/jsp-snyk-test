@@ -30,7 +30,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		if (session.getAttribute("UDatabase") == null) {
 			try {
 				connectToDB();
-				
+
 				session.setAttribute("UDatabase", uDB);
 				session.setAttribute("Customers", uDB.customers);
 				session.setAttribute("Staff", uDB.staff);
@@ -52,7 +52,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		if (session.getAttribute("UDatabase") == null) {
 			try {
 				connectToDB();
-				
+
 				session.setAttribute("UDatabase", uDB);
 				session.setAttribute("Customers", uDB.customers);
 				session.setAttribute("Staff", uDB.staff);
@@ -97,13 +97,43 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		return result;
 	}
 
+	public static final String makeTag(String tag, String content, String... params) throws IllegalArgumentException {
+		if (params.length % 2 == 1) {
+			throw new IllegalArgumentException("Input redirection params must have an even length! Input range: " + params.length + "\n" + Thread.currentThread().getStackTrace()[2]);
+		}
+
+		String result = "<" + tag;
+
+		for (int i = 0; i < params.length - 1; i += 2) {
+			result += " " + params[i] + "=\"" + params[i + 1] + "\"";
+		}
+
+		result += ">" + content + "</" + tag + ">";
+
+		return result;
+	}
+
+	public static final String makeTagNoClose(String tag, String... params) throws IllegalArgumentException {
+		if (params.length % 2 == 1) {
+			throw new IllegalArgumentException("Input redirection params must have an even length! Input range: " + params.length + "\n" + Thread.currentThread().getStackTrace()[2]);
+		}
+
+		String result = "<" + tag;
+
+		for (int i = 0; i < params.length - 1; i += 2) {
+			result += " " + params[i] + "=\"" + params[i+1] + "\"";
+		}
+
+		return result + ">";
+	}
+
 	public static final void connectToDB() throws SQLException {
 		try {
 			System.out.println("Connecting to DB...");
-			
+
 			connector = new DBConnector();
 			uDB = new DBManager(connector.openConnection());
-			
+
 			System.out.println("DB Connected.");
 		} catch (ClassNotFoundException c) {
 			throw new NullPointerException("IoTWebpageBase::connectToDB. Class Not Found Exception.");

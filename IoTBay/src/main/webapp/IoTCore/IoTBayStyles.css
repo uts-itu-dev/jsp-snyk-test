@@ -43,6 +43,7 @@ h1 {
 	height: 100%;
 	top: 0;
 	left: 0;
+	padding-bottom:0px;
 }
 
 .link {
@@ -431,7 +432,7 @@ form .btn input[type="submit"] {
 .revealParent {
 	position: relative;
 	height: 200px;
-	width: 257px;
+	width: 300px;
 }
 
 .hoverRevealer {
