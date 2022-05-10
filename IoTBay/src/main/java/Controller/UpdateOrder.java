@@ -45,9 +45,15 @@ public class UpdateOrder extends IoTWebpageBase implements IIoTWebpage {
 
 		if (request.getParameter("Update") != null) {
 			try {
-				uDB.updateCart(id, owner, eq);
+				if (eq > 0) {
+					uDB.updateCart(id, owner, eq);
+					response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Updated Order!"));
+				}
+				else {
+					uDB.removeFromCart(id, owner);
+					response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Removed Order!"));
+				}
 
-				response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Updated Order!"));
 			} catch (SQLException s) {
 				throw new RuntimeException("UpdateOrder::doPost() -> Update -> SQLException -> " + s);
 			}
@@ -55,7 +61,7 @@ public class UpdateOrder extends IoTWebpageBase implements IIoTWebpage {
 		else if (request.getParameter("Remove") != null) {
 			try {
 				uDB.removeFromCart(id, owner);
-				
+
 				response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Removed Order!"));
 			} catch (SQLException s) {
 				throw new RuntimeException("UpdateOrder::doPost() -> Remove -> SQLException -> " + s);

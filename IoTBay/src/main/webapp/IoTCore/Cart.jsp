@@ -4,6 +4,7 @@
     Author     : Michael Wu
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="DAO.DBManager"%>
 <%@page import="Model.IoTBay.OrderLineItem"%>
 <%@page import="java.util.ArrayList"%>
@@ -99,7 +100,9 @@
 						out.println("<input name=\"EditedQuantity\" type=\"number\" min=\"0\" max=\"100\" step=\"1\""
 							+ "value=\"" + quan + "\"/></div></td>");
 
-						out.println("<td>" + total + "</td>");
+						DecimalFormat df = new DecimalFormat("0.00");
+						String price = df.format(total);
+						out.println("<td>$" + price + "</td>");
 
 						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Update\" name=\"Update\"></div></td>");
 						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Remove\" name=\"Remove\"></div></td>");
