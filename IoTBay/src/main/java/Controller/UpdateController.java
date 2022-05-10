@@ -30,6 +30,26 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 		String firstName = request.getParameter("First");
 		String lastName = request.getParameter("Last");
 		String email = request.getParameter("Email");
+
+		String updateCallFromStaff = request.getParameter("Update");
+		if (updateCallFromStaff != null) {
+			Log("Update");
+			response.sendRedirect("IoTCore/StaffControlPanel/CustomerProfileUpdator.jsp?Email=" + email);
+			return;
+		}
+
+		if (request.getParameter("Remove") != null) {
+			Log("Remove");
+			try {
+				uDB.remove(email);
+
+				response.sendRedirect("IoTCore/StaffControlPanel/SeeEditCustomers.jsp?" + redirectParams("upd", "Customer Removed!"));
+			} catch (SQLException s) {
+				throw new NullPointerException("UpdateController::doPost() -> Failed to remove Customer with E-Mail: " + email);
+			}
+			return;
+		}
+
 		String phoneNumber = request.getParameter("PhoneNumber");
 		String currentPass = request.getParameter("Password");
 		String pass1 = request.getParameter("Pass1");
@@ -44,63 +64,94 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 		String cardHolder = request.getParameter("CardHolder");
 
 		boolean bIsCustomer = request.getParameter("bIsCustomer").equals("yes");
+
+		boolean bCalledFromStaff = request.getParameter("CalledFromStaff") != null;
+		String redirectLink = bCalledFromStaff
+			? "IoTCore/StaffControlPanel/SeeEditCustomers.jsp?"
+			: "IoTCore/Profile.jsp?";
+
 		String attribute = request.getParameter("Attribute");
 
 		HttpSession session = request.getSession();
 
 		if (bIsCustomer) {
 			try {
-				Customer current = uDB.findCustomer(((Customer) session.getAttribute("User")).getEmail());
+				Customer current;
+				if (!bCalledFromStaff) {
+					current = uDB.findCustomer(((Customer) session.getAttribute("User")).getEmail());
+				}
+				else {
+					String uEmail = request.getParameter("originalEmail");
+
+					if (uEmail == null) {
+						throw new NullPointerException("UpdateController::doPost() -> Email is null -> Trying to edit a Customer with no parameter 'Email'!");
+					}
+
+					current = uDB.findCustomer(uEmail);
+				}
 
 				if (current != null) {
 					switch (attribute) {
 						case "Names":
 							updateCustomerNames(current, firstName, lastName);
-							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Name Updated!"));
+							if (!bCalledFromStaff) {
+								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
+							}
+
+							response.sendRedirect(redirectLink + redirectParams("upd", "Name Updated!"));
 
 							break;
 						case "Password":
-							if (!currentPass.equals(current.getPassword())) {
+							if (!bCalledFromStaff && !currentPass.equals(current.getPassword())) {
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "The Current Password was incorrect!"));
 							}
-							else if (!pass1.equals(pass2)) {
-								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "Passwords did not match!"));
+							else if (!bCalledFromStaff && !pass1.equals(pass2)) {
+								response.sendRedirect(redirectLink + redirectParams("err", "Passwords did not match!"));
 							}
 							else {
 								updateCustomerPassword(current, pass1);
-								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
+								if (!bCalledFromStaff) {
+									session.setAttribute("User", uDB.findCustomer(current.getEmail()));
+								}
+								response.sendRedirect(redirectLink + redirectParams("upd", attribute + " Updated!"));
 							}
 
 							break;
 						case "Email":
 							if (uDB.findCustomer(email) != null) {
-								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "An account with that E-Mail already exists!"));
+								response.sendRedirect(redirectLink + redirectParams("err", "An account with that E-Mail already exists!"));
 							}
 							else {
 								updateCustomerEmail(current, email);
-								session.setAttribute("User", uDB.findCustomer(email));
-								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
+								if (!bCalledFromStaff) {
+									session.setAttribute("User", uDB.findCustomer(email));
+								}
+								response.sendRedirect(redirectLink + redirectParams("upd", attribute + " Updated!"));
 							}
 
 							break;
 						case "PhoneNumber":
 							updateCustomerPhoneNumber(current, phoneNumber);
-							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Phone Number Updated!"));
+							if (!bCalledFromStaff) {
+								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
+							}
+							response.sendRedirect(redirectLink + redirectParams("upd", "Phone Number Updated!"));
 
 							break;
 						case "Address":
 							updateCustomerAddress(current, addressNum, addressStreetName, addressSuburb, addressPostcode, addressCity);
-							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
+							if (!bCalledFromStaff) {
+								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
+							}
+							response.sendRedirect(redirectLink + redirectParams("upd", attribute + " Updated!"));
 
 							break;
 						case "PaymentInformation":
 							updateCustomerPaymentInformation(current, cardNo, CVV, cardHolder);
-							session.setAttribute("User", uDB.findCustomer(current.getEmail()));
-							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Payment Information Updated!"));
+							if (!bCalledFromStaff) {
+								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
+							}
+							response.sendRedirect(redirectLink + redirectParams("upd", "Payment Information Updated!"));
 
 							break;
 					}

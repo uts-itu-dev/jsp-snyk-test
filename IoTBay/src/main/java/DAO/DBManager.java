@@ -294,6 +294,15 @@ public class DBManager {
 		ps.executeUpdate();
 	}
 	
+	public void remove(String email) throws SQLException {
+		String instruction = "DELETE FROM IOTBAY.CUSTOMERS WHERE EMAIL=?";
+		
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, email);
+		
+		ps.executeUpdate();
+	}
+	
 	public void removeFromCart(int pid, String owner) throws SQLException {
 		String instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
 		

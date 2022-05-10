@@ -86,41 +86,53 @@
 				<%
 					ArrayList<OrderLineItem> items = (ArrayList<OrderLineItem>) session.getAttribute("Cart");
 					for (int i = 0; i < items.size(); ++i) {
-						out.println("<tr>");
-						out.println("<form action=\"../UpdateOrder\" class=\"login\" method=\"POST\">");
 
+						// Initialise Variables.
 						OrderLineItem OLI = items.get(i);
 						Product p = OLI.getProduct();
 						String pName = p.getName();
 						int quan = OLI.getQuantity();
 						float total = OLI.getTotalCost();
+						
+						// Begin HTML.
+						out.println("<tr>");
+						out.println("<form action=\"../UpdateOrder\" class=\"login\" method=\"POST\">");
 
+						// Name of Product.
 						out.println("<td>" + pName + "</td>");
+						
+						// Quantity.
 						out.println("<td><div class=\"field\">");
 						out.println("<input name=\"EditedQuantity\" type=\"number\" min=\"0\" max=\"100\" step=\"1\""
 							+ "value=\"" + quan + "\"/></div></td>");
 
+						// Total Price (Quantity * Price).
 						DecimalFormat df = new DecimalFormat("0.00");
 						String price = df.format(total);
 						out.println("<td>$" + price + "</td>");
 
+						// Update Quantity, or Remove Order?
 						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Update\" name=\"Update\"></div></td>");
 						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Remove\" name=\"Remove\"></div></td>");
 
+						// If this User is a Registered Customer.
 						if (OLI.getOwner() != null) {
 							out.println("<input type=\"hidden\" name=\"owner\" value=\"" + OLI.getOwner().getEmail() + "\">");
 						}
+						// If this User is an Anonymous Customer.
 						else {
 							out.println("<input type=\"hidden\" name=\"owner\" value=\"" + DBManager.AnonymousUserEmail + "\">");
 						}
-
+						
+						// Get ProductID using inverse, knowing Product's details.
 						int pid = IoTWebpageBase.uDB.findProductID(p);
 						if (pid == -1) {
 							throw new IllegalArgumentException(pName + " has no ID associated with it!");
 						}
 
 						out.println("<input type=\"hidden\" name=\"pid\" value=\"" + pid + "\">");
-
+						
+						// End HTML.
 						out.println("</div>");
 						out.println("</form>");
 						out.println("</tr>");
