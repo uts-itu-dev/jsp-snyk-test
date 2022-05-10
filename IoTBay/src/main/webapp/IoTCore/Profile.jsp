@@ -75,9 +75,9 @@
 								"<div style=\"width: 100%; display: table;\">"
 								+ "<div style=\"display: table-row\">"
 								
-								+ "<div style=\"width: 600px; display:table-cell;\">"
+								+ "<div style=\"width: 600px; display:table-cell; padding-left:0px\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
-								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
 								+ "<tr><td><label for=\"First\">First Name:</label><div class=\"field\"><input type=\"text\" placeholder=\"First Name\" name=\"First\" value=\"" + active.getFirstName() + "\"></div></td></tr>"
 								+ "<tr><td><label for=\"Last\">Last Name:</label><div class=\"field\"><input type=\"text\" placeholder=\"Last Name\" name=\"Last\" value=\"" + active.getLastName() + "\"></div></td></tr>"
 								+ "<tr><td><div class=\"field\"><input type=\"submit\" value=\"Update\"></div></td>"
@@ -89,7 +89,7 @@
 								// Passwords.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
-								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
 								+ "<tr><td><label for=\"Password\">Current Password:</label>"
 								+ "<div class=\"field\"><input type=\"password\" placeholder=\"Current Password\" name=\"Password\"></div>"
 								+ "</td></tr>"
@@ -108,7 +108,7 @@
 								// Email Address.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
-								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
 								+ "<tr><td><label for=\"Email\">Email Address:</label>"
 								+ "<div class=\"field\"><input type=\"email\" placeholder=\"E-Mail Address\" name=\"Email\" value=\"" + active.getEmail() + "\"></div>"
 								+ "</td></tr>"
@@ -121,7 +121,7 @@
 								// Phone Number.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
-								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
 								+ "<tr><td><label for=\"PhoneNumber\">Phone Number:</label>"
 								+ "<div class=\"field\"><input type=\"text\" placeholder=\"Phone Number\" name=\"PhoneNumber\" value=\"" + active.getPhoneNumber() + "\"></div>"
 								+ "</td></tr>"
@@ -134,7 +134,7 @@
 								// Address Details.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
-								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
 								+ "<tr><td><label for=\"addNum\">Street Number:</label>"
 								+ "<div class=\"field\"><input type=\"text\" placeholder=\"Street Number\" name=\"addNum\" value=\"" + active.getAddress().getNumber() + "\"></div>"
 								+ "</td></tr>"
@@ -159,7 +159,7 @@
 								// Payment Information Details.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
-								+ "<form action=\"../Update\" method=\"POST\"><table>"
+								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
 								+ "<tr><td><label for=\"CardNo\">Card Number:</label>"
 								+ "<div class=\"field\"><input type=\"text\" placeholder=\"Card Number\" name=\"CardNo\" value=\"" + cn + "\"></td></tr></div>"
 								+ "<tr><td><label for=\"CVV\">CVV:</label>"

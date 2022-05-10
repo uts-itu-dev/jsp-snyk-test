@@ -85,6 +85,21 @@ public class DBManager {
 		return null;
 	}
 
+	public int findProductID(Product p) throws SQLException {
+		String instruction = "SELECT PRODUCTID FROM IOTBAY.PRODUCTS WHERE PRODUCTNAME=?";
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, p.getName());
+
+		int resultingID = -1;
+
+		ResultSet r = ps.executeQuery();
+		while (r.next()) {
+			resultingID = r.getInt(1);
+		}
+		
+		return resultingID;
+	}
+
 	public Customer findCustomer(String email, String password) throws SQLException {
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
@@ -165,9 +180,10 @@ public class DBManager {
 	}
 
 	public void addToCart(int pid, Customer owner, int quantity) throws SQLException {
-		if (preventDuplicates(pid, owner.getEmail().toLowerCase()))
+		if (preventDuplicates(pid, owner.getEmail().toLowerCase())) {
 			return;
-		
+		}
+
 		final String attributes = " (OWNER, PRODUCTID, QUANTITY) ";
 		String instruction = "INSERT INTO IOTBAY.ORDERLINEITEM " + attributes + " VALUES (?, ?, ?)";
 
@@ -180,10 +196,11 @@ public class DBManager {
 	}
 
 	public void addToCartAnonymous(int pid, int quantity) throws SQLException {
-		
-		if (preventDuplicates(pid, AnonymousUserEmail))
+
+		if (preventDuplicates(pid, AnonymousUserEmail)) {
 			return;
-		
+		}
+
 		final String attributes = " (PRODUCTID, OWNER, QUANTITY) ";
 
 		String instruction = "INSERT INTO IOTBAY.ORDERLINEITEM " + attributes + " VALUES (?, ?, ?)";
@@ -197,9 +214,9 @@ public class DBManager {
 
 		injectOLI(AnonymousUserEmail);
 	}
-	
+
 	private boolean preventDuplicates(int pid, String owner) throws SQLException {
-		
+
 		final String avoidDuplicatesInstruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
 		PreparedStatement rsADI = connection.prepareStatement(avoidDuplicatesInstruction);
 		rsADI.setInt(1, pid);
@@ -215,7 +232,7 @@ public class DBManager {
 			injectOLI(owner);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -226,7 +243,7 @@ public class DBManager {
 		ps.setString(1, fn);
 		ps.setString(2, ln);
 		ps.setString(3, pw);
-		ps.setString(4, email);
+		ps.setString(4, email.toLowerCase());
 		ps.setString(5, phone);
 		ps.setString(6, addNum);
 		ps.setString(7, addStreetName);
@@ -248,7 +265,7 @@ public class DBManager {
 		ps.setString(1, fn);
 		ps.setString(2, ln);
 		ps.setString(3, pw);
-		ps.setString(4, email);
+		ps.setString(4, email.toLowerCase());
 		ps.setString(5, s.getEmail());
 
 		ps.executeUpdate();
@@ -297,7 +314,7 @@ public class DBManager {
 		ArrayList<Staff> dbInjected = new ArrayList();
 
 		while (r.next()) {
-			
+
 			// Inject.
 			dbInjected.add(resultSetToStaff(r));
 		}
@@ -311,7 +328,7 @@ public class DBManager {
 		ArrayList<Product> dbInjected = new ArrayList();
 
 		while (r.next()) {
-			
+
 			// Inject.
 			dbInjected.add(resultSetToProduct(r));
 		}
@@ -329,7 +346,7 @@ public class DBManager {
 		ArrayList<OrderLineItem> dbInjected = new ArrayList();
 
 		while (r.next()) {
-			
+
 			// Inject.
 			dbInjected.add(resultSetToOLI(r, email));
 		}
