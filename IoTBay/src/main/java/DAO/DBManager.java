@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.IoTBay.OrderLineItem;
 import Model.IoTBay.Person.*;
 import Model.IoTBay.Person.Customer;
 import Model.IoTBay.Product;
@@ -17,12 +18,15 @@ import java.util.ArrayList;
  */
 public class DBManager {
 
+	public static final String AnonymousUserEmail = "ANONYMOUS@USER.UTS";
+
 	private final Statement statement;
 	private final Connection connection;
 
 	public ArrayList<Customer> customers;
 	public ArrayList<Staff> staff;
 	public ArrayList<Product> products;
+	public ArrayList<OrderLineItem> cart;
 
 	public DBManager(Connection c) throws SQLException {
 		connection = c;
@@ -73,7 +77,6 @@ public class DBManager {
 		ResultSet r = statement.executeQuery(instruction);
 
 		while (r.next()) {
-			System.out.println(r.getInt(1));
 			if (r.getInt(1) == id) {
 				return resultSetToProduct(r);
 			}
@@ -161,9 +164,64 @@ public class DBManager {
 		ps.execute();
 	}
 
+	public void addToCart(int pid, Customer owner, int quantity) throws SQLException {
+		if (preventDuplicates(pid, owner.getEmail().toLowerCase()))
+			return;
+		
+		final String attributes = " (OWNER, PRODUCTID, QUANTITY) ";
+		String instruction = "INSERT INTO IOTBAY.ORDERLINEITEM " + attributes + " VALUES (?, ?, ?)";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, owner.getEmail());
+		ps.setInt(2, pid);
+		ps.setInt(3, quantity);
+
+		ps.execute();
+	}
+
+	public void addToCartAnonymous(int pid, int quantity) throws SQLException {
+		
+		if (preventDuplicates(pid, AnonymousUserEmail))
+			return;
+		
+		final String attributes = " (PRODUCTID, OWNER, QUANTITY) ";
+
+		String instruction = "INSERT INTO IOTBAY.ORDERLINEITEM " + attributes + " VALUES (?, ?, ?)";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setInt(1, pid);
+		ps.setString(2, AnonymousUserEmail);
+		ps.setInt(3, quantity);
+
+		ps.execute();
+
+		injectOLI(AnonymousUserEmail);
+	}
+	
+	private boolean preventDuplicates(int pid, String owner) throws SQLException {
+		
+		final String avoidDuplicatesInstruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
+		PreparedStatement rsADI = connection.prepareStatement(avoidDuplicatesInstruction);
+		rsADI.setInt(1, pid);
+		rsADI.setString(2, owner);
+
+		ResultSet existing = rsADI.executeQuery();
+
+		// If something of pid already exists.
+		if (existing.next()) {
+			int currentQuantity = existing.getInt(3);
+			updateCart(pid, owner, currentQuantity + 1);
+
+			injectOLI(owner);
+			return true;
+		}
+		
+		return false;
+	}
+
 	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException {
 		String instruction = "UPDATE IOTBAY.CUSTOMERS SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=?, PHONENUMBER=?, STREETNUMBER=?, STREETNAME=?, SUBURB=?, POSTCODE=?, CITY=?, CARDNUMBER=?, CVV=?, CARDHOLDER=? WHERE EMAIL=?";
-		
+
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, fn);
 		ps.setString(2, ln);
@@ -192,40 +250,32 @@ public class DBManager {
 		ps.setString(3, pw);
 		ps.setString(4, email);
 		ps.setString(5, s.getEmail());
-		
+
 		ps.executeUpdate();
 	}
 
 	public void updateProduct(int id, String name, String desc, String price) throws SQLException {
 		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME=?, DESCRIPTION=?, PRICE=? WHERE PRODUCTID=?";
-		
+
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, name);
 		ps.setString(2, desc);
 		ps.setFloat(3, Float.parseFloat(price));
-		ps.setInt(4, id);		
+		ps.setInt(4, id);
 
 		ps.executeUpdate();
 	}
 
-	// Obsolete.
-	//private String concatValues(String... s) {
-		//final String concat = "', '";
-		//String ret = "VALUES ('";
+	public void updateCart(int pid, String owner, int newQuantity) throws SQLException {
+		String instruction = "UPDATE IOTBAY.ORDERLINEITEM SET QUANTITY=? WHERE PRODUCTID=? AND OWNER=?";
 
-		//for (int i = 0; i < s.length; ++i) {
-			//System.out.println(s[i]);
-			//ret += s[i];
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setInt(1, newQuantity);
+		ps.setInt(2, pid);
+		ps.setString(3, owner);
 
-			//if (i != s.length - 1) {
-				//ret += concat;
-			//}
-		//}
-
-		//System.out.println(ret);
-
-		//return ret + "')";
-	//}
+		ps.executeUpdate();
+	}
 
 	public final ArrayList<Customer> injectCustomers() throws SQLException {
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS";
@@ -247,6 +297,7 @@ public class DBManager {
 		ArrayList<Staff> dbInjected = new ArrayList();
 
 		while (r.next()) {
+			
 			// Inject.
 			dbInjected.add(resultSetToStaff(r));
 		}
@@ -260,11 +311,53 @@ public class DBManager {
 		ArrayList<Product> dbInjected = new ArrayList();
 
 		while (r.next()) {
+			
 			// Inject.
 			dbInjected.add(resultSetToProduct(r));
 		}
 
 		return dbInjected;
+	}
+
+	public final ArrayList<OrderLineItem> injectOLI(String email) throws SQLException {
+		String instruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE OWNER=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, email.toLowerCase());
+
+		ResultSet r = ps.executeQuery();
+		ArrayList<OrderLineItem> dbInjected = new ArrayList();
+
+		while (r.next()) {
+			
+			// Inject.
+			dbInjected.add(resultSetToOLI(r, email));
+		}
+
+		cart = dbInjected;
+
+		return dbInjected;
+	}
+
+	public final ArrayList<OrderLineItem> injectOLIAnonymous() throws SQLException {
+		String instruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE OWNER=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, AnonymousUserEmail);
+
+		ResultSet r = ps.executeQuery();
+
+		ArrayList<OrderLineItem> dbInjected = new ArrayList();
+
+		while (r.next()) {
+
+			// Inject.
+			dbInjected.add(resultSetToOLI(r, AnonymousUserEmail));
+		}
+
+		cart = dbInjected;
+
+		return cart;
 	}
 
 	private Customer resultSetToCustomer(ResultSet r) throws SQLException {
@@ -316,5 +409,14 @@ public class DBManager {
 		float fPrice = r.getFloat(4);
 
 		return new Product(pname, descr, fPrice);
+	}
+
+	private OrderLineItem resultSetToOLI(ResultSet r, String ownerEmail) throws SQLException {
+
+		// Order Information.
+		int pid = r.getInt(2);
+		int qua = r.getInt(3);
+
+		return new OrderLineItem(findProduct(pid), findCustomer(ownerEmail), qua);
 	}
 }

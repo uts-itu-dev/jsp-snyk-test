@@ -41,6 +41,7 @@
 			%>
 		</p>
 		
+		<!-- Pure HTML -->
 		<div class="form-container">
 			<div class="form-inner">
 				<form action="../../AddProduct" class="login" method="POST">

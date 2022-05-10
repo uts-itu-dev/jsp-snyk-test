@@ -496,3 +496,14 @@ textarea {
 	font-size: 17px;
 	transition: all 0.5s ease;
 }
+
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 50%;
+}
+
+td, th {
+	text-align: left;
+	padding: 8px;
+}

@@ -89,7 +89,8 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		for (char r : s.toCharArray()) {
 			if (r == ' ') {
 				result += "%20";
-			} else {
+			}
+			else {
 				result += r;
 			}
 		}
@@ -121,7 +122,7 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		String result = "<" + tag;
 
 		for (int i = 0; i < params.length - 1; i += 2) {
-			result += " " + params[i] + "=\"" + params[i+1] + "\"";
+			result += " " + params[i] + "=\"" + params[i + 1] + "\"";
 		}
 
 		return result + ">";
@@ -140,5 +141,9 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		} catch (SQLException s) {
 			throw new NullPointerException("IoTWebpageBase::connectToDB. SQL Exception. " + s);
 		}
+	}
+
+	public static final void Log(Object o) {
+		System.out.println(o);
 	}
 }

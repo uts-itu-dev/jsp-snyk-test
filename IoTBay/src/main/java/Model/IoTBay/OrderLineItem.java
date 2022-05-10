@@ -14,7 +14,7 @@ public class OrderLineItem implements Serializable {
 	private final Product product;
 	private final Customer owner;
 	private int quantity;
-	private final float totalCost;
+	private float totalCost;
 
 	public OrderLineItem(Product product, Customer owner, int quantity) {
 		this.product = product;
@@ -42,7 +42,10 @@ public class OrderLineItem implements Serializable {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+		setTotalCost();
 	}
 	
-	
+	private void setTotalCost() {
+		totalCost = product.getPrice() * quantity;
+	}
 }
