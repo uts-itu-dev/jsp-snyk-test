@@ -21,17 +21,18 @@ public class UpdateOrder extends IoTWebpageBase implements IIoTWebpage {
 		super.doPost(request, response);
 
 		String owner = request.getParameter("owner");
-		
+
 		String pid = request.getParameter("pid");
 		int id = -1;
 		if (pid != null) {
 			id = Integer.parseInt(pid);
 		}
-		
+
 		String nQ = request.getParameter("EditedQuantity");
-		if (nQ == null)
+		if (nQ == null) {
 			throw new NullPointerException("Edited Quantity is NaN!!!!!");
-		
+		}
+
 		int eq = Integer.parseInt(nQ);
 
 		if (id == -1) {
@@ -42,12 +43,23 @@ public class UpdateOrder extends IoTWebpageBase implements IIoTWebpage {
 			throw new NullPointerException("UpdateOrder::doPost() -> No Owner!");
 		}
 
-		try {
-			uDB.updateCart(id, owner, eq);
-			
-			response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Updated Order!"));
-		} catch (SQLException s) {
-			throw new RuntimeException("UpdateOrder::doPost() -> SQLException -> " + s);
+		if (request.getParameter("Update") != null) {
+			try {
+				uDB.updateCart(id, owner, eq);
+
+				response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Updated Order!"));
+			} catch (SQLException s) {
+				throw new RuntimeException("UpdateOrder::doPost() -> Update -> SQLException -> " + s);
+			}
+		}
+		else if (request.getParameter("Remove") != null) {
+			try {
+				uDB.removeFromCart(id, owner);
+				
+				response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("upd", "Removed Order!"));
+			} catch (SQLException s) {
+				throw new RuntimeException("UpdateOrder::doPost() -> Remove -> SQLException -> " + s);
+			}
 		}
 	}
 }

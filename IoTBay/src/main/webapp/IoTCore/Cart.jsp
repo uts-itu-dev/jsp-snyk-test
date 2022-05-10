@@ -101,7 +101,8 @@
 
 						out.println("<td>" + total + "</td>");
 
-						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Update\"></div></td>");
+						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Update\" name=\"Update\"></div></td>");
+						out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Remove\" name=\"Remove\"></div></td>");
 
 						if (OLI.getOwner() != null) {
 							out.println("<input type=\"hidden\" name=\"owner\" value=\"" + OLI.getOwner().getEmail() + "\">");

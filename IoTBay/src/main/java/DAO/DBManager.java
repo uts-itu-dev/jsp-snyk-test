@@ -293,6 +293,16 @@ public class DBManager {
 
 		ps.executeUpdate();
 	}
+	
+	public void removeFromCart(int pid, String owner) throws SQLException {
+		String instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
+		
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setInt(1, pid);
+		ps.setString(2, owner);
+		
+		ps.executeUpdate();
+	}
 
 	public final ArrayList<Customer> injectCustomers() throws SQLException {
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS";
