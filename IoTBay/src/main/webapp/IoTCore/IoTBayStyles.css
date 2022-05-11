@@ -444,7 +444,7 @@ form .btn input[type="submit"] {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	/*background: rgba(255, 255, 255, 0.5); // Background colour of the Product when hovering.
+	background: rgba(255, 255, 255, 0.0); // Background colour of the Product when hovering.
 	color: #fff;
 	visibility: hidden;
 	opacity: 0;
