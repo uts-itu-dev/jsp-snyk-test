@@ -38,7 +38,7 @@
 						if (err != null) {
 							out.println("<span style=\"color:red\"><br>" + err + "</span>");
 						}
-						
+
 						String upd = request.getParameter("upd");
 						if (upd != null) {
 							out.println("<span style=\"color:green\"><br>" + upd + "</span>");
@@ -47,7 +47,7 @@
 				</p>
 				<%
 					User base = (User) session.getAttribute("User");
-					
+
 					if (base.getType() == EUserType.CUSTOMER) {
 						// If logged attribute "User" is a Registered Customer.
 						Customer active = (Customer) base;
@@ -57,24 +57,26 @@
 							String cn = "";
 							String cvv = "";
 							String ch = "";
-							
-							if (pi != null){
+
+							if (pi != null) {
 								cn = pi.getCardNo();
-								if (cn == null)
+								if (cn == null) {
 									cn = "";
+								}
 								cvv = pi.getCVV();
-								if (cvv == null)
+								if (cvv == null) {
 									cvv = "";
+								}
 								ch = pi.getCardHolder();
-								if (ch == null)
+								if (ch == null) {
 									ch = "";
+								}
 							}
-						
+
 							out.println(
 								// First and Last Names.
 								"<div style=\"width: 100%; display: table;\">"
 								+ "<div style=\"display: table-row\">"
-								
 								+ "<div style=\"width: 600px; display:table-cell; padding-left:0px\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
 								+ "<form action=\"../Update\" method=\"POST\" style=\"width:100%\"><table>"
@@ -85,7 +87,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Passwords.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -104,7 +105,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Email Address.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -117,7 +117,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Phone Number.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -130,7 +129,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Address Details.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -155,7 +153,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Payment Information Details.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -171,27 +168,27 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"yes\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div></div>"
+								
+								+ "<div class=\"form-container\"><div class=\"form-inner\">"
+								+ "<form action=\"../Delete\" method=\"POST\" style=\"width:50%\">"
+								+ "<div class=\"field\"><input type=\"submit\" value=\"Delete\"></div>"
+								+ "<input type=\"hidden\" name=\"Email\" value=\"" + active.getEmail() + "\">"
+								+ "<input type=\"hidden\" name=\"Type\" value=\"CUSTOMERS\">"
+								+ "</form></div></div>"
+								
 								+ "</div>"
 								+ "</div>"
 								+ "</div></div>"
 							);
-							
-							out.println(""
-							+ "<div class=\"form-container\"><div class=\"form-inner\">"
-							+ "<form action=\"../Delete\" method=\"POST\" style=\"width:100%\">"
-							+ "<div class=\"field\"><input type=\"submit\" value=\"Delete Account\"></div>"
-							+ "<input type=\"hidden\" name=\"Email\" value=\"" + active.getEmail() + "\">"
-							+ "<input type=\"hidden\" name=\"Type\" value=\"CUSTOMER\">"
-							+ "</form></div></div>");
 						}
-					} else if (base.getType() == EUserType.STAFF) {
+					}
+					else if (base.getType() == EUserType.STAFF) {
 						Staff active = (Staff) base;
 						if (active != null) {
 							out.println(
 								// First and Last Names.
 								"<div style=\"width: 100%; display: table;\">"
 								+ "<div style=\"display: table-row\">"
-								
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
 								+ "<form action=\"../Update\" method=\"POST\"><table>"
@@ -202,7 +199,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Passwords.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -215,7 +211,6 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 								+ "</td></tr></table></form></div></div>"
 								+ "</div>"
-								
 								// Email Address.
 								+ "<div style=\"width: 600px; display:table-cell;\">"
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -225,6 +220,15 @@
 								+ "<input type=\"hidden\" name=\"Attribute\" value=\"Email\">"
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 								+ "</td></tr></table></form></div></div>"
+								
+								
+								+ "<div class=\"form-container\"><div class=\"form-inner\">"
+								+ "<form action=\"../Delete\" method=\"POST\" style=\"width:50%\">"
+								+ "<div class=\"field\"><input type=\"submit\" value=\"Delete\"></div>"
+								+ "<input type=\"hidden\" name=\"Email\" value=\"" + active.getEmail() + "\">"
+								+ "<input type=\"hidden\" name=\"Type\" value=\"STAFF\">"
+								+ "</form></div></div>"
+								
 								+ "</div>");
 						}
 					}
