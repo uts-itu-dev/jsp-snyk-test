@@ -96,7 +96,7 @@ public class DBManager {
 		while (r.next()) {
 			resultingID = r.getInt(1);
 		}
-		
+
 		return resultingID;
 	}
 
@@ -293,23 +293,23 @@ public class DBManager {
 
 		ps.executeUpdate();
 	}
-	
-	public void remove(String email) throws SQLException {
-		String instruction = "DELETE FROM IOTBAY.CUSTOMERS WHERE EMAIL=?";
-		
+
+	public void remove(String database, String email) throws SQLException {
+		String instruction = "DELETE FROM IOTBAY." + database + " WHERE EMAIL=?";
+
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, email);
-		
+
 		ps.executeUpdate();
 	}
-	
+
 	public void removeFromCart(int pid, String owner) throws SQLException {
 		String instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
-		
+
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setInt(1, pid);
 		ps.setString(2, owner);
-		
+
 		ps.executeUpdate();
 	}
 

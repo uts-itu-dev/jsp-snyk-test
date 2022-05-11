@@ -175,6 +175,14 @@
 								+ "</div>"
 								+ "</div></div>"
 							);
+							
+							out.println(""
+							+ "<div class=\"form-container\"><div class=\"form-inner\">"
+							+ "<form action=\"../Delete\" method=\"POST\" style=\"width:100%\">"
+							+ "<div class=\"field\"><input type=\"submit\" value=\"Delete Account\"></div>"
+							+ "<input type=\"hidden\" name=\"Email\" value=\"" + active.getEmail() + "\">"
+							+ "<input type=\"hidden\" name=\"Type\" value=\"CUSTOMER\">"
+							+ "</form></div></div>");
 						}
 					} else if (base.getType() == EUserType.STAFF) {
 						Staff active = (Staff) base;

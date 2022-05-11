@@ -41,7 +41,7 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 		if (request.getParameter("Remove") != null) {
 			Log("Remove");
 			try {
-				uDB.remove(email);
+				uDB.remove("CUSTOMERS", email);
 
 				response.sendRedirect("IoTCore/StaffControlPanel/SeeEditCustomers.jsp?" + redirectParams("upd", "Customer Removed!"));
 			} catch (SQLException s) {
