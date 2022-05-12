@@ -442,9 +442,10 @@ public class DBManager {
 		// Product Information.
 		String pname = r.getString(2);
 		String descr = r.getString(3);
-		float fPrice = r.getFloat(4);
+		int quantity = r.getInt(4);
+		float fPrice = r.getFloat(5);
 
-		return new Product(pname, descr, fPrice);
+		return new Product(pname, descr, fPrice, quantity);
 	}
 
 	private OrderLineItem resultSetToOLI(ResultSet r, String ownerEmail) throws SQLException {

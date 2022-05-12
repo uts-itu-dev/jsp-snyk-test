@@ -24,6 +24,7 @@ public class AddProductController extends IoTWebpageBase implements IIoTWebpage{
 		String pName = request.getParameter("ProductName");
 		String pDesc = request.getParameter("ProductDesc");
 		String price = request.getParameter("ProductPrice");
+		String quant = request.getParameter("ProductQuant");
 		
 		try {
 			if (uDB.products != null && !uDB.products.isEmpty()) {
@@ -36,7 +37,7 @@ public class AddProductController extends IoTWebpageBase implements IIoTWebpage{
 				}
 			}
 			
-			uDB.add(new Product(pName, pDesc, Float.parseFloat(price)));
+			uDB.add(new Product(pName, pDesc, Float.parseFloat(price), Integer.parseInt(quant)));
 			
 			response.sendRedirect("IoTCore/StaffControlPanel/AddProduct.jsp?" + 
 						redirectParams("add", pName + " has been added to IoTBay!"));

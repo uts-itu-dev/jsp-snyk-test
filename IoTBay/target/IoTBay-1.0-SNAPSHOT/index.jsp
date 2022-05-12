@@ -36,7 +36,7 @@
 			<nav>
 				<div>
 					<div class="navLinks left"><a href="index.jsp">Home</a></div>
-					<%						
+					<%
 						User U = (User) session.getAttribute("User");
 						if (U != null) {
 							out.println("<div class=\"navLinks right\"><a href=\"Logout\">Logout</a></div>");
@@ -49,12 +49,12 @@
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Register.jsp\">Register</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Login.jsp\">Login</a></div>");
 						}
-						
-						if (U == null || U.getType() != EUserType.STAFF){
+
+						if (U == null || U.getType() != EUserType.STAFF) {
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Cart.jsp\">Cart</a></div>");
 						}
 					%>
-					
+
 				</div>
 			</nav>
 
@@ -100,7 +100,8 @@
 							<c:out value="${p.name}"/></div>
 						<div style="text-align:center; bottom:100%;">
 							<fmt:formatNumber value="${p.price}" type="currency"/></div>
-						<br><br><br>
+						<div style="text-align:center; bottom:100%;">
+							<c:out value="${p.quantity}"/> in Stock</div>
 						<div class="hoverRevealer">
 							<div class="productmisc revealContent">
 								<c:out value="${p.description}"/>

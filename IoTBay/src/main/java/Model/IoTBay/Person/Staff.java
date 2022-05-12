@@ -30,13 +30,4 @@ public class Staff extends User implements Serializable {
 	public void setRole(String v) {
 		role = v;
 	}
-	
-	public Product addProduct(String name, String desc, float price) {
-		Product p = new Product(name, desc, price);
-		
-		// ...
-		
-		
-		return p;
-	}
 }

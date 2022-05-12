@@ -14,13 +14,15 @@ public class Product implements Serializable {
 	private String name;
 	private String description;
 	private float price;
+	private int quanti;
 
-	public Product(String name, String desc, float price) {
+	public Product(String name, String desc, float price, int quanti) {
 		productID = numberOfProducts++;
 		
 		this.name = name;
 		description = desc;
 		this.price = price;
+		this.quanti = quanti;
 	}
 
 	public String getName() {
@@ -34,6 +36,10 @@ public class Product implements Serializable {
 	public float getPrice() {
 		return price;
 	}
+	
+	public int getQuantity() {
+		return quanti;
+	}
 
 	public void setName(String v) {
 		name = v;
@@ -45,5 +51,9 @@ public class Product implements Serializable {
 
 	public void setPrice(float f) {
 		price = f;
+	}
+	
+	public void setQuantity(int q) {
+		quanti = q;
 	}
 }

@@ -26,10 +26,12 @@
 
 		<%
 			User active = (User) session.getAttribute("User");
-			if (active != null) {
+			if (active != null)
+			{
 				IoTWebpageBase.uDB.injectOLI(active.getEmail());
 			}
-			else {
+			else
+			{
 				IoTWebpageBase.uDB.injectOLIAnonymous();
 			}
 
@@ -42,11 +44,13 @@
 				<div>
 					<div class="navLinks left"><a href="../index.jsp">Home</a></div>
 					<%
-						if (active != null) {
+						if (active != null)
+						{
 							out.println("<div class=\"navLinks right\"><a href=\"../Logout\">Logout</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"Profile.jsp\">Profile</a></div>");
 						}
-						else {
+						else
+						{
 							out.println("<div class=\"navLinks right\"><a href=\"Register.jsp\">Register</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"Login.jsp\">Login</a></div>");
 						}
@@ -54,38 +58,43 @@
 				</div>
 			</nav>
 
-			<!-- Notification of a successful update. -->
-			<%
-				out.println("<p style=\"text-align:center;\">");
-
-				String err = request.getParameter("err");
-				if (err != null) {
-					out.println("<span style=\"color:red\"><br>" + err + "</span>");
-				}
-
-				String upd = request.getParameter("upd");
-				if (upd != null) {
-					out.println("<span style=\"color:green\"><br>" + upd + "</span>");
-				}
-
-				out.println("</p>");
-			%>
-
 			<div class="centreScreen">
 				<h1>Your Cart</h1>
 
+				<!-- Notification of a successful or unsuccessful update. -->
+				<%
+					out.println("<p style=\"text-align:center;\">");
+
+					String err = request.getParameter("err");
+					if (err != null)
+					{
+						out.println("<span style=\"color:red\"><br>" + err + "</span>");
+					}
+
+					String upd = request.getParameter("upd");
+					if (upd != null)
+					{
+						out.println("<span style=\"color:green\"><br>" + upd + "</span>");
+					}
+
+					out.println("</p>");
+				%>
+
 				<c:if test="${Cart != null}">
 					<table>
-
+						<!-- Table Headings. -->
 						<tr>
 							<th>Product Name</th>
 							<th>Quantity</th>
-							<th>Total Cost</th>
+							<th>Price</th>
 						</tr>
 
 						<%
+							DecimalFormat df = new DecimalFormat("0.00");
+
 							ArrayList<OrderLineItem> items = (ArrayList<OrderLineItem>) session.getAttribute("Cart");
-							for (int i = 0; i < items.size(); ++i) {
+							for (int i = 0; i < items.size(); ++i)
+							{
 
 								// Initialise Variables.
 								OrderLineItem OLI = items.get(i);
@@ -107,7 +116,6 @@
 									+ "value=\"" + quan + "\"/></div></td>");
 
 								// Total Price (Quantity * Price).
-								DecimalFormat df = new DecimalFormat("0.00");
 								String price = df.format(total);
 								out.println("<td>$" + price + "</td>");
 
@@ -116,17 +124,20 @@
 								out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Remove\" name=\"Remove\"></div></td>");
 
 								// If this User is a Registered Customer.
-								if (OLI.getOwner() != null) {
+								if (OLI.getOwner() != null)
+								{
 									out.println("<input type=\"hidden\" name=\"owner\" value=\"" + OLI.getOwner().getEmail() + "\">");
 								}
 								// If this User is an Anonymous Customer.
-								else {
+								else
+								{
 									out.println("<input type=\"hidden\" name=\"owner\" value=\"" + DBManager.AnonymousUserEmail + "\">");
 								}
 
 								// Get ProductID using inverse, knowing Product's details.
 								int pid = IoTWebpageBase.uDB.findProductID(p);
-								if (pid == -1) {
+								if (pid == -1)
+								{
 									throw new IllegalArgumentException(pName + " has no ID associated with it!");
 								}
 
@@ -137,6 +148,30 @@
 								out.println("</form>");
 								out.println("</tr>");
 							}
+
+							// Begin HTML for Checkout button and information.
+							out.println("<tr>");
+
+							// Calculate total price for all Products in the Cart.
+							float fullCost = 0;
+							for (OrderLineItem OLI : items)
+							{
+								fullCost += OLI.getTotalCost();
+							}
+							String totalCost = df.format(fullCost);
+
+							// Columns:
+							out.println("<td></td>"); // Product Name. (Skip)
+							out.println("<td></td>"); // Quantity. (Skip)
+							out.println("<td style=\"vertical-align:bottom;font-weight:700;\">Total Cost:</td>"); // Cost of Product/s.
+							out.println("<td style=\"vertical-align:bottom;\">$" + totalCost + "</td>"); // Update Button.
+							
+							// In the Remove column, place a "Checkout" button instead.
+							out.println("<td><div class=\"field\" style=\"padding-top:25px;\"><input class=\"button\" type=\"submit\" value=\"Checkout\" name=\"Checkout\"></div></td>"); // Remove
+
+							// End HTML for Checkout button and information.
+							out.print("</tr>");
+
 						%>
 					</table>
 				</c:if>

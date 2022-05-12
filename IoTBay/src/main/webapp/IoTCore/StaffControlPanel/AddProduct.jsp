@@ -58,6 +58,11 @@
 						<input name="ProductPrice" type="number" min =".01" max="9999" step="0.01" required>
 					</div> <br>
 
+					<label for="ProductQuant">Quantity:</label> <br>
+					<div class="field">
+						<input name="ProductQuant" type="number" min ="1" max="9999" step="1" required>
+					</div> <br>
+
 					<div class="field">
 						<input type="submit" value="Add Product">
 					</div>
