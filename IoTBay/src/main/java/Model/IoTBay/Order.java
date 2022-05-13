@@ -1,8 +1,10 @@
 package Model.IoTBay;
 
+import Model.IoTBay.Person.Address;
 import java.io.Serializable;
 
 import Model.IoTBay.Person.Customer;
+import Model.IoTBay.Person.PaymentInformation;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,14 +14,22 @@ import java.util.ArrayList;
  *
  * @author Michael Wu
  */
-public class Order implements Serializable {
+public class Order implements Serializable
+{
 
+	private final int ID;
 	private final Customer owner;
 	private final ArrayList<OrderLineItem> products;
-	private String orderStatus;
+	private String status;
 	private final String purchaseDate;
+	private final Address address;
+	private final PaymentInformation paymentInformation;
+	private final float totalCost;
 
-	public Order(Customer o, ArrayList<OrderLineItem> products, int quant) {
+	public Order(int ID, Customer o, ArrayList<OrderLineItem> products, float price, String status, String purchaseDate, Address a, PaymentInformation pi)
+	{
+		this.ID = ID;
+
 		owner = o;
 		this.products = products;
 
@@ -27,36 +37,56 @@ public class Order implements Serializable {
 		LocalDateTime now = LocalDateTime.now();
 		purchaseDate = dtf.format(now);
 
-		setOrderStatus("Confirmed");
+		totalCost = price;
+		setOrderStatus(status);
+		this.purchaseDate = purchaseDate;
+
+		address = a;
+		paymentInformation = pi;
 	}
 
-	public final Customer getOwner() {
+	public final int getID()
+	{
+		return ID;
+	}
+
+	public final Customer getOwner()
+	{
 		return owner;
 	}
 
-	public final ArrayList<OrderLineItem> getProducts() {
+	public final ArrayList<OrderLineItem> getProducts()
+	{
 		return products;
 	}
 
-	public final float getTotalCost() {
-		float c = 0;
-
-		for (OrderLineItem o : products) {
-			c += o.getTotalCost();
-		}
-
-		return c;
+	public final float getTotalCost()
+	{
+		return totalCost;
 	}
 
-	public final String getOrderStatus() {
-		return orderStatus;
+	public final String getStatus()
+	{
+		return status;
 	}
 
-	public final String getPurchaseDate() {
+	public final String getPurchaseDate()
+	{
 		return purchaseDate;
 	}
 
-	public final void setOrderStatus(String v) {
-		orderStatus = v;
+	public final Address getAddress()
+	{
+		return address;
+	}
+
+	public final PaymentInformation getPaymentInformation()
+	{
+		return paymentInformation;
+	}
+
+	public final void setOrderStatus(String v)
+	{
+		status = v;
 	}
 }

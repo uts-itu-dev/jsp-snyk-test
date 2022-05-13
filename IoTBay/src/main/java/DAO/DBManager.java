@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.IoTBay.Order;
 import Model.IoTBay.OrderLineItem;
 import Model.IoTBay.Person.*;
 import Model.IoTBay.Person.Customer;
@@ -9,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +19,8 @@ import java.util.ArrayList;
  *
  * @author Michael Wu
  */
-public class DBManager {
+public class DBManager
+{
 
 	public static final String AnonymousUserEmail = "ANONYMOUS@USER.UTS";
 
@@ -27,8 +31,10 @@ public class DBManager {
 	public ArrayList<Staff> staff;
 	public ArrayList<Product> products;
 	public ArrayList<OrderLineItem> cart;
+	public ArrayList<Order> orders;
 
-	public DBManager(Connection c) throws SQLException {
+	public DBManager(Connection c) throws SQLException
+	{
 		connection = c;
 		statement = c.createStatement();
 
@@ -44,13 +50,22 @@ public class DBManager {
 		System.out.println("Injected " + cc + " Customers | " + sc + " Staff | " + pc + " Products into IoTBay.");
 	}
 
-	public Customer findCustomer(String email) throws SQLException {
+	public Customer findCustomer(String email) throws SQLException
+	{
 		email = email.toLowerCase();
+
+		if (email.equals(AnonymousUserEmail.toLowerCase()))
+		{
+			return null;
+		}
+
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL='" + email + "'";
 		ResultSet r = statement.executeQuery(instruction);
 
-		while (r.next()) {
-			if (r.getString(1).equals(email)) {
+		while (r.next())
+		{
+			if (r.getString(1).equals(email))
+			{
 				return resultSetToCustomer(r);
 			}
 		}
@@ -58,13 +73,16 @@ public class DBManager {
 		return null;
 	}
 
-	public Staff findStaff(String email) throws SQLException {
+	public Staff findStaff(String email) throws SQLException
+	{
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL='" + email + "'";
 		ResultSet r = statement.executeQuery(instruction);
 
-		while (r.next()) {
-			if (r.getString(1).equals(email)) {
+		while (r.next())
+		{
+			if (r.getString(1).equals(email))
+			{
 				return resultSetToStaff(r);
 			}
 		}
@@ -72,12 +90,15 @@ public class DBManager {
 		return null;
 	}
 
-	public Product findProduct(int id) throws SQLException {
+	public Product findProduct(int id) throws SQLException
+	{
 		String instruction = "SELECT * FROM IOTBAY.PRODUCTS WHERE PRODUCTID=" + id;
 		ResultSet r = statement.executeQuery(instruction);
 
-		while (r.next()) {
-			if (r.getInt(1) == id) {
+		while (r.next())
+		{
+			if (r.getInt(1) == id)
+			{
 				return resultSetToProduct(r);
 			}
 		}
@@ -85,7 +106,8 @@ public class DBManager {
 		return null;
 	}
 
-	public int findProductID(Product p) throws SQLException {
+	public int findProductID(Product p) throws SQLException
+	{
 		String instruction = "SELECT PRODUCTID FROM IOTBAY.PRODUCTS WHERE PRODUCTNAME=?";
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, p.getName());
@@ -93,20 +115,24 @@ public class DBManager {
 		int resultingID = -1;
 
 		ResultSet r = ps.executeQuery();
-		while (r.next()) {
+		while (r.next())
+		{
 			resultingID = r.getInt(1);
 		}
 
 		return resultingID;
 	}
 
-	public Customer findCustomer(String email, String password) throws SQLException {
+	public Customer findCustomer(String email, String password) throws SQLException
+	{
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
 		ResultSet r = statement.executeQuery(instruction);
 
-		while (r.next()) {
-			if (r.getString(1).equals(email) && r.getString(4).equals(password)) {
+		while (r.next())
+		{
+			if (r.getString(1).equals(email) && r.getString(4).equals(password))
+			{
 				return resultSetToCustomer(r);
 			}
 		}
@@ -114,13 +140,16 @@ public class DBManager {
 		return null;
 	}
 
-	public Staff findStaff(String email, String password) throws SQLException {
+	public Staff findStaff(String email, String password) throws SQLException
+	{
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL='" + email + "' AND PASSWORD='" + password + "'";
 		ResultSet r = statement.executeQuery(instruction);
 
-		while (r.next()) {
-			if (r.getString(1).equals(email) && r.getString(4).equals(password)) {
+		while (r.next())
+		{
+			if (r.getString(1).equals(email) && r.getString(4).equals(password))
+			{
 				return resultSetToStaff(r);
 			}
 		}
@@ -128,7 +157,19 @@ public class DBManager {
 		return null;
 	}
 
-	public void add(Customer c) throws SQLException {
+	public Order findOrder(int oid, String owner) throws SQLException
+	{
+		String instruction = "SELECT * FROM IOTBAY.ORDERS WHERE ORDERID=? AND OWNER=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setInt(1, oid);
+		ps.setString(2, owner);
+		ResultSet r = ps.executeQuery();
+		return resultSetToOrder(r, findCustomer(owner));
+	}
+
+	public void add(Customer c) throws SQLException
+	{
 		Address a = c.getAddress();
 
 		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, PHONENUMBER) ";
@@ -152,7 +193,8 @@ public class DBManager {
 		System.out.println("End Exec.\nAdded new Customer " + c.getFirstName() + " " + c.getEmail());
 	}
 
-	public void add(Staff s) throws SQLException {
+	public void add(Staff s) throws SQLException
+	{
 		final String attributes = " (FIRSTNAME, LASTNAME, PASSWORD, EMAIL) ";
 		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + "VALUES (?, ?, ?, ?)";
 
@@ -165,9 +207,10 @@ public class DBManager {
 		ps.execute();
 	}
 
-	public void add(Product p) throws SQLException {
-		final String attributes = " (PRODUCTNAME, DESCRIPTION, PRICE) ";
-		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "VALUES (?, ?, ?)";
+	public void add(Product p) throws SQLException
+	{
+		final String attributes = " (PRODUCTNAME, DESCRIPTION, PRICE, STOCK) ";
+		String instruction = "INSERT INTO IOTBAY.PRODUCTS " + attributes + "VALUES (?, ?, ?, ?)";
 
 		// Something fancy with the SQL command which allows apostrophes ' to be added
 		// to the Description.
@@ -175,12 +218,15 @@ public class DBManager {
 		ps.setString(1, p.getName());
 		ps.setString(2, p.getDescription());
 		ps.setFloat(3, p.getPrice());
+		ps.setFloat(4, p.getQuantity());
 
 		ps.execute();
 	}
 
-	public void addToCart(int pid, Customer owner, int quantity) throws SQLException {
-		if (preventDuplicates(pid, owner.getEmail().toLowerCase())) {
+	public void addToCart(int pid, Customer owner, int quantity) throws SQLException
+	{
+		if (preventDuplicates(pid, owner.getEmail().toLowerCase()))
+		{
 			return;
 		}
 
@@ -195,9 +241,11 @@ public class DBManager {
 		ps.execute();
 	}
 
-	public void addToCartAnonymous(int pid, int quantity) throws SQLException {
+	public void addToCartAnonymous(int pid, int quantity) throws SQLException
+	{
 
-		if (preventDuplicates(pid, AnonymousUserEmail)) {
+		if (preventDuplicates(pid, AnonymousUserEmail))
+		{
 			return;
 		}
 
@@ -215,8 +263,8 @@ public class DBManager {
 		injectOLI(AnonymousUserEmail);
 	}
 
-	private boolean preventDuplicates(int pid, String owner) throws SQLException {
-
+	private boolean preventDuplicates(int pid, String owner) throws SQLException
+	{
 		final String avoidDuplicatesInstruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
 		PreparedStatement rsADI = connection.prepareStatement(avoidDuplicatesInstruction);
 		rsADI.setInt(1, pid);
@@ -225,7 +273,8 @@ public class DBManager {
 		ResultSet existing = rsADI.executeQuery();
 
 		// If something of pid already exists.
-		if (existing.next()) {
+		if (existing.next())
+		{
 			int currentQuantity = existing.getInt(3);
 			updateCart(pid, owner, currentQuantity + 1);
 
@@ -236,7 +285,65 @@ public class DBManager {
 		return false;
 	}
 
-	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException {
+	public void makeOrder(String owner, ArrayList<OrderLineItem> inCart, Address address, PaymentInformation pi) throws SQLException
+	{
+		float totalCost = 0;
+
+		// Convert to a long String.
+		String pids, quas;
+		pids = quas = "";
+		for (int i = 0; i < inCart.size(); ++i)
+		{
+			OrderLineItem o = inCart.get(i);
+			pids += Integer.toString(findProductID(o.getProduct())) + ":";
+			quas += Integer.toString(o.getQuantity()) + ":";
+
+			totalCost += o.getTotalCost();
+
+			// Subtract from Stock/Quantity.
+			Product p = o.getProduct();
+			updateProduct(findProductID(p), p.getName(), p.getDescription(), p.getPrice() + "", p.getQuantity() - o.getQuantity());
+		}
+
+		// Get the time of creating this Order.
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		String purchaseDate = dtf.format(now);
+
+		String addressNum = address.getNumber();
+		String addressStreetName = address.getStreetName();
+		String addressSuburb = address.getSuburb();
+		String addressPostcode = address.getPostcode();
+		String addressCity = address.getCity();
+
+		String cardNo = pi.getCardNo();
+		String CVV = pi.getCVV();
+		String cardHolder = pi.getCardHolder();
+
+		final String attributes = " (OWNER, PRICE, STATUS, PRODUCTS, QUANTITY, PURCHASEDATE, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, CARDNUMBER, CVV, CARDHOLDER) ";
+		final String instruction = "INSERT INTO IOTBAY.ORDERS " + attributes + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, owner);
+		ps.setFloat(2, totalCost);
+		ps.setString(3, "Confirmed");
+		ps.setString(4, pids);
+		ps.setString(5, quas);
+		ps.setString(6, purchaseDate);
+		ps.setString(7, addressNum);
+		ps.setString(8, addressStreetName);
+		ps.setString(9, addressSuburb);
+		ps.setString(10, addressPostcode);
+		ps.setString(11, addressCity);
+		ps.setString(12, cardNo);
+		ps.setString(13, CVV);
+		ps.setString(14, cardHolder);
+
+		ps.execute();
+	}
+
+	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException
+	{
 		String instruction = "UPDATE IOTBAY.CUSTOMERS SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=?, PHONENUMBER=?, STREETNUMBER=?, STREETNAME=?, SUBURB=?, POSTCODE=?, CITY=?, CARDNUMBER=?, CVV=?, CARDHOLDER=? WHERE EMAIL=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -258,7 +365,8 @@ public class DBManager {
 		ps.executeUpdate();
 	}
 
-	public void update(Staff s, String fn, String ln, String pw, String email) throws SQLException {
+	public void update(Staff s, String fn, String ln, String pw, String email) throws SQLException
+	{
 		String instruction = "UPDATE IOTBAY.STAFF SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=? WHERE EMAIL=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -271,19 +379,22 @@ public class DBManager {
 		ps.executeUpdate();
 	}
 
-	public void updateProduct(int id, String name, String desc, String price) throws SQLException {
-		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME=?, DESCRIPTION=?, PRICE=? WHERE PRODUCTID=?";
+	public void updateProduct(int id, String name, String desc, String price, int stock) throws SQLException
+	{
+		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME=?, DESCRIPTION=?, PRICE=?, STOCK=? WHERE PRODUCTID=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, name);
 		ps.setString(2, desc);
 		ps.setFloat(3, Float.parseFloat(price));
-		ps.setInt(4, id);
+		ps.setInt(4, stock);
+		ps.setInt(5, id);
 
 		ps.executeUpdate();
 	}
 
-	public void updateCart(int pid, String owner, int newQuantity) throws SQLException {
+	public void updateCart(int pid, String owner, int newQuantity) throws SQLException
+	{
 		String instruction = "UPDATE IOTBAY.ORDERLINEITEM SET QUANTITY=? WHERE PRODUCTID=? AND OWNER=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -294,7 +405,8 @@ public class DBManager {
 		ps.executeUpdate();
 	}
 
-	public void remove(String database, String email) throws SQLException {
+	public void remove(String database, String email) throws SQLException
+	{
 		String instruction = "DELETE FROM IOTBAY." + database + " WHERE EMAIL=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -303,7 +415,8 @@ public class DBManager {
 		ps.executeUpdate();
 	}
 
-	public void removeFromCart(int pid, String owner) throws SQLException {
+	public void removeFromCart(int pid, String owner) throws SQLException
+	{
 		String instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=? AND OWNER=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -313,12 +426,59 @@ public class DBManager {
 		ps.executeUpdate();
 	}
 
-	public final ArrayList<Customer> injectCustomers() throws SQLException {
+	public void cancelOrder(int oid, String owningEmail) throws SQLException
+	{
+		String getInstruction = "SELECT PRODUCTS, QUANTITY FROM IOTBAY.ORDERS WHERE ORDERID=?";
+
+		PreparedStatement get_ps = connection.prepareStatement(getInstruction);
+		get_ps.setInt(1, oid);
+
+		ResultSet r = get_ps.executeQuery();
+		String pids = r.getString(2);
+		String quas = r.getString(3);
+
+		String[] buffer_pids = pids.split(":", 1 << 30);
+		String[] buffer_quas = quas.split(":", 1 << 30);
+
+		if (buffer_pids.length != buffer_quas.length)
+		{
+			throw new IllegalArgumentException("DBManager::cancelOrder() -> buffer_pid != buffer_quas. buffer_pid = " + buffer_pids.length + " buffer_quas = " + buffer_quas.length);
+		}
+
+		int count = buffer_pids.length;
+		--count;
+
+		int[] productIDs = new int[count];
+		int[] quantities = new int[count];
+
+		for (int i = 0; i < count; ++i)
+		{
+			productIDs[i] = Integer.parseInt(buffer_pids[i]);
+			quantities[i] = Integer.parseInt(buffer_quas[i]);
+		}
+
+		for (int i = 0; i < count; ++i)
+		{
+			Product p = findProduct(productIDs[i]);
+			updateProduct(productIDs[i], p.getName(), p.getDescription(), p.getPrice() + "", p.getQuantity() + quantities[i]);
+		}
+
+		String instruction = "DELETE FROM IOTBAY.ORDERS WHERE ORDERID=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setInt(1, oid);
+
+		ps.executeUpdate();
+	}
+
+	public final ArrayList<Customer> injectCustomers() throws SQLException
+	{
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS";
 		ResultSet r = statement.executeQuery(instruction);
 		ArrayList<Customer> dbInjected = new ArrayList();
 
-		while (r.next()) {
+		while (r.next())
+		{
 
 			// Inject.
 			dbInjected.add(resultSetToCustomer(r));
@@ -327,12 +487,14 @@ public class DBManager {
 		return dbInjected;
 	}
 
-	public final ArrayList<Staff> injectStaff() throws SQLException {
+	public final ArrayList<Staff> injectStaff() throws SQLException
+	{
 		String instruction = "SELECT * FROM IOTBAY.STAFF";
 		ResultSet r = statement.executeQuery(instruction);
 		ArrayList<Staff> dbInjected = new ArrayList();
 
-		while (r.next()) {
+		while (r.next())
+		{
 
 			// Inject.
 			dbInjected.add(resultSetToStaff(r));
@@ -341,12 +503,14 @@ public class DBManager {
 		return dbInjected;
 	}
 
-	public final ArrayList<Product> injectProducts() throws SQLException {
+	public final ArrayList<Product> injectProducts() throws SQLException
+	{
 		String instruction = "SELECT * FROM IOTBAY.PRODUCTS";
 		ResultSet r = statement.executeQuery(instruction);
 		ArrayList<Product> dbInjected = new ArrayList();
 
-		while (r.next()) {
+		while (r.next())
+		{
 
 			// Inject.
 			dbInjected.add(resultSetToProduct(r));
@@ -355,7 +519,8 @@ public class DBManager {
 		return dbInjected;
 	}
 
-	public final ArrayList<OrderLineItem> injectOLI(String email) throws SQLException {
+	public final ArrayList<OrderLineItem> injectOLI(String email) throws SQLException
+	{
 		String instruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE OWNER=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -364,7 +529,8 @@ public class DBManager {
 		ResultSet r = ps.executeQuery();
 		ArrayList<OrderLineItem> dbInjected = new ArrayList();
 
-		while (r.next()) {
+		while (r.next())
+		{
 
 			// Inject.
 			dbInjected.add(resultSetToOLI(r, email));
@@ -375,7 +541,8 @@ public class DBManager {
 		return dbInjected;
 	}
 
-	public final ArrayList<OrderLineItem> injectOLIAnonymous() throws SQLException {
+	public final ArrayList<OrderLineItem> injectOLIAnonymous() throws SQLException
+	{
 		String instruction = "SELECT * FROM IOTBAY.ORDERLINEITEM WHERE OWNER=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
@@ -385,7 +552,8 @@ public class DBManager {
 
 		ArrayList<OrderLineItem> dbInjected = new ArrayList();
 
-		while (r.next()) {
+		while (r.next())
+		{
 
 			// Inject.
 			dbInjected.add(resultSetToOLI(r, AnonymousUserEmail));
@@ -396,7 +564,31 @@ public class DBManager {
 		return cart;
 	}
 
-	private Customer resultSetToCustomer(ResultSet r) throws SQLException {
+	public ArrayList<Order> injectOrders(String owningEmail) throws SQLException
+	{
+		String instruction = "SELECT * FROM IOTBAY.ORDERS WHERE OWNER=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, owningEmail);
+
+		ResultSet r = ps.executeQuery();
+
+		ArrayList<Order> dbInjected = new ArrayList();
+
+		Customer owner = findCustomer(owningEmail);
+
+		while (r.next())
+		{
+			dbInjected.add(resultSetToOrder(r, owner));
+		}
+
+		orders = dbInjected;
+
+		return dbInjected;
+	}
+
+	private Customer resultSetToCustomer(ResultSet r) throws SQLException
+	{
 
 		// Personal Information.
 		String em = r.getString(1);
@@ -426,7 +618,8 @@ public class DBManager {
 		return new Customer(fn, ln, pw, em, a, pn, p);
 	}
 
-	private Staff resultSetToStaff(ResultSet r) throws SQLException {
+	private Staff resultSetToStaff(ResultSet r) throws SQLException
+	{
 
 		// Personal Information.
 		String em = r.getString(1);
@@ -437,7 +630,8 @@ public class DBManager {
 		return new Staff(fn, ln, pw, em);
 	}
 
-	private Product resultSetToProduct(ResultSet r) throws SQLException {
+	private Product resultSetToProduct(ResultSet r) throws SQLException
+	{
 
 		// Product Information.
 		String pname = r.getString(2);
@@ -448,12 +642,68 @@ public class DBManager {
 		return new Product(pname, descr, fPrice, quantity);
 	}
 
-	private OrderLineItem resultSetToOLI(ResultSet r, String ownerEmail) throws SQLException {
+	private OrderLineItem resultSetToOLI(ResultSet r, String ownerEmail) throws SQLException
+	{
 
 		// Order Information.
 		int pid = r.getInt(2);
 		int qua = r.getInt(3);
 
 		return new OrderLineItem(findProduct(pid), findCustomer(ownerEmail), qua);
+	}
+
+	private Order resultSetToOrder(ResultSet r, Customer owner) throws SQLException
+	{
+		int ID = r.getInt(1);
+		float price = r.getFloat(3);
+		String status = r.getString(4);
+		String pids = r.getString(5);
+		String quas = r.getString(6);
+		String purchaseDate = r.getString(7);
+		String addNum = r.getString(8);
+		String addNam = r.getString(9);
+		String sub = r.getString(10);
+		String pc = r.getString(11);
+		String city = r.getString(12);
+		String cNo = r.getString(13);
+		String cvv = r.getString(14);
+		String cHo = r.getString(15);
+
+		Address a = new Address(addNum, addNam, sub, pc, city);
+		PaymentInformation p = new PaymentInformation(cNo, cvv, cHo);
+
+		// Format to match pids with quantities:
+		// 1:3:4:15:           // Product IDs
+		// 21:45:24:5:         // Quantities.
+		String[] buffer_pids = pids.split(":", 1 << 30);
+		String[] buffer_quas = quas.split(":", 1 << 30);
+
+		int count = buffer_pids.length;
+
+		if (buffer_pids.length != buffer_quas.length)
+		{
+			throw new IllegalArgumentException("DBManager::resultSetToOrder() -> buffer_pid != buffer_quas. buffer_pid = " + buffer_pids.length + " buffer_quas = " + buffer_quas.length);
+		}
+
+		// Ignore the last ':'.
+		--count;
+
+		int[] productIDs = new int[count];
+		int[] quantities = new int[count];
+
+		for (int i = 0; i < count; ++i)
+		{
+			productIDs[i] = Integer.parseInt(buffer_pids[i]);
+			quantities[i] = Integer.parseInt(buffer_quas[i]);
+		}
+
+		ArrayList<OrderLineItem> OLIs = new ArrayList();
+
+		for (int i = 0; i < count; ++i)
+		{
+			OLIs.add(new OrderLineItem(findProduct(productIDs[i]), owner, quantities[i]));
+		}
+
+		return new Order(ID, owner, OLIs, price, status, purchaseDate, a, p);
 	}
 }

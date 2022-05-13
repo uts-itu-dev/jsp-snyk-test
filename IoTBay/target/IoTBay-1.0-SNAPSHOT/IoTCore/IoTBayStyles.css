@@ -16,6 +16,13 @@ h1 {
 	font-weight: 900;
 }
 
+h2 {
+	color:#FA4299;
+	font-family: 'Roboto', sans-serif;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
 .S {
 	color:green;
 	font-family: 'Roboto', sans-serif;
@@ -432,7 +439,7 @@ form .btn input[type="submit"] {
 
 .revealParent {
 	position: relative;
-	
+
 	/* The size of the Product tils in index.jsp */
 	height: 250px;
 	width: 300px;
@@ -447,7 +454,8 @@ form .btn input[type="submit"] {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background: rgba(255, 255, 255, 0.0); // Background colour of the Product when hovering.
+	background: rgba(255, 255, 255, 0.0);
+	// Background colour of the Product when hovering.
 	color: #fff;
 	visibility: hidden;
 	opacity: 0;
@@ -511,4 +519,18 @@ td, th {
 	text-align: left;
 	padding: 8px;
         font-size: 22px;
+}
+
+/* Hide Numerical Input arrows in browsers:
+	Chrome, Safari, Edge, Opera 
+*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* ^ For Firefox: */
+input[type=number] {
+	-moz-appearance: textfield;
 }

@@ -165,9 +165,10 @@
 							out.println("<td></td>"); // Quantity. (Skip)
 							out.println("<td style=\"vertical-align:bottom;font-weight:700;\">Total Cost:</td>"); // Cost of Product/s.
 							out.println("<td style=\"vertical-align:bottom;\">$" + totalCost + "</td>"); // Update Button.
-							
+							out.println("<form action=\"Checkout.jsp\" class=\"login\" method=\"POST\">");
 							// In the Remove column, place a "Checkout" button instead.
 							out.println("<td><div class=\"field\" style=\"padding-top:25px;\"><input class=\"button\" type=\"submit\" value=\"Checkout\" name=\"Checkout\"></div></td>"); // Remove
+							out.println("</form>");
 
 							// End HTML for Checkout button and information.
 							out.print("</tr>");

@@ -23,11 +23,13 @@ import javax.servlet.http.HttpServletResponse;
  * @author Michael Wu
  */
 @WebServlet(name = "ProductEditor", value = "/ProductEditor")
-public class ProductEditorController extends IoTWebpageBase implements IIoTWebpage {
+public class ProductEditorController extends IoTWebpageBase implements IIoTWebpage
+{
 
 	// For some reason, the Product Editor couldn't be made into a .jsp file, so here it is.
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
 		super.doGet(request, response);
 
 		PrintWriter out = response.getWriter();
@@ -44,13 +46,17 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 
 		// Begin Logic.
 		String pid = request.getParameter("productID");
-		if (pid != null) {
-			if (uDB != null) {
+		if (pid != null)
+		{
+			if (uDB != null)
+			{
 				int id = Integer.parseInt(pid);
-				try {
+				try
+				{
 					Product p = uDB.findProduct(id);
 
-					if (p != null) {
+					if (p != null)
+					{
 						DecimalFormat df = new DecimalFormat("0.00");
 						String price = df.format(p.getPrice());
 						out.println("<div class=\"form-container\"><div class=\"form-inner\">"
@@ -73,7 +79,12 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 							+ "<div class=\"field\">"
 							+ "<input name=\"ProductPrice\" type=\"number\" min =\".01\" max=\"9999\" step=\"0.01\" value=\"" + price + "\">"
 							+ "</div><br>"
-							//								
+							//
+							+ "<label for=\"ProductPrice\">Product Stock:</label><br>"
+							+ "<div class=\"field\">"
+							+ "<input name=\"ProductStock\" type=\"number\" min =\"0\" max=\"9999\" step=\"0.01\" value=\"" + p.getQuantity() + "\">"
+							+ "</div><br>"
+							//
 							+ "<div class=\"field\">"
 							+ "<input type=\"submit\" value=\"Update\">"
 							+ "</div>"
@@ -84,11 +95,13 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 							+ "</form>"
 							+ "</div></div>");
 					}
-					else {
+					else
+					{
 						out.println("<h1>No product selected!</h1>");
 					}
 
-				} catch (SQLException ex) {
+				} catch (SQLException ex)
+				{
 					Logger.getLogger(ProductEditorController.class.getName()).log(Level.SEVERE, null, ex);
 				}
 			}

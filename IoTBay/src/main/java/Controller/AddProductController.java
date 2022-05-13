@@ -31,7 +31,7 @@ public class AddProductController extends IoTWebpageBase implements IIoTWebpage{
 				for (Product p : uDB.products){
 					if (p.getName().toLowerCase().equals(pName.toLowerCase())){
 						response.sendRedirect("IoTCore/StaffControlPanel/AddProduct.jsp?" + 
-							redirectParams("err", "A Product with that already exists!"));
+							redirectParams("err", "A Product with that name already exists!"));
 						return;
 					}
 				}
