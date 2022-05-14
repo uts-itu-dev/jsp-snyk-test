@@ -594,6 +594,23 @@ public class DBManager
 		ps.executeUpdate();
 	}
 
+        
+        /**
+         * removes products from database given from product ID
+         */
+        
+        public void removeProduct(String productId) throws SQLException
+	{
+            
+                int id = Integer.parseInt(productId);
+		String instruction = "DELETE FROM IOTBAY.PRODUCTS WHERE PRODUCTID=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setInt(1, id);
+
+		ps.executeUpdate();
+	}
+        
 	/**
 	 * Removes a Product from a Cart.
 	 *
