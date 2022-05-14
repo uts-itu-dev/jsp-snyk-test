@@ -3,13 +3,10 @@ package Controller;
 import DAO.DBManager;
 import Model.IoTBay.Core.IIoTWebpage;
 import Model.IoTBay.Core.IoTWebpageBase;
-import Model.IoTBay.OrderLineItem;
 import Model.IoTBay.Person.Customer;
 import Model.IoTBay.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,14 +25,15 @@ public class AddToCartController extends IoTWebpageBase implements IIoTWebpage
 	{
 		super.doPost(request, response);
 
-		// Add to Cart Logic here...
 		String pid = request.getParameter("productID");
 
 		if (pid != null)
 		{
+			// PRODUCTID of Product.
 			int id = Integer.parseInt(pid);
 			try
 			{
+				// The Product with PRODUCTID.
 				Product p = uDB.findProduct(id);
 
 				if (p != null)
@@ -55,17 +53,19 @@ public class AddToCartController extends IoTWebpageBase implements IIoTWebpage
 					// Anonymous Customer.
 					else
 					{
+						// If the Anonymous Customer has no associated Cart, assign one.
 						if (uDB.cart == null)
 						{
 							uDB.injectOLI(DBManager.AnonymousUserEmail);
 						}
 
-						//uDB.cart.add(new OrderLineItem(p, null, 1));
 						uDB.addToCartAnonymous(id, 1);
 						request.setAttribute("Cart", uDB.cart);
 						response.sendRedirect("IoTCore/Cart.jsp");
 					}
-				} else {
+				}
+				else
+				{
 					throw new NullPointerException("AddToCartController::doPost() -> Product is null!");
 				}
 			} catch (SQLException s)

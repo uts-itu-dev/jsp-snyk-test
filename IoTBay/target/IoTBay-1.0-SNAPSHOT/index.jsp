@@ -45,17 +45,20 @@
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Profile.jsp\">Profile</a></div>");
 							if (U.getType() == EUserType.STAFF)
 							{
+								// If this User is STAFF, show a link to their Control Panel.
 								out.println("<div class=\"navLinks right\"><a href=\"IoTCore/StaffControlPanel.jsp\">Staff Control Panel</a></div>");
 							}
 						}
 						else
 						{
+							// The User is not logged in, or not registered.
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Register.jsp\">Register</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Login.jsp\">Login</a></div>");
 						}
 
 						if (U == null || U.getType() != EUserType.STAFF)
 						{
+							// If the User is a Customer, i.e., not Staff, they have a Cart and their existing Orders.
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Cart.jsp\">Cart</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Orders.jsp\">Your Orders</a></div>");
 						}
@@ -98,23 +101,40 @@
 		<h1 id="Products">Our Products</h1>
 
 		<div class="tileGrid">
-			<% int productID = 1; %> <!-- Keep track of Product index when looping. -->
-			<c:if test="${Products != null}"> <!-- If session.getAttribute("Products") exists (if there are products). -->
-				<c:forEach var="p" items="${Products}"> <!-- Loop over Products. -->
+			<!-- Keep track of Product index when looping. -->
+			<!-- A crude workaround to tracking Product IDs for button links. -->
+			<% int productID = 1; %>
+
+			<!-- If session.getAttribute("Products") exists (if there are products). -->
+			<c:if test="${Products != null}">
+
+				<!-- Loop over Products. -->
+				<c:forEach var="p" items="${Products}">
+
+					<!-- Relevant styles to prepare for mouse hover events. -->
 					<div class="tileSpace revealParent">
+
 						<div class="tileTitle">
 							<c:out value="${p.name}"/></div>
+
 						<div style="text-align:center; bottom:100%;">
 							<fmt:formatNumber value="${p.price}" type="currency"/></div>
+
 						<div style="text-align:center; bottom:100%;">
 							<c:out value="${p.quantity}"/> in Stock</div>
+
+						<!-- Anything in this Division will appear when hovered over. -->
 						<div class="hoverRevealer">
+							
 							<div class="productmisc revealContent">
+								
 								<c:out value="${p.description}"/>
 								<br><br>
+								
 								<%
 									Product feProduct = IoTWebpageBase.uDB.findProduct(productID);
 								%>
+								
 								<c:choose>
 									<c:when test="${User != null}"> <!-- if (session.getAttribute("User") != null) -->
 										<%

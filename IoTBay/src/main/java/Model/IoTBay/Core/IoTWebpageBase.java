@@ -14,21 +14,33 @@ import java.sql.SQLException;
  *
  * @author Michael Wu
  */
-public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
+public class IoTWebpageBase extends HttpServlet implements IIoTWebpage
+{
 
 	public final String CSS_LINK = "<link rel=\"stylesheet\"href=\"IoTCore/IoTBayStyles.css\">";
 
 	public static DBConnector connector;
 	public static DBManager uDB;
 
+	/**
+	 * Base HTTP GET method that ensures a connection to the IoTBay Database
+	 * is made.
+	 *
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
 		response.setContentType("text/html");
 
 		HttpSession session = request.getSession();
 
-		if (session.getAttribute("UDatabase") == null) {
-			try {
+		if (session.getAttribute("UDatabase") == null)
+		{
+			try
+			{
 				connectToDB();
 
 				session.setAttribute("UDatabase", uDB);
@@ -37,20 +49,33 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 				session.setAttribute("Products", uDB.products);
 
 				System.out.println("Database Set");
-			} catch (SQLException s) {
+			} catch (SQLException s)
+			{
 				throw new NullPointerException("IoTWebpageBase::doPost. SQL Exception. " + s);
 			}
 		}
 	}
 
+	/**
+	 * Base HTTP POST method that ensures a connection to the IoTBay
+	 * Database is made.
+	 *
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		response.setContentType("text/html");
 
 		HttpSession session = request.getSession();
 
-		if (session.getAttribute("UDatabase") == null) {
-			try {
+		if (session.getAttribute("UDatabase") == null)
+		{
+			try
+			{
 				connectToDB();
 
 				session.setAttribute("UDatabase", uDB);
@@ -59,23 +84,36 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 				session.setAttribute("Products", uDB.products);
 
 				System.out.println("Database Set");
-			} catch (SQLException s) {
+			} catch (SQLException s)
+			{
 				throw new NullPointerException("IoTWebpageBase::doPost. SQL Exception. " + s);
 			}
 		}
 	}
 
-	public final String redirectParams(String... params) throws IllegalArgumentException {
-		if (params.length % 2 == 1) {
+	/**
+	 * Utility function to join URL Parameter Attributes.
+	 *
+	 * @param params { AttributeName, AttributeValue, AttributeName,
+	 * AttributeValue, ... }. Must be even in length/contents.
+	 * @return A String formatted and organised in a way that can be passed at the end of a base URL.
+	 * @throws IllegalArgumentException
+	 */
+	public final String redirectParams(String... params) throws IllegalArgumentException
+	{
+		if (params.length % 2 == 1)
+		{
 			throw new IllegalArgumentException("Input redirection params must have an even length! Input range: " + params.length + "\n" + Thread.currentThread().getStackTrace()[2]);
 		}
 
 		String result = "";
 
-		for (int i = 0; i < params.length - 1; i += 2) {
+		for (int i = 0; i < params.length - 1; i += 2)
+		{
 			result += params[i] + "=" + params[i + 1];
 
-			if (i != params.length - 2) {
+			if (i != params.length - 2)
+			{
 				result += "&";
 			}
 		}
@@ -83,14 +121,19 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		return result;
 	}
 
-	final String convertStringToHTMLRequest(String s) {
+	@Deprecated // Google Chrome does this for automatically.
+	final String convertStringToHTMLRequest(String s)
+	{
 		String result = "";
 
-		for (char r : s.toCharArray()) {
-			if (r == ' ') {
+		for (char r : s.toCharArray())
+		{
+			if (r == ' ')
+			{
 				result += "%20";
 			}
-			else {
+			else
+			{
 				result += r;
 			}
 		}
@@ -98,14 +141,17 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		return result;
 	}
 
-	public static final String makeTag(String tag, String content, String... params) throws IllegalArgumentException {
-		if (params.length % 2 == 1) {
+	public static final String makeTag(String tag, String content, String... params) throws IllegalArgumentException
+	{
+		if (params.length % 2 == 1)
+		{
 			throw new IllegalArgumentException("Input redirection params must have an even length! Input range: " + params.length + "\n" + Thread.currentThread().getStackTrace()[2]);
 		}
 
 		String result = "<" + tag;
 
-		for (int i = 0; i < params.length - 1; i += 2) {
+		for (int i = 0; i < params.length - 1; i += 2)
+		{
 			result += " " + params[i] + "=\"" + params[i + 1] + "\"";
 		}
 
@@ -114,36 +160,44 @@ public class IoTWebpageBase extends HttpServlet implements IIoTWebpage {
 		return result;
 	}
 
-	public static final String makeTagNoClose(String tag, String... params) throws IllegalArgumentException {
-		if (params.length % 2 == 1) {
+	public static final String makeTagNoClose(String tag, String... params) throws IllegalArgumentException
+	{
+		if (params.length % 2 == 1)
+		{
 			throw new IllegalArgumentException("Input redirection params must have an even length! Input range: " + params.length + "\n" + Thread.currentThread().getStackTrace()[2]);
 		}
 
 		String result = "<" + tag;
 
-		for (int i = 0; i < params.length - 1; i += 2) {
+		for (int i = 0; i < params.length - 1; i += 2)
+		{
 			result += " " + params[i] + "=\"" + params[i + 1] + "\"";
 		}
 
 		return result + ">";
 	}
 
-	public static final void connectToDB() throws SQLException {
-		try {
+	public static final void connectToDB() throws SQLException
+	{
+		try
+		{
 			System.out.println("Connecting to DB...");
 
 			connector = new DBConnector();
 			uDB = new DBManager(connector.openConnection());
 
 			System.out.println("DB Connected.");
-		} catch (ClassNotFoundException c) {
+		} catch (ClassNotFoundException c)
+		{
 			throw new NullPointerException("IoTWebpageBase::connectToDB. Class Not Found Exception.");
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			throw new NullPointerException("IoTWebpageBase::connectToDB. SQL Exception. " + s);
 		}
 	}
 
-	public static final void Log(Object o) {
+	public static final void Log(Object o)
+	{
 		System.out.println(o);
 	}
 }

@@ -10,37 +10,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * The logic when a Registered Customer or Staff deletes their account from
+ * IoTBay.
  *
  * @author Michael Wu
  */
 @WebServlet(name = "Delete", value = "/Delete")
-public class DeleteController extends IoTWebpageBase implements IIoTWebpage {
+public class DeleteController extends IoTWebpageBase implements IIoTWebpage
+{
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		super.doPost(request, response);
-		
-		System.out.println("Deleting");
 
 		String email = request.getParameter("Email");
 		String type = request.getParameter("Type");
-		
-		if (email == null)
-			throw new NullPointerException("DeleteController::doPost() -> Email is null!");
-		if (type == null)
-			throw new NullPointerException("DeleteController::doPost() -> Type is null!");
 
-		try {
+		if (email == null)
+		{
+			throw new NullPointerException("DeleteController::doPost() -> Email is null!");
+		}
+		if (type == null)
+		{
+			throw new NullPointerException("DeleteController::doPost() -> Type is null!");
+		}
+
+		try
+		{
 			uDB.remove(type, email);
-			
+
 			request.getSession().invalidate();
-			
-			response.sendRedirect("IoTCore/Redirector.jsp?" +
-				redirectParams("HeadingMessage", "Deleted " + type,
+
+			response.sendRedirect("IoTCore/Redirector.jsp?"
+				+ redirectParams("HeadingMessage", "Deleted " + type,
 					"Message", "Please wait while we redirect you.")
 			);
-				
-		} catch (SQLException s) {
+
+		} catch (SQLException s)
+		{
 			System.out.println("DeleteController::doPost() -> Failed to Delete: " + s);
 		}
 

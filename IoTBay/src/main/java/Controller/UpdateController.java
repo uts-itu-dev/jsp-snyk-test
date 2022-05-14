@@ -21,10 +21,12 @@ import javax.servlet.http.HttpSession;
  * @author Michael Wu
  */
 @WebServlet(name = "Update", value = "/Update")
-public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
+public class UpdateController extends IoTWebpageBase implements IIoTWebpage
+{
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		super.doPost(request, response);
 
 		String firstName = request.getParameter("First");
@@ -32,19 +34,23 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 		String email = request.getParameter("Email");
 
 		String updateCallFromStaff = request.getParameter("Update");
-		if (updateCallFromStaff != null) {
+		if (updateCallFromStaff != null)
+		{
 			Log("Update");
 			response.sendRedirect("IoTCore/StaffControlPanel/CustomerProfileUpdator.jsp?Email=" + email);
 			return;
 		}
 
-		if (request.getParameter("Remove") != null) {
+		if (request.getParameter("Remove") != null)
+		{
 			Log("Remove");
-			try {
+			try
+			{
 				uDB.remove("CUSTOMERS", email);
 
 				response.sendRedirect("IoTCore/StaffControlPanel/SeeEditCustomers.jsp?" + redirectParams("upd", "Customer Removed!"));
-			} catch (SQLException s) {
+			} catch (SQLException s)
+			{
 				throw new NullPointerException("UpdateController::doPost() -> Failed to remove Customer with E-Mail: " + email);
 			}
 			return;
@@ -65,6 +71,7 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 
 		boolean bIsCustomer = request.getParameter("bIsCustomer").equals("yes");
 
+		// Depending on who is Editing a Customer, the redirect link will be different.
 		boolean bCalledFromStaff = request.getParameter("CalledFromStaff") != null;
 		String redirectLink = bCalledFromStaff
 			? "IoTCore/StaffControlPanel/SeeEditCustomers.jsp?"
@@ -74,27 +81,35 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 
 		HttpSession session = request.getSession();
 
-		if (bIsCustomer) {
-			try {
+		if (bIsCustomer)
+		{
+			try
+			{
 				Customer current;
-				if (!bCalledFromStaff) {
+				if (!bCalledFromStaff)
+				{
 					current = uDB.findCustomer(((Customer) session.getAttribute("User")).getEmail());
 				}
-				else {
+				else
+				{
 					String uEmail = request.getParameter("originalEmail");
 
-					if (uEmail == null) {
+					if (uEmail == null)
+					{
 						throw new NullPointerException("UpdateController::doPost() -> Email is null -> Trying to edit a Customer with no parameter 'Email'!");
 					}
 
 					current = uDB.findCustomer(uEmail);
 				}
 
-				if (current != null) {
-					switch (attribute) {
+				if (current != null)
+				{
+					switch (attribute)
+					{
 						case "Names":
 							updateCustomerNames(current, firstName, lastName);
-							if (!bCalledFromStaff) {
+							if (!bCalledFromStaff)
+							{
 								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
 							}
 
@@ -102,15 +117,19 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 
 							break;
 						case "Password":
-							if (!bCalledFromStaff && !currentPass.equals(current.getPassword())) {
+							if (!bCalledFromStaff && !currentPass.equals(current.getPassword()))
+							{
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "The Current Password was incorrect!"));
 							}
-							else if (!bCalledFromStaff && !pass1.equals(pass2)) {
+							else if (!bCalledFromStaff && !pass1.equals(pass2))
+							{
 								response.sendRedirect(redirectLink + redirectParams("err", "Passwords did not match!"));
 							}
-							else {
+							else
+							{
 								updateCustomerPassword(current, pass1);
-								if (!bCalledFromStaff) {
+								if (!bCalledFromStaff)
+								{
 									session.setAttribute("User", uDB.findCustomer(current.getEmail()));
 								}
 								response.sendRedirect(redirectLink + redirectParams("upd", attribute + " Updated!"));
@@ -118,12 +137,15 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 
 							break;
 						case "Email":
-							if (uDB.findCustomer(email) != null) {
+							if (uDB.findCustomer(email) != null)
+							{
 								response.sendRedirect(redirectLink + redirectParams("err", "An account with that E-Mail already exists!"));
 							}
-							else {
+							else
+							{
 								updateCustomerEmail(current, email);
-								if (!bCalledFromStaff) {
+								if (!bCalledFromStaff)
+								{
 									session.setAttribute("User", uDB.findCustomer(email));
 								}
 								response.sendRedirect(redirectLink + redirectParams("upd", attribute + " Updated!"));
@@ -132,7 +154,8 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							break;
 						case "PhoneNumber":
 							updateCustomerPhoneNumber(current, phoneNumber);
-							if (!bCalledFromStaff) {
+							if (!bCalledFromStaff)
+							{
 								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
 							}
 							response.sendRedirect(redirectLink + redirectParams("upd", "Phone Number Updated!"));
@@ -140,7 +163,8 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							break;
 						case "Address":
 							updateCustomerAddress(current, addressNum, addressStreetName, addressSuburb, addressPostcode, addressCity);
-							if (!bCalledFromStaff) {
+							if (!bCalledFromStaff)
+							{
 								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
 							}
 							response.sendRedirect(redirectLink + redirectParams("upd", attribute + " Updated!"));
@@ -148,7 +172,8 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							break;
 						case "PaymentInformation":
 							updateCustomerPaymentInformation(current, cardNo, CVV, cardHolder);
-							if (!bCalledFromStaff) {
+							if (!bCalledFromStaff)
+							{
 								session.setAttribute("User", uDB.findCustomer(current.getEmail()));
 							}
 							response.sendRedirect(redirectLink + redirectParams("upd", "Payment Information Updated!"));
@@ -157,39 +182,49 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 					}
 				}
 
-			} catch (SQLException s) {
+			} catch (SQLException s)
+			{
 				System.out.println("UpdateController::doPost::Logged in as a Customer " + s);
 			}
 		}
-		else { // The User is Staff.
-			try {
-				Staff current = uDB.findStaff(((Staff) session.getAttribute("User")).getEmail());
+		else
+		{ // The User is Staff.
+			try
+			{
+				Staff current = uDB.findStaff( ( (Staff) session.getAttribute("User")).getEmail() );
 
-				if (current != null) {
-					switch (attribute) {
+				if (current != null)
+				{
+					switch (attribute)
+					{
 						case "Names":
 							updateStaffNames(current, firstName, lastName);
 							session.setAttribute("User", uDB.findStaff(current.getEmail()));
 							response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", "Name Updated!"));
 							break;
 						case "Password":
-							if (!currentPass.equals(current.getPassword())) {
+							if (!currentPass.equals(current.getPassword()))
+							{
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "The Current Password was incorrect!"));
 							}
-							else if (!pass1.equals(pass2)) {
+							else if (!pass1.equals(pass2))
+							{
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "Passwords did not match!"));
 							}
-							else {
+							else
+							{
 								updateStaffPassword(current, pass1);
 								session.setAttribute("User", uDB.findStaff(current.getEmail()));
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
 							}
 							break;
 						case "Email":
-							if (uDB.findCustomer(email) != null) {
+							if (uDB.findCustomer(email) != null)
+							{
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("err", "An account with that E-Mail already exists!"));
 							}
-							else {
+							else
+							{
 								updateStaffEmail(current, email);
 								session.setAttribute("User", uDB.findStaff(email));
 								response.sendRedirect("IoTCore/Profile.jsp?" + redirectParams("upd", attribute + " Updated!"));
@@ -203,7 +238,7 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 
 							String pid = request.getParameter("pid");
 							int id = Integer.parseInt(pid);
-							
+
 							int stock = Integer.parseInt(pStock);
 
 							uDB.updateProduct(id, pName, pDesc, pPrice, stock);
@@ -217,96 +252,119 @@ public class UpdateController extends IoTWebpageBase implements IIoTWebpage {
 							break;
 					}
 				}
-			} catch (SQLException s) {
+			} catch (SQLException s)
+			{
 				System.out.println("UpdateController::doPost::Logged in as STAFF " + s);
 			}
 		}
 	}
 
-	void onSuccessfulCustomerUpdate(HttpSession session, HttpServletResponse response, String email) throws SQLException, IOException {
+	void onSuccessfulCustomerUpdate(HttpSession session, HttpServletResponse response, String email) throws SQLException, IOException
+	{
 		session.setAttribute("User", uDB.findCustomer(email));
 		response.sendRedirect("IoTCore/Landing.jsp");
 	}
 
-	void updateCustomerNames(Customer c, String fn, String ln) throws SQLException {
-		try {
+	void updateCustomerNames(Customer c, String fn, String ln) throws SQLException
+	{
+		try
+		{
 			Address a = c.getAddress();
 			PaymentInformation p = c.getPayment();
 			uDB.update(c, fn, ln, c.getPassword(), c.getEmail(), c.getPhoneNumber(),
 				a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(),
 				p.getCardNo(), p.getCVV(), p.getCardHolder());
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			System.out.println("Update Customer Names Failed: " + s);
 		}
 	}
 
-	void updateCustomerPassword(Customer c, String password) throws SQLException {
-		try {
+	void updateCustomerPassword(Customer c, String password) throws SQLException
+	{
+		try
+		{
 			Address a = c.getAddress();
 			PaymentInformation p = c.getPayment();
 			uDB.update(c, c.getFirstName(), c.getLastName(), password, c.getEmail(), c.getPhoneNumber(),
 				a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(),
 				p.getCardNo(), p.getCVV(), p.getCardHolder());
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			System.out.println("Update Customer Password Failed: " + s);
 		}
 	}
 
-	void updateCustomerEmail(Customer c, String email) throws SQLException {
-		try {
+	void updateCustomerEmail(Customer c, String email) throws SQLException
+	{
+		try
+		{
 			Address a = c.getAddress();
 			PaymentInformation p = c.getPayment();
 			uDB.update(c, c.getFirstName(), c.getLastName(), c.getPassword(), email, c.getPhoneNumber(),
 				a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(),
 				p.getCardNo(), p.getCVV(), p.getCardHolder());
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			System.out.println("Update Customer Email Failed: " + s);
 		}
 	}
 
-	void updateCustomerPhoneNumber(Customer c, String phoneNumber) throws SQLException {
-		try {
+	void updateCustomerPhoneNumber(Customer c, String phoneNumber) throws SQLException
+	{
+		try
+		{
 			Address a = c.getAddress();
 			PaymentInformation p = c.getPayment();
 			uDB.update(c, c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail(), phoneNumber,
 				a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(),
 				p.getCardNo(), p.getCVV(), p.getCardHolder());
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			System.out.println("Update Customer Phone Number Failed: " + s);
 		}
 	}
 
-	void updateCustomerAddress(Customer c, String sNo, String sn, String sub, String pc, String city) throws SQLException {
-		try {
+	void updateCustomerAddress(Customer c, String sNo, String sn, String sub, String pc, String city) throws SQLException
+	{
+		try
+		{
 			PaymentInformation p = c.getPayment();
 			uDB.update(c, c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail(), c.getPhoneNumber(),
 				sNo, sn, sub, pc, city,
 				p.getCardNo(), p.getCVV(), p.getCardHolder());
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			System.out.println("Update Customer Address Failed: " + s);
 		}
 	}
 
-	void updateCustomerPaymentInformation(Customer c, String cardNo, String cvv, String cardHolder) throws SQLException {
-		try {
+	void updateCustomerPaymentInformation(Customer c, String cardNo, String cvv, String cardHolder) throws SQLException
+	{
+		try
+		{
 			Address a = c.getAddress();
 			uDB.update(c, c.getFirstName(), c.getLastName(), c.getPassword(), c.getEmail(), c.getPhoneNumber(),
 				a.getNumber(), a.getStreetName(), a.getSuburb(), a.getPostcode(), a.getCity(),
 				cardNo, cvv, cardHolder);
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 			System.out.println("Update Customer Payment Information Failed: " + s);
 		}
 	}
 
-	void updateStaffNames(Staff s, String fn, String ln) throws SQLException {
+	void updateStaffNames(Staff s, String fn, String ln) throws SQLException
+	{
 		uDB.update(s, fn, ln, s.getPassword(), s.getEmail());
 	}
 
-	void updateStaffPassword(Staff s, String password) throws SQLException {
+	void updateStaffPassword(Staff s, String password) throws SQLException
+	{
 		uDB.update(s, s.getFirstName(), s.getLastName(), password, s.getEmail());
 	}
 
-	void updateStaffEmail(Staff s, String email) throws SQLException {
+	void updateStaffEmail(Staff s, String email) throws SQLException
+	{
 		uDB.update(s, s.getFirstName(), s.getLastName(), s.getPassword(), email);
 	}
 }

@@ -17,10 +17,12 @@ import java.sql.SQLException;
  * @author Michael Wu
  */
 @WebServlet(name = "Register", value = "/Register")
-public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
+public class RegisterController extends IoTWebpageBase implements IIoTWebpage
+{
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		super.doPost(request, response);
 
 		String firstName = request.getParameter("First");
@@ -35,9 +37,11 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 		String addressPostcode = request.getParameter("addPostcode");
 		String addressCity = request.getParameter("addCity");
 
-		try {
+		try
+		{
 			// If an account with email already exists, don't Register.
-			if (uDB.findCustomer(email) != null) {
+			if (uDB.findCustomer(email) != null)
+			{
 				response.sendRedirect("IoTCore/Register.jsp?"
 					+ redirectParams(
 						"err", "An account with that E-Mail already exists!",
@@ -55,10 +59,12 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				// Make sure to exit Registration.
 				return;
 			}
-		} catch (SQLException s) {
+		} catch (SQLException s)
+		{
 		}
 
-		if (!pass1.equals(pass2)) {
+		if (!pass1.equals(pass2))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "Passwords did not match!",
@@ -74,7 +80,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsNumber(firstName + lastName)) {
+		else if (Validator.containsNumber(firstName + lastName))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "Names do not have numbers!",
@@ -88,7 +95,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsLetter(phoneNumber)) {
+		else if (Validator.containsLetter(phoneNumber))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "Phone Numbers don't have letters!",
@@ -103,7 +111,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (addressNum.length() >= 10) {
+		else if (addressNum.length() >= 10)
+		{
 			// A street number should never be a VARCHAR greater than 10 in length.
 
 			response.sendRedirect("IoTCore/Register.jsp?"
@@ -120,7 +129,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsLetter(addressNum)) {
+		else if (Validator.containsLetter(addressNum))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "A Street Number cannot contain letters!",
@@ -135,7 +145,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsNumber(addressStreetName)) {
+		else if (Validator.containsNumber(addressStreetName))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "Street Names cannot contain numbers!",
@@ -150,7 +161,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsNumber(addressSuburb)) {
+		else if (Validator.containsNumber(addressSuburb))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "The name of a Suburb cannot have a number!",
@@ -165,7 +177,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsNumber(addressCity)) {
+		else if (Validator.containsNumber(addressCity))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "The name of a City cannot contain a number!",
@@ -180,7 +193,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else if (Validator.containsLetter(addressPostcode)) {
+		else if (Validator.containsLetter(addressPostcode))
+		{
 			response.sendRedirect("IoTCore/Register.jsp?"
 				+ redirectParams(
 					"err", "Australian Postcodes do not contain letters!",
@@ -195,7 +209,8 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 				)
 			);
 		}
-		else {
+		else
+		{
 
 			// Otherwise, officially Register these details.
 			System.out.println("EXEC");
@@ -203,9 +218,11 @@ public class RegisterController extends IoTWebpageBase implements IIoTWebpage {
 			HttpSession session = request.getSession();
 			Customer newCustomer = new Customer(firstName, lastName, pass1, email, new Address(addressNum, addressStreetName, addressSuburb, addressPostcode, addressCity), phoneNumber);
 
-			try {
+			try
+			{
 				uDB.add(newCustomer);
-			} catch (SQLException e) {
+			} catch (SQLException e)
+			{
 				System.out.println("SQL\n" + e);
 			}
 

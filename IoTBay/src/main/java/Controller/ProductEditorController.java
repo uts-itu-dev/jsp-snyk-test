@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Provides the view for editing a product.
+ * Provides the View for Editing a Product.
  *
  * @author Michael Wu
  */

@@ -74,6 +74,8 @@
 					// If Unregistered.
 					if (active == null)
 					{
+						// Defaults.
+
 						stNo = stNa = sub = pc = city = "";
 						cn = cvv = ch = "";
 
@@ -180,14 +182,14 @@
 
 							<div class="field" style="padding-right:25%">
 								<input type="submit" value="Proceed With Checkout" style="float:right; width:20%;">
-								
+
 								<input type="hidden" name="isCustomer" value=<%=isCustomer%>>
 								<input type="hidden" name="email" value=<%=email%>>
 							</div>
 
 						</form>
-					</div> <!-- vv -->
-				</div> <!-- <div class="form-container"><div class="form-inner"> -->
+					</div> <!-- <div class="form-inner"> -->
+				</div> <!-- <div class="form-container"> -->
 			</div>
 		</div>
 	</body>

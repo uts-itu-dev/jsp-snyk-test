@@ -106,9 +106,6 @@ public class UpdateOrder extends IoTWebpageBase implements IIoTWebpage
 			}
 		}
 		// Otherwise, if the Customer wishes to proceed with their Order. (Checkout)
-		else if (request.getParameter("Checkout") != null)
-		{
-			
-		}
+		else if (request.getParameter("Checkout") != null) { }
 	}
 }

@@ -90,7 +90,9 @@
 						{
 							out.println("<h2>You haven't ordered anything yet!</h2>");
 							out.println("<meta http-equiv=\"refresh\" content=\"1.5; URL=../index.jsp#Products\"/>");
-						} else { // <- I didn't know you could do this.
+						}
+						else
+						{ // <- I didn't know you could do this.
 					%>
 					<table style="width:90%">
 						<!-- Table Headings. -->
@@ -104,67 +106,72 @@
 						</tr>
 
 						<%
-							for (int i = 0; i < items.size(); ++i)
-							{
-								// Initialise Variables.
-								Order o = items.get(i);
-								ArrayList<OrderLineItem> p = o.getProducts();
-								float total = o.getTotalCost();
-								String status = o.getStatus();
-
-								// Begin HTML.
-								out.println("<tr>");
-								out.println("<form action=\"../CancelOrder\" class=\"login\" method=\"POST\">");
-
-								// Order No.#.
-								out.println("<td>" + (i + 1) + "</td>");
-
-								// Products.
-								String display = "";
-								for (OrderLineItem auto : p)
+								for (int i = 0; i < items.size(); ++i)
 								{
-									display += auto.getQuantity() + "x&nbsp;";
-									display += auto.getProduct().getName();
-									display += "<br>";
+									// Initialise Variables.
+									Order o = items.get(i);
+									ArrayList<OrderLineItem> p = o.getProducts();
+									float total = o.getTotalCost();
+									String status = o.getStatus();
+
+									String colourDependingOnStatus = status.equals("Cancelled") ? "#777777" : "#000000";
+
+									// Begin HTML.
+									out.println("<tr>");
+									out.println("<form action=\"../CancelOrder\" class=\"login\" method=\"POST\">");
+
+									// Order No.#.
+									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + (i + 1) + "</td>");
+
+									// Products.
+									String display = "";
+									for (OrderLineItem auto : p)
+									{
+										display += auto.getQuantity() + "x&nbsp;";
+										display += auto.getProduct().getName();
+										display += "<br>";
+									}
+									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + display + "</td>");
+
+									// Total Price of Order.
+									String price = df.format(total);
+									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">$" + price + "</td>");
+
+									// Status.
+									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + status + "</td>");
+
+									// Shipping Address.
+									Address a = o.getAddress();
+									String addr = a.getNumber() + " " + a.getStreetName();
+									addr += ",<br>" + a.getSuburb() + ", " + a.getPostcode();
+									addr += ",<br>" + a.getCity();
+									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + addr + "</td>");
+
+									// Date Purchased.
+									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + o.getPurchaseDateOnly() + "</td>");
+
+									if (status.equals("Confirmed"))
+									{
+										// Cancel Order?
+										out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Cancel\" name=\"Cancel\"></div></td>");
+									}
+
+									// Get OrderID.
+									int oid = o.getID();
+									out.println("<input type=\"hidden\" name=\"oid\" value=\"" + oid + "\">");
+
+									// Get Owner
+									String email = active == null
+										? DBManager.AnonymousUserEmail
+										: o.getOwner().getEmail();
+									out.println("<input type=\"hidden\" name=\"owner\" value=\"" + email + "\">");
+
+									// End HTML.
+									out.println("</div>");
+									out.println("</form>");
+									out.println("</tr>");
 								}
-								out.println("<td>" + display + "</td>");
-
-								// Total Price of Order.
-								String price = df.format(total);
-								out.println("<td>$" + price + "</td>");
-
-								// Status.
-								out.println("<td>" + status + "</td>");
-
-								// Shipping Address.
-								Address a = o.getAddress();
-								String addr = a.getNumber() + " " + a.getStreetName();
-								addr += ",<br>" + a.getSuburb() + ", " + a.getPostcode();
-								addr += ",<br>" + a.getCity();
-								out.println("<td>" + addr + "</td>");
-								
-								// Date Purchased.
-								out.println("<td>" + o.getPurchaseDateOnly() + "</td>");
-
-								// Cancel Order?
-								out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Cancel\" name=\"Cancel\"></div></td>");
-
-								// Get OrderID.
-								int oid = o.getID();
-								out.println("<input type=\"hidden\" name=\"oid\" value=\"" + oid + "\">");
-
-								// Get Owner
-								String email = active == null
-									? DBManager.AnonymousUserEmail
-									: o.getOwner().getEmail();
-								out.println("<input type=\"hidden\" name=\"owner\" value=\"" + email + "\">");
-
-								// End HTML.
-								out.println("</div>");
-								out.println("</form>");
-								out.println("</tr>");
 							}
-						}
 						%>
 					</table>
 				</c:if>

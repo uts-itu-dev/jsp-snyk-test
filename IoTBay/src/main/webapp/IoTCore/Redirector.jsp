@@ -1,7 +1,10 @@
 <%-- 
-    Document   : Redirector
-    Created on : May 8, 2022, 2:27:55 PM
-    Author     : Michael Wu
+	Document   : Redirector
+	Created on : May 8, 2022, 2:27:55 PM
+	Author     : Michael Wu
+
+	Purpose    : Serve as a redirector back to the index.jsp page in
+                     1.5 seconds of waiting time.
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -19,6 +22,7 @@
 			String H1 = request.getParameter("HeadingMessage");
 			if (H1 != null)
 				out.println("<h1>"+H1+"</h1>");
+				
 			String M = request.getParameter("Message");
 			if (M != null)
 				out.println("<p class=\"text textArea\">" + M + "</p>");

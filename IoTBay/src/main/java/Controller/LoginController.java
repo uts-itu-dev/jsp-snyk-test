@@ -17,18 +17,22 @@ import javax.servlet.http.HttpSession;
  * @author Michael Wu
  */
 @WebServlet(name = "Login", value = "/Login")
-public class LoginController extends IoTWebpageBase implements IIoTWebpage {
+public class LoginController extends IoTWebpageBase implements IIoTWebpage
+{
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		super.doPost(request, response);
 
 		String email = request.getParameter("Email");
 		String password = request.getParameter("Password");
 
-		try {
+		try
+		{
 			Customer tryLoginCredentials = uDB.findCustomer(email, password);
-			if (tryLoginCredentials != null) { // Found Customer.
+			if (tryLoginCredentials != null)
+			{ // Found Customer.
 				HttpSession session = request.getSession();
 				session.setAttribute("User", tryLoginCredentials);
 
@@ -38,11 +42,15 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 						"Message", "Please wait while we redirect you...")
 				);
 
-			} else { // If no Customer was found, try Staff.
+			}
+			else
+			{ // If no Customer was found, try Staff.
 
 				Staff tryStaffCredentials = uDB.findStaff(email, password);
 
-				if (tryStaffCredentials != null) { // Found Staff.
+				// Found Staff.
+				if (tryStaffCredentials != null)
+				{
 					HttpSession session = request.getSession();
 					session.setAttribute("User", tryStaffCredentials);
 
@@ -51,8 +59,11 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 							"HeadingMessage", "Welcome, " + tryStaffCredentials.getFirstName() + "!",
 							"Message", "Please wait while we redirect you...")
 					);
-					
-				} else { // Neither Customer or Staff exists with this Email.
+
+				}
+				// Neither Customer or Staff exists with this Email.
+				else
+				{
 
 					response.sendRedirect("IoTCore/Login.jsp?"
 						+ redirectParams("err", "Incorrect E-Mail or Password!", "Email", email)
@@ -60,7 +71,8 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage {
 				}
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException e)
+		{
 			System.out.println("Unable to find Email: " + email + "\n" + e);
 		}
 	}

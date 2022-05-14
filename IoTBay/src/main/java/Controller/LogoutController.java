@@ -12,18 +12,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * When a Logged-In User Logs Out from IoTBay.
  *
  * @author Michael Wu
  */
 @WebServlet(name = "Logout", value = "/Logout")
-public class LogoutController extends IoTWebpageBase implements IIoTWebpage {
-	
+public class LogoutController extends IoTWebpageBase implements IIoTWebpage
+{
+
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
 		super.doGet(request, response);
-		
+
 		request.getSession().invalidate();
-		
+
 		response.sendRedirect("index.jsp");
-	}	
+	}
 }
