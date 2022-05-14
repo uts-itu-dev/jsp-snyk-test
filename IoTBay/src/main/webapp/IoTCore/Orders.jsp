@@ -54,6 +54,7 @@
 							out.println("<div class=\"navLinks right\"><a href=\"Register.jsp\">Register</a></div>");
 							out.println("<div class=\"navLinks right\"><a href=\"Login.jsp\">Login</a></div>");
 						}
+						out.println("<div class=\"navLinks right\"><a href=\"Cart.jsp\">Cart</a></div>");
 					%>
 				</div>
 			</nav>
@@ -80,7 +81,17 @@
 					out.println("</p>");
 				%>
 
+				<!-- if (request.getAttribute("Orders") != null) -->
 				<c:if test="${Orders != null}">
+					<%
+						DecimalFormat df = new DecimalFormat("0.00");
+						ArrayList<Order> items = (ArrayList<Order>) session.getAttribute("Orders");
+						if (items.isEmpty())
+						{
+							out.println("<h2>You haven't ordered anything yet!</h2>");
+							out.println("<meta http-equiv=\"refresh\" content=\"1.5; URL=../index.jsp#Products\"/>");
+						} else { // <- I didn't know you could do this.
+					%>
 					<table style="width:90%">
 						<!-- Table Headings. -->
 						<tr>
@@ -89,18 +100,17 @@
 							<th>Total Cost</th>
 							<th>Status</th>
 							<th>Address</th>
+							<th>Date Purchased</th>
 						</tr>
 
 						<%
-							DecimalFormat df = new DecimalFormat("0.00");
-							ArrayList<Order> items = (ArrayList<Order>) session.getAttribute("Orders");
 							for (int i = 0; i < items.size(); ++i)
 							{
 								// Initialise Variables.
-								Order OLI = items.get(i);
-								ArrayList<OrderLineItem> p = OLI.getProducts();
-								float total = OLI.getTotalCost();
-								String status = OLI.getStatus();
+								Order o = items.get(i);
+								ArrayList<OrderLineItem> p = o.getProducts();
+								float total = o.getTotalCost();
+								String status = o.getStatus();
 
 								// Begin HTML.
 								out.println("<tr>");
@@ -127,23 +137,26 @@
 								out.println("<td>" + status + "</td>");
 
 								// Shipping Address.
-								Address a = OLI.getAddress();
+								Address a = o.getAddress();
 								String addr = a.getNumber() + " " + a.getStreetName();
 								addr += ",<br>" + a.getSuburb() + ", " + a.getPostcode();
 								addr += ",<br>" + a.getCity();
 								out.println("<td>" + addr + "</td>");
+								
+								// Date Purchased.
+								out.println("<td>" + o.getPurchaseDateOnly() + "</td>");
 
 								// Cancel Order?
-								out.println("<td><p>cancel works, but it doesnt add the stock/quantities back into IoTBay :( </p><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Cancel\" name=\"Cancel\"></div></td>");
+								out.println("<td><div class=\"field\"><input class=\"button\" type=\"submit\" value=\"Cancel\" name=\"Cancel\"></div></td>");
 
 								// Get OrderID.
-								int oid = OLI.getID();
+								int oid = o.getID();
 								out.println("<input type=\"hidden\" name=\"oid\" value=\"" + oid + "\">");
 
 								// Get Owner
 								String email = active == null
 									? DBManager.AnonymousUserEmail
-									: OLI.getOwner().getEmail();
+									: o.getOwner().getEmail();
 								out.println("<input type=\"hidden\" name=\"owner\" value=\"" + email + "\">");
 
 								// End HTML.
@@ -151,6 +164,7 @@
 								out.println("</form>");
 								out.println("</tr>");
 							}
+						}
 						%>
 					</table>
 				</c:if>

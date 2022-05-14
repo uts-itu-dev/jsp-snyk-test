@@ -6,6 +6,7 @@ import java.io.Serializable;
 import Model.IoTBay.Person.Customer;
 import Model.IoTBay.Person.PaymentInformation;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -73,6 +74,42 @@ public class Order implements Serializable
 	public final String getPurchaseDate()
 	{
 		return purchaseDate;
+	}
+
+	public final String getPurchaseDateOnly()
+	{
+		// Format:
+		// yyyy/MM/dd HH:mm:ss.
+		// Split using '/' to get { "yyyy", "MM", "dd HH:mm:ss" }
+		String[] split = purchaseDate.split("/");
+
+		String year = split[0];
+		String buffer_m0m = split[1];
+		Month month = Month.of(Integer.parseInt(buffer_m0m));
+
+		// Only get the 'dd' portion in { ..., "dd HH:mm:ss" }
+		String buffer_d0d = split[2];
+		String D0D = buffer_d0d.charAt(0) + "" + buffer_d0d.charAt(1);
+
+		String ordinal;
+
+		switch (D0D)
+		{
+			case "01":
+				ordinal = "st";
+				break;
+			case "02":
+				ordinal = "nd";
+				break;
+			case "03":
+				ordinal = "rd";
+				break;
+			default:
+				ordinal = "th";
+				break;
+		}
+
+		return D0D + ordinal + " of " + month + ", " + year;
 	}
 
 	public final Address getAddress()

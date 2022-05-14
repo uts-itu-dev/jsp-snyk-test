@@ -81,6 +81,16 @@
 				%>
 
 				<c:if test="${Cart != null}">
+					<%
+						ArrayList<OrderLineItem> items = (ArrayList<OrderLineItem>) session.getAttribute("Cart");
+						if (items.isEmpty())
+						{
+							out.println("<h2>There is nothing in your Cart!</h2>");
+							out.println("<meta http-equiv=\"refresh\" content=\"1.5; URL=../index.jsp#Products\"/>");
+						}
+						else
+						{
+					%>
 					<table>
 						<!-- Table Headings. -->
 						<tr>
@@ -92,7 +102,6 @@
 						<%
 							DecimalFormat df = new DecimalFormat("0.00");
 
-							ArrayList<OrderLineItem> items = (ArrayList<OrderLineItem>) session.getAttribute("Cart");
 							for (int i = 0; i < items.size(); ++i)
 							{
 
@@ -112,7 +121,7 @@
 
 								// Quantity.
 								out.println("<td><div class=\"field\">");
-								out.println("<input name=\"EditedQuantity\" type=\"number\" min=\"0\" max=\"100\" step=\"1\""
+								out.println("<input name=\"EditedQuantity\" type=\"number\" min=\"0\" step=\"1\""
 									+ "value=\"" + quan + "\"/></div></td>");
 
 								// Total Price (Quantity * Price).
@@ -172,7 +181,7 @@
 
 							// End HTML for Checkout button and information.
 							out.print("</tr>");
-
+						}
 						%>
 					</table>
 				</c:if>

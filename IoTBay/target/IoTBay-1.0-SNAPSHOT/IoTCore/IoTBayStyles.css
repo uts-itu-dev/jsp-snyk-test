@@ -498,6 +498,24 @@ form .btn input[type="submit"] {
 	text-decoration: none;
 }
 
+.disabledButton {
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+	position: relative;
+	background: #EEE;
+	border: none;
+	color: red;
+	padding-left: 0;
+	border-radius: 5px;
+	font-size: 20px;
+	font-weight: 500;
+	cursor: pointer;
+	text-decoration: none;
+	
+	text-align:center;
+}
+
 textarea {
 	padding: 12px 20px;
 	outline: none;

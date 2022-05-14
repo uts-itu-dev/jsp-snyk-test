@@ -20,42 +20,56 @@ import javax.servlet.http.HttpServletResponse;
  * @author Michael Wu
  */
 @WebServlet(name = "AddToCart", value = "/AddToCart")
-public class AddToCartController extends IoTWebpageBase implements IIoTWebpage {
-	
+public class AddToCartController extends IoTWebpageBase implements IIoTWebpage
+{
+
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		super.doPost(request, response);
 
 		// Add to Cart Logic here...
 		String pid = request.getParameter("productID");
-		
-		if (pid != null) {
+
+		if (pid != null)
+		{
 			int id = Integer.parseInt(pid);
-			try {
+			try
+			{
 				Product p = uDB.findProduct(id);
-				Customer owner = (Customer) request.getSession().getAttribute("User");
 
-				// Registered Customer.
-				if (p != null && owner != null) {
+				if (p != null)
+				{
+					Customer owner = (Customer) request.getSession().getAttribute("User");
 
-					uDB.injectOLI(owner.getEmail());
-					uDB.addToCart(id, owner, 1);
-					request.setAttribute("Cart", uDB.cart);
-					
-					response.sendRedirect("IoTCore/Cart.jsp");
-				}
-				// Anonymous Customer.
-				else if (p != null) {
-					if (uDB.cart == null) {
-						uDB.injectOLI(DBManager.AnonymousUserEmail);
+					// Registered Customer.
+					if (owner != null)
+					{
+
+						uDB.injectOLI(owner.getEmail());
+						uDB.addToCart(id, owner, 1);
+						request.setAttribute("Cart", uDB.cart);
+
+						response.sendRedirect("IoTCore/Cart.jsp");
 					}
+					// Anonymous Customer.
+					else
+					{
+						if (uDB.cart == null)
+						{
+							uDB.injectOLI(DBManager.AnonymousUserEmail);
+						}
 
-					//uDB.cart.add(new OrderLineItem(p, null, 1));
-					uDB.addToCartAnonymous(id, 1);
-					request.setAttribute("Cart", uDB.cart);
-					response.sendRedirect("IoTCore/Cart.jsp");
+						//uDB.cart.add(new OrderLineItem(p, null, 1));
+						uDB.addToCartAnonymous(id, 1);
+						request.setAttribute("Cart", uDB.cart);
+						response.sendRedirect("IoTCore/Cart.jsp");
+					}
+				} else {
+					throw new NullPointerException("AddToCartController::doPost() -> Product is null!");
 				}
-			} catch (SQLException s) {
+			} catch (SQLException s)
+			{
 				throw new NullPointerException("AddToCartController::doPost() -> Something went wrong!\n" + s);
 			}
 		}

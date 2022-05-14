@@ -270,13 +270,21 @@ public class DBManager
 		rsADI.setInt(1, pid);
 		rsADI.setString(2, owner);
 
+		Product p = findProduct(pid);
+
 		ResultSet existing = rsADI.executeQuery();
 
 		// If something of pid already exists.
 		if (existing.next())
 		{
+			// The Quantity of Product p that already exists in the Cart.
 			int currentQuantity = existing.getInt(3);
-			updateCart(pid, owner, currentQuantity + 1);
+
+			// Only update the Quantity of p in the Cart if it doesn't exceed the existing Stock.
+			updateCart(pid, owner, (currentQuantity + 1) > p.getQuantity()
+				? currentQuantity
+				: currentQuantity + 1
+			);
 
 			injectOLI(owner);
 			return true;
@@ -340,6 +348,8 @@ public class DBManager
 		ps.setString(14, cardHolder);
 
 		ps.execute();
+
+		clearCartByOwner(owner);
 	}
 
 	public void update(Customer c, String fn, String ln, String pw, String email, String phone, String addNum, String addStreetName, String addSuburb, String addPostcode, String addCity, String cardNo, String cvv, String cardHolder) throws SQLException
@@ -426,49 +436,62 @@ public class DBManager
 		ps.executeUpdate();
 	}
 
+	public void clearCartByOwner(String owner) throws SQLException
+	{
+		String instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE OWNER=?";
+
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, owner);
+
+		ps.executeUpdate();
+	}
+
 	public void cancelOrder(int oid, String owningEmail) throws SQLException
 	{
-		String getInstruction = "SELECT PRODUCTS, QUANTITY FROM IOTBAY.ORDERS WHERE ORDERID=?";
+		String getInstruction = "SELECT * FROM IOTBAY.ORDERS WHERE ORDERID=?";
 
 		PreparedStatement get_ps = connection.prepareStatement(getInstruction);
 		get_ps.setInt(1, oid);
 
 		ResultSet r = get_ps.executeQuery();
-		String pids = r.getString(2);
-		String quas = r.getString(3);
-
-		String[] buffer_pids = pids.split(":", 1 << 30);
-		String[] buffer_quas = quas.split(":", 1 << 30);
-
-		if (buffer_pids.length != buffer_quas.length)
+		while (r.next())
 		{
-			throw new IllegalArgumentException("DBManager::cancelOrder() -> buffer_pid != buffer_quas. buffer_pid = " + buffer_pids.length + " buffer_quas = " + buffer_quas.length);
+			String pids = r.getString(5);
+			String quas = r.getString(6);
+
+			String[] buffer_pids = pids.split(":", 1 << 30);
+			String[] buffer_quas = quas.split(":", 1 << 30);
+
+			if (buffer_pids.length != buffer_quas.length)
+			{
+				throw new IllegalArgumentException("DBManager::cancelOrder() -> buffer_pid != buffer_quas. buffer_pid = " + buffer_pids.length + " buffer_quas = " + buffer_quas.length);
+			}
+
+			int count = buffer_pids.length;
+			--count;
+
+			int[] productIDs = new int[count];
+			int[] quantities = new int[count];
+
+			for (int i = 0; i < count; ++i)
+			{
+				productIDs[i] = Integer.parseInt(buffer_pids[i]);
+				quantities[i] = Integer.parseInt(buffer_quas[i]);
+			}
+
+			for (int i = 0; i < count; ++i)
+			{
+				Product p = findProduct(productIDs[i]);
+				updateProduct(productIDs[i], p.getName(), p.getDescription(), p.getPrice() + "", p.getQuantity() + quantities[i]);
+			}
+
+			String instruction = "DELETE FROM IOTBAY.ORDERS WHERE ORDERID=?";
+
+			PreparedStatement ps = connection.prepareStatement(instruction);
+			ps.setInt(1, oid);
+
+			ps.executeUpdate();
 		}
-
-		int count = buffer_pids.length;
-		--count;
-
-		int[] productIDs = new int[count];
-		int[] quantities = new int[count];
-
-		for (int i = 0; i < count; ++i)
-		{
-			productIDs[i] = Integer.parseInt(buffer_pids[i]);
-			quantities[i] = Integer.parseInt(buffer_quas[i]);
-		}
-
-		for (int i = 0; i < count; ++i)
-		{
-			Product p = findProduct(productIDs[i]);
-			updateProduct(productIDs[i], p.getName(), p.getDescription(), p.getPrice() + "", p.getQuantity() + quantities[i]);
-		}
-
-		String instruction = "DELETE FROM IOTBAY.ORDERS WHERE ORDERID=?";
-
-		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setInt(1, oid);
-
-		ps.executeUpdate();
 	}
 
 	public final ArrayList<Customer> injectCustomers() throws SQLException

@@ -55,7 +55,7 @@ public class CheckoutController extends IoTWebpageBase implements IIoTWebpage
 			{
 				uDB.makeOrder(email, cart, shippingAddress, pi);
 
-				response.sendRedirect("index.jsp");
+				response.sendRedirect("IoTCore/Orders.jsp");
 			} else {
 				response.sendRedirect("IoTCore/Cart.jsp?" + redirectParams("err", "There is nothing in your Cart!"));
 			}
