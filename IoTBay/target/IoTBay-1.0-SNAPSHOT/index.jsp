@@ -104,6 +104,9 @@
 			<!-- Keep track of Product index when looping. -->
 			<!-- A crude workaround to tracking Product IDs for button links. -->
 			<% int productID = 1; %>
+			<% int size = ((ArrayList<Product>) session.getAttribute("Products")).size(); %>
+			<% final int iterationsBeforeRejection = 50; %>
+			<% int currentIteration = 0; %>
 
 			<!-- If session.getAttribute("Products") exists (if there are products). -->
 			<c:if test="${Products != null}">
@@ -125,16 +128,28 @@
 
 						<!-- Anything in this Division will appear when hovered over. -->
 						<div class="hoverRevealer">
-							
+
 							<div class="productmisc revealContent">
-								
+
 								<c:out value="${p.description}"/>
 								<br><br>
-								
+
 								<%
-									Product feProduct = IoTWebpageBase.uDB.findProduct(productID);
+									Product feProduct;
+									while ((feProduct = IoTWebpageBase.uDB.findProduct(productID)) == null)
+									{
+										++productID;
+										++currentIteration;
+
+										if (currentIteration >= iterationsBeforeRejection)
+										{
+											return;
+										}
+									}
+									
+									currentIteration = 0;
 								%>
-								
+
 								<c:choose>
 									<c:when test="${User != null}"> <!-- if (session.getAttribute("User") != null) -->
 										<%

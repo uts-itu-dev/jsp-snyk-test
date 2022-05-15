@@ -136,7 +136,8 @@ public class DBManager
 	/**
 	 * Finds the ID of a Product, given the full details of that Product.
 	 *
-	 * @param p The full details of the Product to find the corresponding ID.
+	 * @param p The full details of the Product to find the corresponding
+	 * ID.
 	 * @return The Primary Key of p.
 	 * @throws SQLException
 	 */
@@ -169,11 +170,11 @@ public class DBManager
 	{
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE EMAIL=? AND PASSWORD=?";
-		
+
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, email);
 		ps.setString(2, password);
-		
+
 		ResultSet r = ps.executeQuery();
 
 		while (r.next())
@@ -199,11 +200,11 @@ public class DBManager
 	{
 		email = email.toLowerCase();
 		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE EMAIL=? AND PASSWORD=?";
-		
+
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setString(1, email);
 		ps.setString(2, password);
-		
+
 		ResultSet r = ps.executeQuery();
 
 		while (r.next())
@@ -313,7 +314,8 @@ public class DBManager
 	 * Adds quantity number of Products pid to owner.
 	 *
 	 * @param pid The Product ID Primary Key of the Product to add.
-	 * @param owner The Customer who owns the Cart. Cannot be null. See addToCartAnonymous().
+	 * @param owner The Customer who owns the Cart. Cannot be null. See
+	 * addToCartAnonymous().
 	 * @param quantity The desired number of this Product.
 	 * @throws SQLException
 	 */
@@ -470,7 +472,8 @@ public class DBManager
 	/**
 	 * Updates a Customer.
 	 *
-	 * @param c The Customer as an Object that holds all the current details pre-update.
+	 * @param c The Customer as an Object that holds all the current details
+	 * pre-update.
 	 * @param fn First Name.
 	 * @param ln Last Name.
 	 * @param pw Password.
@@ -512,7 +515,8 @@ public class DBManager
 	/**
 	 * Updates a member of Staff.
 	 *
-	 * @param s The Staff as an Object that holds all the current details pre-update.
+	 * @param s The Staff as an Object that holds all the current details
+	 * pre-update.
 	 * @param fn First Name.
 	 * @param ln Last Name.
 	 * @param pw Password.
@@ -581,7 +585,8 @@ public class DBManager
 	 * Removes a record from database, given an email.
 	 *
 	 * @param database The Database to modify.
-	 * @param email The Email address to remove, based on existence within database.
+	 * @param email The Email address to remove, based on existence within
+	 * database.
 	 * @throws SQLException
 	 */
 	public void remove(String database, String email) throws SQLException
@@ -594,23 +599,37 @@ public class DBManager
 		ps.executeUpdate();
 	}
 
-        
-        /**
-         * removes products from database given from product ID
-         */
-        
-        public void removeProduct(String productId) throws SQLException
+	/**
+	 * Removes products from database given from product ID
+	 *
+	 * @param productId The Product with this Primary Key to remove.
+	 * @return The name of the Product that was removed.
+	 * @throws SQLException
+	 */
+	public String removeProduct(String productId) throws SQLException
 	{
-            
-                int id = Integer.parseInt(productId);
+		int id = Integer.parseInt(productId);
+		
+		String name = findProduct(id).getName();
+		
 		String instruction = "DELETE FROM IOTBAY.PRODUCTS WHERE PRODUCTID=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setInt(1, id);
 
 		ps.executeUpdate();
+		
+		// Ensure that anyone who still has this Product in their Cart has it removed.
+		String oli_instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=?";
+		
+		PreparedStatement o_ps = connection.prepareStatement(oli_instruction);
+		o_ps.setInt(1, id);
+		
+		o_ps.executeUpdate();
+		
+		return name;
 	}
-        
+
 	/**
 	 * Removes a Product from a Cart.
 	 *
@@ -649,7 +668,8 @@ public class DBManager
 	 * Cancels a Confirmed Order.
 	 *
 	 * @param oid The Primary Key of the Order to remove.
-	 * @param owningEmail The Email address of the Customer who made the Order.
+	 * @param owningEmail The Email address of the Customer who made the
+	 * Order.
 	 * @throws SQLException
 	 */
 	public void cancelOrder(int oid, String owningEmail) throws SQLException
@@ -885,6 +905,8 @@ public class DBManager
 		// Order Line Information.
 		int pid = r.getInt(2);
 		int qua = r.getInt(3);
+		
+		System.out.println("PID: " + pid);
 
 		return new OrderLineItem(findProduct(pid), findCustomer(ownerEmail), qua);
 	}

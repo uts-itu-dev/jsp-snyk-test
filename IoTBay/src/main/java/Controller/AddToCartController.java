@@ -31,6 +31,7 @@ public class AddToCartController extends IoTWebpageBase implements IIoTWebpage
 		{
 			// PRODUCTID of Product.
 			int id = Integer.parseInt(pid);
+			System.out.println("This is ID: " + id);
 			try
 			{
 				// The Product with PRODUCTID.

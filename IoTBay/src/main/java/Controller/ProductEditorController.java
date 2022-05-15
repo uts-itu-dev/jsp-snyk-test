@@ -93,12 +93,15 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 							+ "<input type=\"hidden\" name=\"Attribute\" value=\"Product\">"
 							+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 							+ "</form>"
-                                                                + "<form action=\"DeleteProduct\" class=\"login\" method=\"POST\">"
-                                                                +"<div class=\"field\">"
-                                                                + "<input type=\"submit\" value=\"Delete\">"
-                                                                + "</div>"
-                                                                + "<input type=\"hidden\" name=\"ProductID\" value=\"" + id + "\">"
-                                                                +"</form>"
+							+ "<div style=\"width:50%; padding-left:5%;\">"
+							+ "<form action=\"DeleteProduct\" class=\"login\" method=\"POST\">"
+							+ "<label>Remove this Product</label><br>"
+							+ "<div class=\"field\">"
+							+ "<input type=\"submit\" value=\"Remove\">"
+							+ "</div>"
+							+ "<input type=\"hidden\" name=\"ProductID\" value=\"" + id + "\">"
+							+ "</form>"
+							+ "</div>"
 							+ "</div></div>");
 					}
 					else

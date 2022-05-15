@@ -120,8 +120,8 @@
 								out.println("<td>" + pName + "</td>");
 
 								// Quantity.
-								out.println("<td><div class=\"field\">");
-								out.println("<input name=\"EditedQuantity\" type=\"number\" min=\"0\" step=\"1\""
+								out.println("<td><div class=\"field\" style=\"width:50%;\">");
+								out.println("<input class=\"forceInputButtonLayout\" name=\"EditedQuantity\" type=\"number\" min=\"0\" step=\"1\""
 									+ "value=\"" + quan + "\"/></div></td>");
 
 								// Total Price (Quantity * Price).

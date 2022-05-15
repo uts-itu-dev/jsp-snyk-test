@@ -24,6 +24,9 @@ public class OrderLineItem implements Serializable
 		this.product = product;
 		this.owner = owner;
 		this.quantity = quantity;
+		
+		if (product == null)
+			System.out.println("P is null");
 
 		totalCost = (float) product.getPrice() * quantity;
 	}
