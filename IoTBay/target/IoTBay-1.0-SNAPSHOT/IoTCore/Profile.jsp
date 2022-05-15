@@ -222,10 +222,10 @@
 								+ "<input type=\"hidden\" name=\"bIsCustomer\" value=\"no\">"
 								+ "</td></tr></table></form></div></div>"
 								
-								
 								+ "<div class=\"form-container\"><div class=\"form-inner\">"
 								+ "<form action=\"../Delete\" method=\"POST\" style=\"width:50%\">"
-								+ "<div class=\"field\"><input type=\"submit\" value=\"Delete\"></div>"
+								+ "<label>Deactivate Account</label>"
+								+ "<div class=\"field\"><input type=\"submit\" value=\"Deactivate\"></div>"
 								+ "<input type=\"hidden\" name=\"Email\" value=\"" + active.getEmail() + "\">"
 								+ "<input type=\"hidden\" name=\"Type\" value=\"STAFF\">"
 								+ "</form></div></div>"

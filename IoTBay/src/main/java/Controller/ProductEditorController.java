@@ -42,6 +42,7 @@ public class ProductEditorController extends IoTWebpageBase implements IIoTWebpa
 		out.println("<title>Product Editor</title>");
 		out.println("</head>");
 		out.println("<body>");
+		out.println("<div class=\"IndexDivMain\"><nav><div><div class=\"navLinks left\"><a href=\"index.jsp\">Home</a></div></div></nav></div>");
 		out.println("<h1>Product Editor</h1>");
 
 		// Begin Logic.
