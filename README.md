@@ -1,4 +1,4 @@
-## INTRODUCTION TO SOFTWARE DEVELOPMENT R0 (41025)
+## INTRODUCTION TO SOFTWARE DEVELOPMENT R1 (41025)
 
 DEVELOPED BY:  
 
@@ -9,6 +9,11 @@ DEVELOPED BY:
 	MICHAEL WU | 13938903  	
 	JERRY YAU | 14150371  
 	
+## IoTBAY E-COMMERCE WEBSITE
+This Project was made according to specifications provided by the University of Technology Sydney, Introduction to Software Development (41025).<br /><br />
+The Internet of Things store (IoTBay) sells a number of devices, including, but not limited to: sensors, actuators, and gateways, to customers around Australia. At present, IoTBay does not provide customers to purchase IoT devices online. As such, IoTBay was an online website developed that allows customers an easier way to access, view and purchase their devices.<br /><br />
+This website should facilitate the processing of online payments for customers, provide details for orders and deliveries, and let customers register an account to use with IoTBay. The new website should also provide an interface for existing staff members to manage the new IoTBay website system.
+
 
 ## HOW TO RUN
 
