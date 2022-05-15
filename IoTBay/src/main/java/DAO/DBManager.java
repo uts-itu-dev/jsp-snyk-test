@@ -252,16 +252,16 @@ public class DBManager
 		String instruction = "INSERT INTO IOTBAY.CUSTOMERS" + attributes + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setString(1, c.getFirstName());
-		ps.setString(2, c.getLastName());
-		ps.setString(3, c.getPassword());
-		ps.setString(4, c.getEmail().toLowerCase());
-		ps.setString(5, a.getNumber());
-		ps.setString(6, a.getStreetName());
-		ps.setString(7, a.getSuburb());
-		ps.setString(8, a.getPostcode());
-		ps.setString(9, a.getCity());
-		ps.setString(10, c.getPhoneNumber());
+		ps.setString(1, clamp(c.getFirstName(), 100));
+		ps.setString(2, clamp(c.getLastName(), 100));
+		ps.setString(3, clamp(c.getPassword(), 100));
+		ps.setString(4, clamp(c.getEmail().toLowerCase(), 100));
+		ps.setString(5, clamp(a.getNumber(), 10));
+		ps.setString(6, clamp(a.getStreetName(), 100));
+		ps.setString(7, clamp(a.getSuburb(), 100));
+		ps.setString(8, clamp(a.getPostcode(), 10));
+		ps.setString(9, clamp(a.getCity(), 100));
+		ps.setString(10, clamp(c.getPhoneNumber(), 15));
 
 		ps.execute();
 
@@ -280,10 +280,10 @@ public class DBManager
 		String instruction = "INSERT INTO IOTBAY.STAFF " + attributes + "VALUES (?, ?, ?, ?)";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setString(1, s.getFirstName());
-		ps.setString(2, s.getLastName());
-		ps.setString(3, s.getPassword());
-		ps.setString(4, s.getEmail().toLowerCase());
+		ps.setString(1, clamp(s.getFirstName(), 100));
+		ps.setString(2, clamp(s.getLastName(), 100));
+		ps.setString(3, clamp(s.getPassword(), 100));
+		ps.setString(4, clamp(s.getEmail().toLowerCase(), 100));
 
 		ps.execute();
 	}
@@ -302,8 +302,8 @@ public class DBManager
 		// Something fancy with the SQL command which allows apostrophes ' to be added
 		// to the Description.
 		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setString(1, p.getName());
-		ps.setString(2, p.getDescription());
+		ps.setString(1, clamp(p.getName(), 100));
+		ps.setString(2, clamp(p.getDescription(), 500));
 		ps.setFloat(3, p.getPrice());
 		ps.setFloat(4, p.getQuantity());
 
@@ -494,19 +494,19 @@ public class DBManager
 		String instruction = "UPDATE IOTBAY.CUSTOMERS SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=?, PHONENUMBER=?, STREETNUMBER=?, STREETNAME=?, SUBURB=?, POSTCODE=?, CITY=?, CARDNUMBER=?, CVV=?, CARDHOLDER=? WHERE EMAIL=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setString(1, fn);
-		ps.setString(2, ln);
-		ps.setString(3, pw);
-		ps.setString(4, email.toLowerCase());
-		ps.setString(5, phone);
-		ps.setString(6, addNum);
-		ps.setString(7, addStreetName);
-		ps.setString(8, addSuburb);
-		ps.setString(9, addPostcode);
-		ps.setString(10, addCity);
-		ps.setString(11, cardNo);
-		ps.setString(12, cvv);
-		ps.setString(13, cardHolder);
+		ps.setString(1, clamp(fn, 100));
+		ps.setString(2, clamp(ln, 100));
+		ps.setString(3, clamp(pw, 100));
+		ps.setString(4, clamp(email.toLowerCase(), 100));
+		ps.setString(5, clamp(phone, 15));
+		ps.setString(6, clamp(addNum, 10));
+		ps.setString(7, clamp(addStreetName, 100));
+		ps.setString(8, clamp(addSuburb, 100));
+		ps.setString(9, clamp(addPostcode, 10));
+		ps.setString(10, clamp(addCity, 100));
+		ps.setString(11, clamp(cardNo, 25));
+		ps.setString(12, clamp(cvv, 5));
+		ps.setString(13, clamp(cardHolder, 200));
 		ps.setString(14, c.getEmail());
 
 		ps.executeUpdate();
@@ -528,10 +528,10 @@ public class DBManager
 		String instruction = "UPDATE IOTBAY.STAFF SET FIRSTNAME=?, LASTNAME=?, PASSWORD=?, EMAIL=? WHERE EMAIL=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setString(1, fn);
-		ps.setString(2, ln);
-		ps.setString(3, pw);
-		ps.setString(4, email.toLowerCase());
+		ps.setString(1, clamp(fn, 100));
+		ps.setString(2, clamp(ln, 100));
+		ps.setString(3, clamp(pw, 100));
+		ps.setString(4, clamp(email.toLowerCase(), 100));
 		ps.setString(5, s.getEmail());
 
 		ps.executeUpdate();
@@ -552,8 +552,8 @@ public class DBManager
 		String instruction = "UPDATE IOTBAY.PRODUCTS SET PRODUCTNAME=?, DESCRIPTION=?, PRICE=?, STOCK=? WHERE PRODUCTID=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
-		ps.setString(1, name);
-		ps.setString(2, desc);
+		ps.setString(1, clamp(name, 100));
+		ps.setString(2, clamp(desc, 500));
 		ps.setFloat(3, Float.parseFloat(price));
 		ps.setInt(4, stock);
 		ps.setInt(5, id);
@@ -609,24 +609,24 @@ public class DBManager
 	public String removeProduct(String productId) throws SQLException
 	{
 		int id = Integer.parseInt(productId);
-		
+
 		String name = findProduct(id).getName();
-		
+
 		String instruction = "DELETE FROM IOTBAY.PRODUCTS WHERE PRODUCTID=?";
 
 		PreparedStatement ps = connection.prepareStatement(instruction);
 		ps.setInt(1, id);
 
 		ps.executeUpdate();
-		
+
 		// Ensure that anyone who still has this Product in their Cart has it removed.
 		String oli_instruction = "DELETE FROM IOTBAY.ORDERLINEITEM WHERE PRODUCTID=?";
-		
+
 		PreparedStatement o_ps = connection.prepareStatement(oli_instruction);
 		o_ps.setInt(1, id);
-		
+
 		o_ps.executeUpdate();
-		
+
 		return name;
 	}
 
@@ -905,7 +905,7 @@ public class DBManager
 		// Order Line Information.
 		int pid = r.getInt(2);
 		int qua = r.getInt(3);
-		
+
 		System.out.println("PID: " + pid);
 
 		return new OrderLineItem(findProduct(pid), findCustomer(ownerEmail), qua);
@@ -974,5 +974,15 @@ public class DBManager
 		}
 
 		return new Order(ID, owner, OLIs, price, status, purchaseDate, a, p);
+	}
+
+	final String clamp(String inString, int length)
+	{
+		if (inString.length() < length)
+		{
+			return inString;
+		}
+		
+		return inString.substring(0, length);
 	}
 }

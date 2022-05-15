@@ -136,11 +136,16 @@
 
 								<%
 									Product feProduct;
+									
+									// Continue looping through the Products array, even if null was found.
 									while ((feProduct = IoTWebpageBase.uDB.findProduct(productID)) == null)
 									{
 										++productID;
 										++currentIteration;
 
+										// We have *actually* reached the end of the array if the ProductID
+										// doesn't refer to any Product iterationsBeforeRejection times in
+										// a row - there are no more Products.
 										if (currentIteration >= iterationsBeforeRejection)
 										{
 											return;
