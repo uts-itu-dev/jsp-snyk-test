@@ -23,25 +23,26 @@
 			<!-- Top menu bar thing. -->
 			<nav>
 				<div>
-					<div class="navLinks left"><a href="../index.jsp">Home</a></div>
-					<div class="navLinks right"><a href="../Logout">Logout</a></div>
+					<div class="navLinks left"><a href="../../index.jsp">Home</a></div>
+					<div class="navLinks right"><a href="../../Logout">Logout</a></div>
 					<!-- Already in Profile, so we don't need to link it. -->
 				</div>
 			</nav>
 
 			<div class="centreScreen">
-				<h1>Your Profile</h1><br><br>
 
 				<!-- If the user's current password didn't match, show the message. -->
 				<p style="text-align:center;">
 					<%
 						String err = request.getParameter("err");
-						if (err != null) {
+						if (err != null)
+						{
 							out.println("<span style=\"color:red\"><br>" + err + "</span>");
 						}
 
 						String upd = request.getParameter("upd");
-						if (upd != null) {
+						if (upd != null)
+						{
 							out.println("<span style=\"color:green\"><br>" + upd + "</span>");
 						}
 					%>
@@ -49,30 +50,38 @@
 				<%
 					String email = request.getParameter("Email");
 
-					if (email == null) {
+					if (email == null)
+					{
 						throw new NullPointerException("CustomerProfileUpdator.jsp -> Email is null -> Trying to edit a Customer with no parameter 'Email'!");
 					}
 
 					// If logged attribute "User" is a Registered Customer.
 					Customer active = IoTWebpageBase.uDB.findCustomer(email);
 
-					if (active != null) {
+					if (active != null)
+					{
+						out.println("<h1>" + active.getFirstName() + "'s Profile</h1><br><br>");
+						
 						PaymentInformation pi = active.getPayment();
 						String cn = "";
 						String cvv = "";
 						String ch = "";
 
-						if (pi != null) {
+						if (pi != null)
+						{
 							cn = pi.getCardNo();
-							if (cn == null) {
+							if (cn == null)
+							{
 								cn = "";
 							}
 							cvv = pi.getCVV();
-							if (cvv == null) {
+							if (cvv == null)
+							{
 								cvv = "";
 							}
 							ch = pi.getCardHolder();
-							if (ch == null) {
+							if (ch == null)
+							{
 								ch = "";
 							}
 						}
@@ -93,7 +102,6 @@
 							+ "<input type=\"hidden\" name=\"CalledFromStaff\" value=\"yes\">"
 							+ "</td></tr></table></form></div></div>"
 							+ "</div>"
-							
 							// Passwords.
 							+ "<div style=\"width: 600px; display:table-cell;\">"
 							+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -108,7 +116,6 @@
 							+ "<input type=\"hidden\" name=\"CalledFromStaff\" value=\"yes\">"
 							+ "</td></tr></table></form></div></div>"
 							+ "</div>"
-							
 							// Email Address.
 							+ "<div style=\"width: 600px; display:table-cell;\">"
 							+ "<div class=\"form-container\"><div class=\"form-inner\">"
@@ -183,8 +190,7 @@
 							+ "</div>"
 							+ "</div>"
 							+ "</div></div>"
-					
-				);
+						);
 					}
 				%>
 			</div>

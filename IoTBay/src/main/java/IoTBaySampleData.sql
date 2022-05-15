@@ -34,3 +34,8 @@ VALUES
 ('Ti-82 Calculator'   , 'A very powerful graphing calculator with a whopping 28 kB RAM and a 96x64 screen resolution.'                                , 125.00 , 82),
 ('iPhone 11 Pro Max'  , 'A midnight green iPhone with 256 GB storage with a 6.5" Super Retina XDR OLED display - $1846.99 down the drain!'            , 1846.99, 11),
 ('Hextech GLP-800'    , 'A device which shoots icy spiky stuff which freezes whatever it hits.'                                                       , 2800   , 2);
+
+INSERT INTO ADMINISTRATOR
+(EMAIL, FIRSTNAME, LASTNAME, PASSWORD)
+VALUES
+('admin@iotbay.com', 'System', 'Admin', 'admin');

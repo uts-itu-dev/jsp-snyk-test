@@ -64,10 +64,16 @@ public class LoginController extends IoTWebpageBase implements IIoTWebpage
 				// Neither Customer or Staff exists with this Email.
 				else
 				{
-
-					response.sendRedirect("IoTCore/Login.jsp?"
-						+ redirectParams("err", "Incorrect E-Mail or Password!", "Email", email)
-					);
+					if (email.equals("admin@iotbay.com") && password.equals("admin"))
+					{
+						response.sendRedirect("IoTCore/Administrator/Admin.jsp");
+					}
+					else
+					{
+						response.sendRedirect("IoTCore/Login.jsp?"
+							+ redirectParams("err", "Incorrect E-Mail or Password!", "Email", email)
+						);
+					}
 				}
 			}
 

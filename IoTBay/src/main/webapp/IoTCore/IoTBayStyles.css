@@ -3,6 +3,10 @@
     Author     : Michael Wu
 */
 
+body, html {
+	scroll-behavior: smooth;
+}
+
 .h1 {
 	color:red;
 	font-family: 'Roboto', sans-serif;

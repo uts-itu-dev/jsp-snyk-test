@@ -1,0 +1,169 @@
+/* 
+    Created on : May 14, 2020, 2:43:50 PM
+    Author     : Michael Wu
+    
+    Purpose    : Michael Wu Web Systems Assignment.
+*/
+
+body, html {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	line-height: 1.35;
+	margin: 0em;
+	background-color: #F5FFFF; /* A VERY LIGHT GREY; A VERY SLIGHT DARK WHITE */
+	height: 100%;
+	scroll-behavior: smooth;
+	background-color: #1c1c1c;
+}
+
+h1 {
+	text-align: left;
+	color: #1FBEB9;
+	text-transform: uppercase;
+	font-weight: 900;
+}
+
+th, td {
+	padding-top: 10px;
+	padding-bottom: 20px;
+	padding-left: 30px;
+	padding-right: 40px;
+}
+
+.header {
+	padding: 10px;
+	text-align: center;
+	/*background-color:  #FEFE00;*/
+	background-color: #1FBEB9; /* EGGSHELL BLUE */
+	color: black;
+	text-transform: uppercase;
+	font-weight: 900;
+}
+
+.container {
+	position: relative;
+	width: 50%;
+	max-width: 300px;
+}
+
+nav {
+	background-color: #1c1c1c;
+	text-align: left;
+}
+
+.navLinks {
+	background-color: #1c1c1c;
+	display: inline-table;
+	padding: 15px;
+	width:200px;
+	margin-right: 20px;
+
+	font-weight: 400;
+	font-style: normal;
+}
+
+.navLinks:hover a {
+	color: black;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 25px;
+	padding-right: 25px;
+	background-color: whitesmoke;
+	/*border-right: 7px solid #FEFE00;*/
+	border-right: 7px solid #24F2E8; /* A VERY LIGHT BLUE; MODIFIED EGGSHELL BLUE */
+}
+
+.navLinks a {
+	color: white;
+	list-style: none;
+	text-decoration: none;
+	font-size: 25px;
+	text-align: center;
+	transition-timing-function: ease-in-out;
+	transition: .5s;
+}
+
+.C {
+	text-align: center;
+
+	list-style-type: none;
+}
+
+.L {
+	text-align: left;
+
+	padding-left: 5%;
+
+	list-style-type: none;
+}
+
+.R {
+	text-align: right;
+
+	padding-right: 5%;
+
+	list-style-type: none;
+}
+
+.cap {
+	text-transform: uppercase;
+}
+
+.bold {
+	font-weight: 500;
+}
+
+.link {
+	text-decoration: none;
+
+	color: #00ACA7; /* FROM THE PETRONAS LOGO */
+
+	font-size: 40px;
+}
+
+.text {
+	text-align: left;
+	position: relative;
+
+	padding-left: 5%;
+	padding-right: 5%;
+
+	font-weight: 600;
+	font-size: 120%;
+
+	list-style-type: none;
+	color:white;
+}
+
+.textInput {
+	position: relative;
+
+	padding-left: 5%;
+	padding-right: 5%;
+
+	font-weight: 600;
+	font-size: 120%;
+
+	list-style-type: none;
+	color:white;
+}
+
+/* Hide Numerical Input arrows in browsers:
+	Chrome, Safari, Edge, Opera 
+*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* ^ For Firefox: */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+::selection {
+	background: #00ACA7;
+	color: #fff;
+}

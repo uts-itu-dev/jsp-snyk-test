@@ -978,11 +978,16 @@ public class DBManager
 
 	final String clamp(String inString, int length)
 	{
+		if (inString == null)
+		{
+			return "";
+		}
+
 		if (inString.length() < length)
 		{
 			return inString;
 		}
-		
+
 		return inString.substring(0, length);
 	}
 }

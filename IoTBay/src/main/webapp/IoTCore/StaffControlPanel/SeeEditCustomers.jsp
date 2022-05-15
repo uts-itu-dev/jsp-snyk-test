@@ -30,8 +30,8 @@
 			<!-- Top menu bar thing. -->
 			<nav>
 				<div>
-					<div class="navLinks left"><a href="../../index.jsp">Home</a></div>
-					<div class="navLinks right"><a href="../../Logout">Logout</a></div>
+					<div class="navLinks left"><a href="../../../index.jsp">Home</a></div>
+					<div class="navLinks right"><a href="../../../Logout">Logout</a></div>
 					<div class="navLinks right"><a href="../Profile.jsp">Profile</a></div>
 				</div>
 			</nav>
