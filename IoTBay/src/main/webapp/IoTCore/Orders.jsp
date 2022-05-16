@@ -113,9 +113,33 @@
 									ArrayList<OrderLineItem> p = o.getProducts();
 									float total = o.getTotalCost();
 									String status = o.getStatus();
+									boolean bMarkMainReturn = false;
 
 									String colourDependingOnStatus = status.equals("Cancelled") ? "#777777" : "#000000";
 
+
+									// Products.
+									String display = "";
+									for (OrderLineItem auto : p)
+									{
+										Product product = auto.getProduct();
+										if (product != null && product.getName().length() > 0)
+										{
+											display += auto.getQuantity() + "x&nbsp;";
+											display += product.getName();
+											display += "<br>";
+										}
+										else
+										{
+											bMarkMainReturn = true;
+										}
+									}
+
+									if (bMarkMainReturn)
+									{
+										continue;
+									}
+									
 									// Begin HTML.
 									out.println("<tr>");
 									out.println("<form action=\"../CancelOrder\" class=\"login\" method=\"POST\">");
@@ -123,14 +147,6 @@
 									// Order No.#.
 									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + (i + 1) + "</td>");
 
-									// Products.
-									String display = "";
-									for (OrderLineItem auto : p)
-									{
-										display += auto.getQuantity() + "x&nbsp;";
-										display += auto.getProduct().getName();
-										display += "<br>";
-									}
 									out.println("<td style=\"color:" + colourDependingOnStatus + ";\">" + display + "</td>");
 
 									// Total Price of Order.
