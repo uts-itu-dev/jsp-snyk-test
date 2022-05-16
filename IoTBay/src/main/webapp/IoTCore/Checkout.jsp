@@ -90,15 +90,16 @@
 						Address a = c.getAddress();
 						PaymentInformation p = c.getPayment();
 
-						stNo = a.getNumber();
-						stNa = a.getStreetName();
-						sub = a.getSuburb();
-						pc = a.getPostcode();
-						city = a.getCity();
+						stNo = "\"" + a.getNumber() + "\"";
+						stNa = "\"" + a.getStreetName() + "\"";
+						sub = "\"" + a.getSuburb() + "\"";
+						pc = "\"" + a.getPostcode() + "\"";
+						city = "\"" + a.getCity() + "\"";
 
-						cn = p.getCardNo();
-						cvv = p.getCVV();
-						ch = p.getCardHolder();
+						cn = "\"" + p.getCardNo() + "\"";
+						cvv = "\"" + p.getCVV() + "\"";
+						ch = "\"" + p.getCardHolder() + "\"";
+						System.out.println(ch + " " + stNa);
 
 						isCustomer = "yes";
 						email = c.getEmail();
