@@ -11,7 +11,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Admin | Add Customer</title>
+		<title>Admin | View All Customers</title>
 		<link rel="stylesheet" href="AdministratorStyles.css">
 	</head>
 	<body>
@@ -62,8 +62,9 @@
 					</form>
 					<%						}%>
 				</table>
-
 			</div>
+			<a href="Admin.jsp" class="link cap" style="padding-bottom:10%;">Back</a>
+
 		</div>
 	</body>
 </html>

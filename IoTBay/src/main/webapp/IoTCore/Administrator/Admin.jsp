@@ -36,7 +36,7 @@
 			<a href="ViewAllStaff.jsp" class="link cap">View all Staff</a>
 
 			<br><br><br><br><br><br>
-			<a href="../../index.jsp" class="link cap">Return</a>
+			<a href="../../index.jsp" class="link cap">Return to IoTBay</a>
 		</div>
 	</body>
 </html>

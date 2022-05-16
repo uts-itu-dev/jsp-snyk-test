@@ -50,7 +50,7 @@
 
 		<form action="../../AdminAllCustomers" method="POST">
 			<div style="padding-left:5%; padding-top:5%;">
-				<h1>Add a Customer</h1>
+				<h1>Customer Editor</h1>
 
 				<p class="text">First Name: </p>
 				<div style="padding-left:5%;">

@@ -9,13 +9,13 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Admin | Add Customer</title>
+		<title>Admin | Add Staff</title>
 		<link rel="stylesheet" href="AdministratorStyles.css">
 	</head>
 	<body>
 		<form action="../../AdminAddStaff" method="POST">
 			<div style="padding-left:5%; padding-top:5%;">
-				<h1>Add a Customer</h1>
+				<h1>Add a Staff Member</h1>
 
 				<p class="text">First Name: </p>
 				<div style="padding-left:5%;">
