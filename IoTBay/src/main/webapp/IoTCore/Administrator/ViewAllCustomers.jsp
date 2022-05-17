@@ -28,7 +28,12 @@
 
 			<div class="centreScreen">
 				<h1>Customers: </h1>
+				<form action="../../AdminSearchCustomers" method="POST">
+					<input style="background-color:rgba(0,0,0,0); border:none" class="textInput" type="text" placeholder="Search Customers" name="Params">
+					<input style="background-color:rgba(0,0,.5,.5); border:none" class="link cap" type="submit" value="Search Customers">
+				</form>
 
+				<br><br>
 
 				<table style="width:90%">
 					<tr>

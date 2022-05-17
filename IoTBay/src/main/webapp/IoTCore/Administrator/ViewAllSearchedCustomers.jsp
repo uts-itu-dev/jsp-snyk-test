@@ -4,14 +4,15 @@
     Author     : Michael Wu
 --%>
 
-<%@page import="Model.IoTBay.Person.Staff"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.IoTBay.Person.Customer"%>
 <%@page import="Model.IoTBay.Core.IoTWebpageBase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Admin | View All Staff</title>
+		<title>Admin | View All Customers</title>
 		<link rel="stylesheet" href="AdministratorStyles.css">
 	</head>
 	<body>
@@ -27,10 +28,10 @@
 			%>
 
 			<div class="centreScreen">
-				<h1>Staff Members: </h1>
-				<form action="../../AdminSearchStaff" method="POST">
-					<input style="background-color:rgba(0,0,0,0); border:none" class="textInput" type="text" placeholder="Search" name="Params">
-					<input style="background-color:rgba(0,0,.5,.5); border:none" class="link cap" type="submit" value="Search Staff">
+				<h1>Customers: </h1>
+				<form action="../../AdminSearchCustomers" method="POST">
+					<input style="background-color:rgba(0,0,0,0); border:none" class="textInput" type="text" placeholder="Search Customers" name="Params">
+					<input style="background-color:rgba(0,0,.5,.5); border:none" class="link cap" type="submit" value="Search Customers">
 				</form>
 				
 				<br><br>
@@ -41,17 +42,23 @@
 						<th class="text cap bold header">First Name</th>
 						<th class="text cap bold header">Last Name</th>
 						<th class="text cap bold header">Update/View Details</th>
-						<th class="text cap bold header">Remove Staff Member</th>
+						<th class="text cap bold header">Remove Customer</th>
 					</tr>
 					<%
-						for (int i = 0; i < IoTWebpageBase.uDB.staff.size(); ++i)
+						ArrayList<Customer> customers = (ArrayList<Customer>) session.getAttribute("SearchedCustomers");
+						if (customers == null)
 						{
-							Staff s = IoTWebpageBase.uDB.staff.get(i);
-							String email = s.getEmail();
-							String fn = s.getFirstName();
-							String ln = s.getLastName();
+						out.println("IST NULLL");
+							return;
+					}
+						for (int i = 0; i < customers.size(); ++i)
+						{
+							Customer c = customers.get(i);
+							String email = c.getEmail();
+							String fn = c.getFirstName();
+							String ln = c.getLastName();
 					%>
-					<form action="../../AdminAllStaff" method="POST">
+					<form action="../../AdminAllCustomers" method="POST">
 
 						<tr>
 							<td class="text"><%=email%></td>

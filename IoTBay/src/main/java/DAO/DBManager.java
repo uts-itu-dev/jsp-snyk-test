@@ -237,6 +237,51 @@ public class DBManager
 		return resultSetToOrder(r, findCustomer(owner));
 	}
 
+	public ArrayList<Product> search(String byName) throws SQLException
+	{
+		String instruction = "SELECT * FROM IOTBAY.PRODUCTS WHERE UPPER(PRODUCTNAME) LIKE UPPER('%" + byName + "%')";
+		
+		ResultSet r = statement.executeQuery(instruction);
+		
+		ArrayList<Product> p = new ArrayList();
+		
+		while (r.next()) {
+			p.add(resultSetToProduct(r));
+		}
+		
+		return p;
+	}
+
+	public ArrayList<Staff> searchStaff(String byName) throws SQLException
+	{
+		String instruction = "SELECT * FROM IOTBAY.STAFF WHERE UPPER(FIRSTNAME) LIKE UPPER('%" + byName + "%')";
+		
+		ResultSet r = statement.executeQuery(instruction);
+		
+		ArrayList<Staff> p = new ArrayList();
+		
+		while (r.next()) {
+			p.add(resultSetToStaff(r));
+		}
+		
+		return p;
+	}
+
+	public ArrayList<Customer> searchCustomers(String byName) throws SQLException
+	{
+		String instruction = "SELECT * FROM IOTBAY.CUSTOMERS WHERE UPPER(FIRSTNAME) LIKE UPPER('%" + byName + "%')";
+		
+		ResultSet r = statement.executeQuery(instruction);
+		
+		ArrayList<Customer> p = new ArrayList();
+		
+		while (r.next()) {
+			p.add(resultSetToCustomer(r));
+		}
+		
+		return p;
+	}
+
 	/**
 	 * Adds a Customer and Registers them in IoTBay.
 	 *

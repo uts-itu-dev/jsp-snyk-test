@@ -4,6 +4,7 @@
     Author     : Michael Wu
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page import="Model.IoTBay.Person.Staff"%>
 <%@page import="Model.IoTBay.Core.IoTWebpageBase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -29,7 +30,7 @@
 			<div class="centreScreen">
 				<h1>Staff Members: </h1>
 				<form action="../../AdminSearchStaff" method="POST">
-					<input style="background-color:rgba(0,0,0,0); border:none" class="textInput" type="text" placeholder="Search" name="Params">
+					<input style="background-color:rgba(0,0,0,0); border:none" class="textInput" type="text" placeholder="Search Staff Members" name="Params">
 					<input style="background-color:rgba(0,0,.5,.5); border:none" class="link cap" type="submit" value="Search Staff">
 				</form>
 				
@@ -44,9 +45,12 @@
 						<th class="text cap bold header">Remove Staff Member</th>
 					</tr>
 					<%
-						for (int i = 0; i < IoTWebpageBase.uDB.staff.size(); ++i)
+						ArrayList<Staff> staffs = (ArrayList<Staff>) session.getAttribute("SearchedStaff");
+						if (staffs == null)
+							return;
+						for (int i = 0; i < staffs.size(); ++i)
 						{
-							Staff s = IoTWebpageBase.uDB.staff.get(i);
+							Staff s = staffs.get(i);
 							String email = s.getEmail();
 							String fn = s.getFirstName();
 							String ln = s.getLastName();

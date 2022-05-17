@@ -19,7 +19,7 @@
 <html>
 	<head>
 		<title>IoTBay</title>
-		<link rel="stylesheet" href="IoTCore/IoTBayStyles.css">
+		<link rel="stylesheet" href="IoTBayStyles.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
@@ -36,78 +36,80 @@
 			<!-- Top menu bar thing. -->
 			<nav>
 				<div>
-					<div class="navLinks left"><a href="index.jsp">Home</a></div>
+					<div class="navLinks left"><a href="../index.jsp">Home</a></div>
 					<%
 						User U = (User) session.getAttribute("User");
 						if (U != null)
 						{
 							out.println("<div class=\"navLinks right\"><a href=\"Logout\">Logout</a></div>");
-							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Profile.jsp\">Profile</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"Profile.jsp\">Profile</a></div>");
 							if (U.getType() == EUserType.STAFF)
 							{
 								// If this User is STAFF, show a link to their Control Panel.
-								out.println("<div class=\"navLinks right\"><a href=\"IoTCore/StaffControlPanel.jsp\">Staff Control Panel</a></div>");
+								out.println("<div class=\"navLinks right\"><a href=\"StaffControlPanel.jsp\">Staff Control Panel</a></div>");
 							}
 						}
 						else
 						{
 							// The User is not logged in, or not registered.
-							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Register.jsp\">Register</a></div>");
-							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Login.jsp\">Login</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"Register.jsp\">Register</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"Login.jsp\">Login</a></div>");
 						}
 
 						if (U == null || U.getType() != EUserType.STAFF)
 						{
 							// If the User is a Customer, i.e., not Staff, they have a Cart and their existing Orders.
-							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Cart.jsp\">Cart</a></div>");
-							out.println("<div class=\"navLinks right\"><a href=\"IoTCore/Orders.jsp\">Your Orders</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"Cart.jsp\">Cart</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"Orders.jsp\">Your Orders</a></div>");
 						}
 					%>
 
 				</div>
 			</nav>
 
-			<h1 class="IndexH1 ">IoTBay</h1>
+			<h1 class="IndexH1 ">Search For Products</h1>
 
-			<!-- Content area. -->
-			<div>
-				<p class="text textArea">
-					IoT Bay | Introduction to Software Development (41025) - Assignment 2: R1
-					<br><br>
-					The Internet of Things Store (IoTBay) is a small company based in Sydney, Australia.
-					IoTBay wants to develop an online IoT devices ordering application to allow their
-					customers to purchase IoT devices (e.g., sensors, actuators, gateways).
-				</p>
-				<br><br>
-				<p class="text textArea left">
-					IoTBay was developed in accordance to the requirements outlined by the University of
-					Technology Sydney | 41025 - Intro. to Software Development.
-					<br><br>
-					<span class="pink">SAOBAN SALWA HABIB</span> | <span class="darkerPink">14104638</span>
-					<br>
-					<span class="pink">SEUNGWON OCK</span> | <span class="darkerPink">14109641</span>
-					<br>
-					<span class="pink">YESEUL SHIN</span> | <span class="darkerPink">13978248</span>
-					<br>
-					<span class="pink">CHRISTIAN WU</span> | <span class="darkerPink">14147817</span>
-					<br>
-					<span class="pink">MICHAEL WU</span> | <span class="darkerPink">13938903</span>
-					<br>
-					<span class="pink">JERRY YAU</span> | <span class="darkerPink">14150371</span>
-				</p>
-			</div>
+			<!-- If the user of email and password does not exist, show the message. -->
+			<p style="text-align:center; color:red">
+				<%
+					String err = request.getParameter("err");
+					if (err != null)
+					{
+						out.println("<br>" + err);
+					}
+				%>
+			</p>
+
+			<%
+				String search = request.getParameter("param");
+				if (search != null)
+				{
+			%>
+			<p style="text-align:center; color:green;">Search results for: <%=search%></p>
+			<%
+				}
+			%>
 		</div>
 		<br><br>
-		<h1 id="Products">Our Products</h1>
-		<div style="width:10%;">
-			<div class="form-container">
-				<div class="form-inner">
-					<form action="IoTCore/Listing.jsp" class="login" method="GET">
-						<div class="field">
-							<input type="submit" value="Search for Products">
-						</div>
-					</form>
-				</div>
+
+		<div class="form-container">
+			<div class="form-inner">
+				<form action="../SearchProduct" class="login" method="POST">
+					<table style="width:550px;">
+						<tr>
+							<td>
+								<div class="field">
+									<input type="text" name="Params" placeholder="Search..."">
+								</div>
+							</td>
+							<td>
+								<div class="field">
+									<input type="submit" value="Search" style="width:150px;">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
 			</div>
 		</div>
 
@@ -115,15 +117,14 @@
 			<!-- Keep track of Product index when looping. -->
 			<!-- A crude workaround to tracking Product IDs for button links. -->
 			<% int productID = 1; %>
-			<% int size = ((ArrayList<Product>) session.getAttribute("Products")).size(); %>
 			<% final int iterationsBeforeRejection = 50; %>
 			<% int currentIteration = 0; %>
 
 			<!-- If session.getAttribute("Products") exists (if there are products). -->
-			<c:if test="${Products != null}">
+			<c:if test="${Searched != null}">
 
 				<!-- Loop over Products. -->
-				<c:forEach var="p" items="${Products}">
+				<c:forEach var="p" items="${Searched}">
 
 					<!-- Relevant styles to prepare for mouse hover events. -->
 					<div class="tileSpace revealParent">

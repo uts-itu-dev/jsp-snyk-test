@@ -99,6 +99,17 @@
 		</div>
 		<br><br>
 		<h1 id="Products">Our Products</h1>
+		<div style="width:10%;">
+			<div class="form-container">
+				<div class="form-inner">
+					<form action="IoTCore/Listing.jsp" class="login" method="GET">
+						<div class="field">
+							<input type="submit" value="Search for Products">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 
 		<div class="tileGrid">
 			<!-- Keep track of Product index when looping. -->
@@ -136,7 +147,7 @@
 
 								<%
 									Product feProduct;
-									
+
 									// Continue looping through the Products array, even if null was found.
 									while ((feProduct = IoTWebpageBase.uDB.findProduct(productID)) == null)
 									{
@@ -151,7 +162,7 @@
 											return;
 										}
 									}
-									
+
 									currentIteration = 0;
 								%>
 
