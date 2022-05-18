@@ -138,7 +138,7 @@
 
 					<div class="tileTitle"><%=p.getName()%></div>
 
-					<div style="text-align:center; bottom:100%;"><%=price%></div>
+					<div style="text-align:center; bottom:100%;">$<%=price%></div>
 
 					<div style="text-align:center; bottom:100%;"><%=p.getQuantity()%> in Stock</div>
 

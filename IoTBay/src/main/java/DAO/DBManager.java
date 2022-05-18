@@ -495,15 +495,15 @@ public class DBManager
 		LocalDateTime now = LocalDateTime.now();
 		String purchaseDate = dtf.format(now);
 
-		String addressNum = address.getNumber();
-		String addressStreetName = address.getStreetName();
-		String addressSuburb = address.getSuburb();
-		String addressPostcode = address.getPostcode();
-		String addressCity = address.getCity();
+		String addressNum = clamp(address.getNumber(), 10);
+		String addressStreetName = clamp(address.getStreetName(), 100);
+		String addressSuburb = clamp(address.getSuburb(), 100);
+		String addressPostcode = clamp(address.getPostcode(), 10);
+		String addressCity = clamp(address.getCity(), 100);
 
-		String cardNo = pi.getCardNo();
-		String CVV = pi.getCVV();
-		String cardHolder = pi.getCardHolder();
+		String cardNo = clamp(pi.getCardNo(), 16);
+		String CVV = clamp(pi.getCVV(), 5);
+		String cardHolder = clamp(pi.getCardHolder(), 200);
 
 		final String attributes = " (OWNER, PRICE, STATUS, PRODUCTS, QUANTITY, PURCHASEDATE, STREETNUMBER, STREETNAME, SUBURB, POSTCODE, CITY, CARDNUMBER, CVV, CARDHOLDER) ";
 		final String instruction = "INSERT INTO IOTBAY.ORDERS " + attributes + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
