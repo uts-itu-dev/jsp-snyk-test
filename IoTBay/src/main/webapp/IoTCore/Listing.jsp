@@ -6,6 +6,7 @@
 	Purpose    : The landing page of IoTBay.
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="DAO.DBManager"%>
 <%@page import="Model.IoTBay.Person.User.EUserType"%>
 <%@page import="Model.IoTBay.Person.User"%>
@@ -41,8 +42,8 @@
 						User U = (User) session.getAttribute("User");
 						if (U != null)
 						{
-							out.println("<div class=\"navLinks right\"><a href=\"Logout\">Logout</a></div>");
-							out.println("<div class=\"navLinks right\"><a href=\"Profile.jsp\">Profile</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"../Logout\">Logout</a></div>");
+							out.println("<div class=\"navLinks right\"><a href=\"../Profile.jsp\">Profile</a></div>");
 							if (U.getType() == EUserType.STAFF)
 							{
 								// If this User is STAFF, show a link to their Control Panel.
@@ -124,94 +125,45 @@
 			<c:if test="${Searched != null}">
 
 				<!-- Loop over Products. -->
-				<c:forEach var="p" items="${Searched}">
+				<%
+					ArrayList<Product> searched = (ArrayList<Product>) session.getAttribute("Searched");
+					for (int i = 0; i < searched.size(); ++i)
+					{
+						Product p = searched.get(i);
+						DecimalFormat df = new DecimalFormat("0.00");
+						String price = df.format(p.getPrice());
+				%>
+				<!-- Relevant styles to prepare for mouse hover events. -->
+				<div class="tileSpace revealParent">
 
-					<!-- Relevant styles to prepare for mouse hover events. -->
-					<div class="tileSpace revealParent">
+					<div class="tileTitle"><%=p.getName()%></div>
 
-						<div class="tileTitle">
-							<c:out value="${p.name}"/></div>
+					<div style="text-align:center; bottom:100%;"><%=price%></div>
 
-						<div style="text-align:center; bottom:100%;">
-							<fmt:formatNumber value="${p.price}" type="currency"/></div>
+					<div style="text-align:center; bottom:100%;"><%=p.getQuantity()%> in Stock</div>
 
-						<div style="text-align:center; bottom:100%;">
-							<c:out value="${p.quantity}"/> in Stock</div>
+					<!-- Anything in this Division will appear when hovered over. -->
+					<div class="hoverRevealer">
 
-						<!-- Anything in this Division will appear when hovered over. -->
-						<div class="hoverRevealer">
+						<div class="productmisc revealContent">
 
-							<div class="productmisc revealContent">
+							<br><br>
 
-								<c:out value="${p.description}"/>
-								<br><br>
-
-								<%
-									Product feProduct;
-
-									// Continue looping through the Products array, even if null was found.
-									while ((feProduct = IoTWebpageBase.uDB.findProduct(productID)) == null)
-									{
-										++productID;
-										++currentIteration;
-
-										// We have *actually* reached the end of the array if the ProductID
-										// doesn't refer to any Product iterationsBeforeRejection times in
-										// a row - there are no more Products.
-										if (currentIteration >= iterationsBeforeRejection)
+							<c:choose>
+								<c:when test="${User != null}"> <!-- if (session.getAttribute("User") != null) -->
+									<%
+										// If the User is a Customer, they can add it to their cart.
+										if (U.getType() == EUserType.CUSTOMER)
 										{
-											return;
-										}
-									}
-
-									currentIteration = 0;
-								%>
-
-								<c:choose>
-									<c:when test="${User != null}"> <!-- if (session.getAttribute("User") != null) -->
-										<%
-											// If the User is a Customer, they can add it to their cart.
-											if (U.getType() == EUserType.CUSTOMER)
+											if (p.getQuantity() > 0)
 											{
-												if (feProduct.getQuantity() > 0)
-												{
-													out.println("<form action=\"AddToCart\" method=\"POST\">"
-														+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
-														+ "<input type=\"hidden\" name=\"bAnonymous\" value=\"false\">"
-														+ "<input type=\"hidden\" name=\"productID\" value=\"" + productID + "\"></form>");
-												}
-												else
-												{
-													// No more stock.
-													out.println("<form>"
-														+ "<input class=\"disabledButton\" value=\"No more Stock!\" disabled>"
-														+ "</form>");
-												}
-
-												productID++;
-											}
-											// If the User is Staff, they can edit the Product.
-											else if (U.getType() == EUserType.STAFF)
-											{
-												String link = "ProductEditor?bAnonymous=false&productID=" + productID;
-												out.println(
-													"<a href=\"" + link + "\">"
-													+ "<input class=\"button\" type=\"submit\" value=\"Edit Product\">"
-													+ "</a>");
-												productID++;
-											}
-										%>
-									</c:when>
-									<c:when test="${User == null}"> <!-- if (session.getAttribute("User") == null) -->
-										<!-- The 'User' is Anonymous. -->
-										<%
-											if (feProduct.getQuantity() > 0)
-											{
-												// Same link as a Registered Customer, but mark bAnonymous.
-												out.println("<form action=\"AddToCart\" method=\"POST\">"
+												out.println("<form action=\"../AddToCart\" method=\"POST\">"
 													+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
-													+ "<input type=\"hidden\" name=\"bAnonymous\" value=\"true\">"
-													+ "<input type=\"hidden\" name=\"productID\" value=\"" + productID + "\"></form>");
+													+ "<input type=\"hidden\" name=\"bAnonymous\" value=\"false\">");
+									%>
+									<input type="hidden" name="productID" value="<%=IoTWebpageBase.uDB.findProductID(p)%>">
+									<%
+												out.println("</form>");
 											}
 											else
 											{
@@ -222,13 +174,50 @@
 											}
 
 											productID++;
-										%>
-									</c:when>
-								</c:choose>
-							</div>
+										}
+										// If the User is Staff, they can edit the Product.
+										else if (U.getType() == EUserType.STAFF)
+										{
+											String link = "../ProductEditor?bAnonymous=false&productID=" + IoTWebpageBase.uDB.findProductID(p);
+											out.println(
+												"<a href=\"" + link + "\">"
+												+ "<input class=\"button\" type=\"submit\" value=\"Edit Product\">"
+												+ "</a>");
+											productID++;
+										}
+									%>
+								</c:when>
+								<c:when test="${User == null}"> <!-- if (session.getAttribute("User") == null) -->
+									<!-- The 'User' is Anonymous. -->
+									<%
+										if (p.getQuantity() > 0)
+										{
+											// Same link as a Registered Customer, but mark bAnonymous.
+											out.println("<form action=\"../AddToCart\" method=\"POST\">"
+												+ "<input class=\"button\" type=\"submit\" value=\"Add to Cart!\">"
+												+ "<input type=\"hidden\" name=\"bAnonymous\" value=\"true\">");
+									%>
+									<input type="hidden" name="productID" value="<%=IoTWebpageBase.uDB.findProductID(p)%>"></form>
+									<%
+										}
+										else
+										{
+											// No more stock.
+											out.println("<form>"
+												+ "<input class=\"disabledButton\" value=\"No more Stock!\" disabled>"
+												+ "</form>");
+										}
+
+										productID++;
+									%>
+								</c:when>
+							</c:choose>
 						</div>
 					</div>
-				</c:forEach>
+				</div>
+				<%
+					}
+				%>
 			</c:if>
 		</div>
 		<br><br><br>

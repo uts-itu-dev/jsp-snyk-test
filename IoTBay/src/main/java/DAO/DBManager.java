@@ -157,6 +157,22 @@ public class DBManager
 
 		return resultingID;
 	}
+	
+	public int findProductID(String byName) throws SQLException {
+		System.out.println("THIS IS THE NAE: " + byName);
+		String instruction = "SELECT PRODUCTID FROM IOTBAY.PRODUCTS WHERE PRODUCTNAME=?";
+		PreparedStatement ps = connection.prepareStatement(instruction);
+		ps.setString(1, byName);
+		
+		int resultingID = -1;
+		
+		ResultSet r = ps.executeQuery();
+		while (r.next()) {
+			resultingID = r.getInt(1);
+		}
+		
+		return resultingID;
+	}
 
 	/**
 	 * Finds a Customer by login credentials.
